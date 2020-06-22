@@ -36,34 +36,12 @@ export default class MlsSettingLinkScreen extends Component {
     super(props);
     this.state = {
       selectedIndex: -1,
-      agentData: [
-        {
-          "agent_fullname": "Danielle Reese",
-          "agent_photourl": "http://www.openhousemarketingsystem.com/data/images/agents/19196.jpg",
-          "agent_companyname": "Keller Williams",
-          "uniquerecord": "2-53706",
-          "displayorder": 1
-        },
-        {
-          "agent_fullname": "Danielle Reese",
-          "agent_photourl": "http://www.openhousemarketingsystem.com/data/images/agents/19196.jpg",
-          "agent_companyname": "Keller Williams",
-          "uniquerecord": "2-53706",
-          "displayorder": 2
-        },
-        {
-          "agent_fullname": "Danielle Reese",
-          "agent_photourl": "http://www.openhousemarketingsystem.com/data/images/agents/19196.jpg",
-          "agent_companyname": "Keller Williams",
-          "uniquerecord": "2-53706",
-          "displayorder": 3
-        },
-      ]
+      agentData: []
     }
   }
 
   componentDidMount() {
-    //this.getAgent();
+    this.getAgent();
   }
 
   getAgent = () => {

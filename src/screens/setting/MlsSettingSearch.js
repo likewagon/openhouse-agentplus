@@ -37,35 +37,13 @@ export default class MlsSettingSearchScreen extends Component {
     super(props);
     this.state = {
       selectedIndex: -1,
-      agentData: [
-        {
-          "agent_fullname": "Danielle Reese",
-          "agent_photourl": "http://www.openhousemarketingsystem.com/data/images/agents/19196.jpg",
-          "agent_companyname": "Keller Williams",
-          "uniquerecord": "2-53706",
-          "displayorder": 1
-        },
-        {
-          "agent_fullname": "Danielle Reese",
-          "agent_photourl": "http://www.openhousemarketingsystem.com/data/images/agents/19196.jpg",
-          "agent_companyname": "Keller Williams",
-          "uniquerecord": "2-53706",
-          "displayorder": 2
-        },
-        {
-          "agent_fullname": "Danielle Reese",
-          "agent_photourl": "http://www.openhousemarketingsystem.com/data/images/agents/19196.jpg",
-          "agent_companyname": "Keller Williams",
-          "uniquerecord": "2-53706",
-          "displayorder": 3
-        },
-      ],
+      agentData: [],
       spinner: false
     }
   }
 
   componentDidMount() {
-    //this.getAgent();
+    
   }
 
   getAgent = (agentName) => {
@@ -101,23 +79,23 @@ export default class MlsSettingSearchScreen extends Component {
 
   onClickAgent = (index) => {
     this.setState({ selectedIndex: index });
-    let desc = 'Are you sure you want to select ' +
-      this.state.agentData[index].realtor_full_name +
-      ' from ' +
-      this.state.agentData[index].realtor_company +
-      ' as your preferred real estate agent?';
+    // let desc = 'Are you sure you want to select ' +
+    //   this.state.agentData[index].realtor_full_name +
+    //   ' from ' +
+    //   this.state.agentData[index].realtor_company +
+    //   ' as your preferred real estate agent?';
 
-    Alert.alert(
-      'Please confirm',
-      desc,
-      [
-        { text: 'Yes', onPress: () => this.onYes() },
-        { text: 'No', onPress: () => { } },
-      ],
-      {
-        cancelable: true
-      }
-    );
+    // Alert.alert(
+    //   'Please confirm',
+    //   desc,
+    //   [
+    //     { text: 'Yes', onPress: () => this.onYes() },
+    //     { text: 'No', onPress: () => { } },
+    //   ],
+    //   {
+    //     cancelable: true
+    //   }
+    // );
   }
 
   onYes = async () => {
