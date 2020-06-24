@@ -205,7 +205,7 @@ export default class DashboardScreen extends Component {
 
         <View style={styles.mostPopularPropertyContainer}>
           <View style={styles.labelContainer}>
-            <Text style={styles.label}>MOST PUPULAR PROPERTIES</Text>
+            <Text style={styles.label}>MOST POPULAR PROPERTIES</Text>
           </View>
           <View style={styles.propertiesContainer}>
             <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
     height: '95%',
     marginRight: normalize(10),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(2)
+    borderWidth: normalize(1)
   },
   activityTxtContainer: {
     width: '100%',
