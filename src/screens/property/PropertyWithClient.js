@@ -114,7 +114,7 @@ export default class PropertyWithClientScreen extends Component {
               this.state.clientData.map((each, index) => {
                 return (
                   <TouchableOpacity key={index} style={styles.eachContainer}
-                    onPress={() => this.onClickClient(each)}>
+                    /*onPress={() => this.onClickClient(each)}*/>
                     <ClientCard
                       cardStyle={{width: wp(94)}}
                       clientName={each.client_fullname}                      
