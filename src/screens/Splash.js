@@ -149,7 +149,7 @@ export default class SplashScreen extends Component {
   submit = async () => {
     // skip
     LoginInfo.uniqueid = '123';
-    LoginInfo.user_account = '2';
+    LoginInfo.user_account = 2;
     LoginInfo.fullname = 'Anthony Robinson';
     LoginInfo.email = 'kelloggsx@gmail.com';
     LoginInfo.telephone = '+13059007270';

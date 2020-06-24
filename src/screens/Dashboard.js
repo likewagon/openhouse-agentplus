@@ -104,7 +104,7 @@ export default class DashboardScreen extends Component {
       action: 'dashboard_most_popular_properties',
       account_no: LoginInfo.user_account
     };
-    //console.log('mostPopularProperty Param', mostPopularPropertyParam);
+    console.log('mostPopularProperty Param', mostPopularPropertyParam);
     this.setState({ spinner: true });
     getContentByAction(mostPopularPropertyParam)
       .then((res) => {
