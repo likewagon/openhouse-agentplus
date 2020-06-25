@@ -36,36 +36,77 @@ export default class PreferenceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: -1,
+      selectedIndex: -1,      
       preferenceData: [
         {
-          id: 0,
+          id: 0,          
           title: 'IN-PERSON OPEN HOUSE AGENCY DISCLOSURE FORMS',
           desc: 'Required that attendees that enter your in-person open house signs the department of state agency disclosure form',
-          value: 1
-        },
+          value: 0
+        },        
         {
-          id: 1,
-          title: 'VIRTUAL TOUR SETTINGS',
-          desc: 'Required that attendees that enter your online virtual tour signs the department of state agency disclosure',
-          value: 1
-        },
-        {
-          id: 2,
+          id: 1,          
           title: 'LIVE STREAM SETTINGS',
           desc: 'Required that attendees that enter your LIVE STREAM Open House signs the department of state agency',
-          value: 1
+          value: 0
         }
       ]
     }
   }
 
   componentDidMount() {
-
+    this.getPreference();
   }
 
-  updatePreference = () => {
-    console.log(this.state.preferenceData);
+  getPreference = () => {
+    var preferenceParam = {
+      action: 'my_preference',
+      account_no: LoginInfo.user_account,      
+    };
+    
+    getContentByAction(preferenceParam)
+      .then((res) => {
+        //console.log(res);
+        if(res){
+          var {preferenceData} = this.state;
+          preferenceData[0].value = res[0].in_person;          
+          preferenceData[1].value = res[0].live_stream;
+          
+          console.log(preferenceData)
+          this.setState({
+            preferenceData: preferenceData,          
+          });        
+        }
+      })
+      .catch((err) => {
+        console.log('get preference error', err);        
+      })
+  }
+
+  updatePreference = async () => {
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'update_preferences');
+    bodyFormData.append('account_no', LoginInfo.user_account);
+    bodyFormData.append('in_person', this.state.preferenceData[0].value);
+    bodyFormData.append('live_stream', this.state.preferenceData[1].value);
+        
+    await postData(bodyFormData)
+      .then((res) => {
+        if (res.length == 0 || res[0].error) {
+          Alert.alert(
+            'Update is failed. \n Please Try Again',
+            '',
+            [
+              { text: 'OK', onPress: () => {} }
+            ],
+          );
+          return;
+        }
+        console.log('update preference success', res);                
+      })
+      .catch((err) => {
+        console.log('update preference error', err);        
+      })    
   }
 
   render() {
