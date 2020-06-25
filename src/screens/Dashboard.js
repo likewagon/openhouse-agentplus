@@ -154,7 +154,7 @@ export default class DashboardScreen extends Component {
           : null
         }
         <View style={styles.headerContainer}>
-          <Header title={'OPEN™ FOR AGENTS'} titleColor={Colors.blackColor} leftIcon={Images.iconMenu} onPressBack={() => this.props.navigation.goBack(null)} onPressLeftIcon={() => this.onToggleMenu()} /*rightIcon={Images.iconSearch} onPressRightIcon={() => { }}*/ />
+          <Header title={'AGENT PLUS™'} titleColor={Colors.blackColor} leftIcon={Images.iconMenu} onPressBack={() => this.props.navigation.goBack(null)} onPressLeftIcon={() => this.onToggleMenu()} /*rightIcon={Images.iconSearch} onPressRightIcon={() => { }}*/ />
         </View>
         <View style={styles.body}>
           <View style={styles.recentClientContainer}>
@@ -193,11 +193,11 @@ export default class DashboardScreen extends Component {
                 renderItem={({ item }) =>
                   <View style={styles.activityContainer}>
                     <View style={styles.activityTxtContainer}>
-                      <Text style={styles.activityTxt} numberOfLines={5} ellipsizeMode='tail'>{item.query_text}</Text>
+                      <Text style={styles.activityTxt} numberOfLines={4} ellipsizeMode='tail'>{item.query_text}</Text>
                     </View>
-                    {/* <View style={styles.activityDetailContainer}>
-                    <Text style={styles.detailTag}>{'>'} Details</Text>
-                  </View> */}
+                    <View style={styles.activityDetailContainer}>
+                      <Text style={styles.detailTag}>{'>'} Details</Text>
+                    </View>
                   </View>
                 }
               />
@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
   },
-  body:{
+  body: {
     width: '100%',
     height: height - normalize(70, 'heihgt'),
     justifyContent: 'space-around',
@@ -288,8 +288,8 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
   clientImgContainer: {
-    width: normalize(70),
-    height: normalize(70),
+    width: normalize(62),
+    height: normalize(62),
     alignSelf: 'center',
     //borderWidth: 1
   },
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
     width: '95%',
     height: normalize(30),
     //justifyContent: 'center',
-    alignItems: 'center',    
+    alignItems: 'center',
     //borderWidth: 1,
   },
   clientName: {
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
   },
   recentActivityContainer: {
     width: '100%',
-    height: normalize(145),
+    height: normalize(150),
     justifyContent: 'space-between',
     marginBottom: normalize(15, 'height'),
     //borderWidth: 1
@@ -328,32 +328,33 @@ const styles = StyleSheet.create({
   activityContainer: {
     width: normalize(width * 0.7),
     height: normalize(110),
-    marginRight: normalize(8),
+    marginRight: normalize(10),
     borderColor: Colors.borderColor,
     borderWidth: normalize(0.5)
   },
   activityTxtContainer: {
     width: '100%',
-    //height: '75%',
-    height: '100%',
-    padding: normalize(10),
+    height: '75%',
+    paddingLeft: normalize(10),
+    paddingTop: normalize(10),
+    paddingRight: normalize(10),
     //borderWidth: 1
   },
-  // activityDetailContainer: {
-  //   width: '100%',
-  //   height: '25%',
-  //   borderWidth: 1
-  // },
+  activityDetailContainer: {
+    width: '100%',
+    height: '25%',
+    //borderWidth: 1
+  },
   activityTxt: {
     fontFamily: 'SFProText-Regular',
-    fontSize: RFPercentage(2),
-    color: Colors.passiveTxtColor,    
+    fontSize: RFPercentage(1.8),
+    color: Colors.blackColor,
   },
   detailTag: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
-    color: Colors.passiveTxtColor,
-    paddingLeft: normalize(7)
+    color: Colors.blackColor,
+    paddingLeft: normalize(10)
   },
   mostPopularPropertyContainer: {
     width: '100%',

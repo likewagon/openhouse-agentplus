@@ -37,22 +37,16 @@ export default class SideMenu extends Component {
   }
 
   onListing = () => {
-    RouteParam.isChanged = true;
-    
     this.props.navigation.navigate('AgentStack');
     this.props.onToggleMenu();
   }
 
   onClient = () => {
-    RouteParam.isChanged = true;
-    
     this.props.navigation.navigate('ClientStack');
     this.props.onToggleMenu();
   }
 
   onMlsSetting = () => {
-    RouteParam.isChanged = true;
-    
     this.props.navigation.navigate('SettingStack');
     this.props.onToggleMenu();
   }
@@ -66,8 +60,8 @@ export default class SideMenu extends Component {
     return (
       <ImageBackground style={styles.container} source={Images.sideBlurBack}>
         <View style={styles.sideMenuIcon}>
-          <TouchableOpacity style={{width: '100%', height: '100%'}} onPress={() => this.props.onToggleMenu()}>
-            <Image style={{width: '100%', height: '100%'}} source={Images.iconMenu} resizeMode='contain'></Image>
+          <TouchableOpacity style={{ width: '100%', height: '100%' }} onPress={() => this.props.onToggleMenu()}>
+            <Image style={{ width: '100%', height: '100%' }} source={Images.iconMenu} resizeMode='contain'></Image>
           </TouchableOpacity>
         </View>
         <View style={styles.profileContainer}>
@@ -75,10 +69,10 @@ export default class SideMenu extends Component {
             <Image style={{ width: '100%', height: '100%', borderRadius: normalize(50) }} /*source={{ uri: LoginInfo.photourl }}*/ resizeMode='stretch' />
           </View>
           <Text style={styles.userName}>{LoginInfo.fullname}</Text>
-          <Text style={styles.userTitleAndCompany}>{LoginInfo.title}</Text>
-          <Text style={styles.userTitleAndCompany}>{LoginInfo.company}</Text>
+          <Text style={styles.userTitle}>{LoginInfo.title}</Text>
+          <Text style={styles.userCompany}>{LoginInfo.company}</Text>
         </View>
-        <View style={styles.bodyContainer}>
+        <View style={styles.menuContainer}>
           <TouchableOpacity style={[styles.menuItemContainer, { marginTop: normalize(10, 'height') }]} onPress={() => this.onListing()}>
             <Text style={styles.menuItemTxt}>LISTINGS</Text>
           </TouchableOpacity>
@@ -89,12 +83,11 @@ export default class SideMenu extends Component {
             <Text style={styles.menuItemTxt}>MLS SETTINGS</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItemContainer} onPress={() => this.onPreference()}>
-            <Text style={styles.menuItemTxt}>PREFERENCES</Text>
+            <Text style={styles.menuItemTxt}>PREFERENCE</Text>
           </TouchableOpacity>
-
-          <View style={[styles.menuItemContainer, { marginTop: normalize(80, 'height') }]}>
-            <Button btnTxt='Log out' btnStyle={{ width: width * 0.45, height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.props.onLogout()} />
-          </View>
+        </View>
+        <View style={styles.btnContainer}>
+          <Button btnTxt='Log out' btnStyle={{ width: width * 0.7, height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.props.onLogout()} />
         </View>
       </ImageBackground>
     );
@@ -114,14 +107,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'absolute',
-    left: 0,
-    // top: 0,
+    left: 0,    
     top: normalize(-25, 'height'),
     width: width * 0.8,
     //height: height,
-    height: height + normalize(70, 'height'),
-    //opacity: 0.95,
-    zIndex: 10
+    height: height + normalize(70, 'height'),    
+    zIndex: 1
   },
   sideMenuIcon: {
     width: normalize(22),
@@ -143,8 +134,8 @@ const styles = StyleSheet.create({
     //borderWidth: 1,
   },
   profileImgContainer: {
-    width: normalize(100),
-    height: normalize(100),
+    width: normalize(64),
+    height: normalize(64),
     borderRadius: normalize(50),
     borderColor: Colors.borderColor,
     borderWidth: normalize(1)
@@ -155,17 +146,27 @@ const styles = StyleSheet.create({
     color: Colors.blackColor,
     marginTop: normalize(10, 'height')
   },
-  userTitleAndCompany: {
+  userTitle: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(1.8),
     color: Colors.blackColor,
     marginTop: normalize(10, 'height')
   },
-  bodyContainer: {
+  userCompany: {
+    fontFamily: 'SFProText-Regular',
+    fontSize: RFPercentage(1.8),
+    color: Colors.blackColor,
+    marginTop: normalize(3, 'height')
+  },
+  menuContainer: {
     width: '100%',
+    height: '43%',
+    justifyContent: 'space-around',
     marginTop: normalize(20, 'height'),
     borderColor: Colors.borderColor,
-    borderTopWidth: normalize(1, 'height')
+    borderTopWidth: normalize(1, 'height'),
+    paddingTop: normalize(20, 'height'),
+    //borderWidth: 1
   },
   menuItemContainer: {
     width: '100%',
@@ -178,7 +179,15 @@ const styles = StyleSheet.create({
   menuItemTxt: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
-    color: Colors.blackColor
+    color: Colors.blackColor,
+    //borderWidth: 1
   },
-
+  btnContainer:{
+    width: '100%',
+    height: '11%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: normalize(10, 'height'),
+    //borderWidth: 1    
+  },
 });

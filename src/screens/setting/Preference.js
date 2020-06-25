@@ -41,13 +41,13 @@ export default class PreferenceScreen extends Component {
         {
           id: 0,          
           title: 'IN-PERSON OPEN HOUSE AGENCY DISCLOSURE FORMS',
-          desc: 'Required that attendees that enter your in-person open house signs the department of state agency disclosure form',
+          desc: 'Required that every attendees that enter your In-Person Open House signs the department of state agency disclosure form and any additional disclaimers or documents required by your local Board of Realtors.',
           value: 0
         },        
         {
           id: 1,          
           title: 'LIVE STREAM SETTINGS',
-          desc: 'Required that attendees that enter your LIVE STREAM Open House signs the department of state agency',
+          desc: 'Required that every attendees that enter your LIVE STREAM Open House signs the department of state agency disclosure form and any additional disclaimers or documents required by your local Board of Realtors.',
           value: 0
         }
       ]
@@ -189,16 +189,16 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: '90%',
-    height: normalize(120),
+    height: normalize(180),    
     alignSelf: 'center',
     marginTop: normalize(17, 'height'),
     borderColor: Colors.borderColor,
     borderWidth: normalize(0.5),
-    padding: normalize(10)
+    padding: normalize(15)
   },
   topPart: {
     width: '100%',
-    height: '45%',
+    height: '25%',
     flexDirection: 'row',
     //borderWidth: 1
   },
@@ -216,16 +216,19 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
-    color: Colors.blackColor,
+    color: Colors.blackColor,    
+  },
+  bottomPart: {
+    width: '100%',
+    height: '75%',
+    justifyContent: 'flex-end',
+    //borderWidth: 1
   },
   desc: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
-  },
-  bottomPart: {
-    width: '100%',
-    height: '55%',
+    lineHeight: 22,
     //borderWidth: 1
   },
 });

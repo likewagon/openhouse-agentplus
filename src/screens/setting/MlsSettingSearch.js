@@ -79,31 +79,55 @@ export default class MlsSettingSearchScreen extends Component {
 
   onClickAgent = (index) => {
     this.setState({ selectedIndex: index });
-    // let desc = 'Are you sure you want to select ' +
-    //   this.state.agentData[index].realtor_full_name +
-    //   ' from ' +
-    //   this.state.agentData[index].realtor_company +
-    //   ' as your preferred real estate agent?';
+    let desc = 'Are you sure you want to link ' +
+      this.state.agentData[index].agent_fullname +
+      ' from ' +
+      this.state.agentData[index].agent_companyname +
+      ' to your Agent Plus™ account?';
 
-    // Alert.alert(
-    //   'Please confirm',
-    //   desc,
-    //   [
-    //     { text: 'Yes', onPress: () => this.onYes() },
-    //     { text: 'No', onPress: () => { } },
-    //   ],
-    //   {
-    //     cancelable: true
-    //   }
-    // );
+    Alert.alert(
+      'Please Confirm',
+      desc,
+      [
+        { text: 'Yes', onPress: () => this.onYes(index) },
+        { text: 'No', onPress: () => { } },
+      ],
+      {
+        cancelable: true
+      }
+    );
   }
 
-  onYes = async () => {
-    // let userAssignedAgent = this.state.agentData[this.state.selectedIndex].realtor_account;
-    // LoginInfo.user_assigned_agent = userAssignedAgent;
-    // await AsyncStorage.setItem('UserAssignedAgent', userAssignedAgent.toString());
-    // await AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
-    // this.props.navigation.navigate('Main');
+  onYes = async (index) => {
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'link_to_mls');
+    bodyFormData.append('account_no', LoginInfo.user_account);
+    bodyFormData.append('agent_fullname', this.state.agentData[index].agent_fullname);
+    bodyFormData.append('mls_organization_id', this.state.agentData[index].mls_organization_id);
+    bodyFormData.append('agent_mls_id', this.state.agentData[index].mls_agent_id);
+    bodyFormData.append('agent_companyid', this.state.agentData[index].agent_companyid);
+    bodyFormData.append('agent_companyname', this.state.agentData[index].agent_companyname);
+    bodyFormData.append('agent_photourl', this.state.agentData[index].agent_photourl);
+        
+    await postData(bodyFormData)
+      .then((res) => {
+        if (res.length == 0 || res[0].error) {
+          Alert.alert(
+            'Link is failed. \n Please Try Again',
+            '',
+            [
+              { text: 'OK', onPress: () => {} }
+            ],
+          );
+          return;
+        }
+        console.log('mls link success', res);                
+        
+        this.props.navigation.navigate('MlsSettingLink');
+      })
+      .catch((err) => {
+        console.log('mls link error', err);        
+      })        
   }
 
   onSearch = (query) => {
@@ -119,13 +143,15 @@ export default class MlsSettingSearchScreen extends Component {
         </View>
         <View style={styles.txtContainer}>
           <Text style={styles.txt}>
-            To link your Open™ to your
+            To link your Agent Plus™ to your
             {'\n'}
-            MLS and Board of Realtors™?
+            MLS and Board of Realtors™
+            {'\n'}
+            Please enter Agent's Full Name
           </Text>
         </View>
         <View style={styles.searchContainer}>
-          <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} placeholderTxt={'Enter agent full name'} onSearch={this.onSearch} />
+          <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} placeholderTxt={'Enter Agent Full Name'} onSearch={this.onSearch} />
         </View>
         <ScrollView style={{ marginTop: normalize(10, 'height') }}>
           {
@@ -183,10 +209,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   txtContainer: {
-    width: '100%',
-    height: '10%',
+    width: '90%',
+    height: '12%',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
   },
@@ -195,6 +222,7 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
     textAlign: 'center',
+    lineHeight: 22
   },
   searchContainer: {
     width: '100%',
@@ -216,7 +244,7 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     width: '100%',
-    height: height * 0.65,
+    height: height * 0.6,
     justifyContent: 'center',
     alignItems: 'center'
   },

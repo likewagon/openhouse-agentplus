@@ -17,6 +17,7 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
   Button,
@@ -35,13 +36,22 @@ export default class MlsSettingLinkScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      spinner: false,
       selectedIndex: -1,
       agentData: []
     }
   }
 
-  componentDidMount() {
-    this.getAgent();
+  componentDidMount() {    
+    this.listener = this.props.navigation.addListener('focus', ()=>this.componentDidFocus());
+  }
+
+  componentDidFocus(){    
+    this.getAgent();    
+  }
+
+  componentWillUnmount() {    
+    // if (this.listener) this.listener.remove();  
   }
 
   getAgent = () => {
@@ -50,38 +60,42 @@ export default class MlsSettingLinkScreen extends Component {
       account_no: LoginInfo.user_account
     };
     //console.log('agent Param', agentParam);
+    this.setState({ spinner: true });
+
     getContentByAction(agentParam)
       .then((res) => {
         console.log('agent data', res);
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           agentData: sortedRes,
+          spinner: false
         });
       })
       .catch((err) => {
         console.log('get agent error', err);
+        this.setState({ spinner: false });
       })
   }
 
   onClickAgent = (index) => {
-    this.setState({ selectedIndex: index });
-    let desc = 'Are you sure you want to select ' +
-      this.state.agentData[index].realtor_full_name +
-      ' from ' +
-      this.state.agentData[index].realtor_company +
-      ' as your preferred real estate agent?';
+    // this.setState({ selectedIndex: index });
+    // let desc = 'Are you sure you want to select ' +
+    //   this.state.agentData[index].realtor_full_name +
+    //   ' from ' +
+    //   this.state.agentData[index].realtor_company +
+    //   ' as your preferred real estate agent?';
 
-    Alert.alert(
-      'Please confirm',
-      desc,
-      [
-        { text: 'Yes', onPress: () => this.onYes() },
-        { text: 'No', onPress: () => { } },
-      ],
-      {
-        cancelable: true
-      }
-    );
+    // Alert.alert(
+    //   'Please confirm',
+    //   desc,
+    //   [
+    //     { text: 'Yes', onPress: () => this.onYes() },
+    //     { text: 'No', onPress: () => { } },
+    //   ],
+    //   {
+    //     cancelable: true
+    //   }
+    // );
   }
 
   onYes = async () => {
@@ -95,12 +109,13 @@ export default class MlsSettingLinkScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        {/* <Spinner visible={this.state.spinner} /> */}
         <View style={styles.headerContainer}>
           <Header title={'MLS SETTINGS'} titleColor={Colors.blackColor} rightIcon={Images.iconAddAgent} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => { this.props.navigation.navigate('MlsSettingSearch') }} />
         </View>
         <View style={styles.txtContainer}>
           <Text style={styles.txt}>
-            Your Open™ is currently linked to the
+            Your Agent Plus™ account is currently linked to the following MLS and Board of Realtors™
           </Text>
         </View>
         <ScrollView style={{ marginTop: normalize(10, 'height') }}>
@@ -153,10 +168,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   txtContainer: {
-    width: '100%',
+    width: '90%',
     height: '10%',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
   },
@@ -165,6 +181,7 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
     textAlign: 'center',
+    lineHeight: 22
   },
   eachContainer: {
     width: '95%',
