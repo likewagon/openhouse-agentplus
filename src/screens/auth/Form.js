@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 8,
     borderColor: Colors.blueColor,
-    borderWidth: 1,
+    borderWidth: normalize(1),
     paddingLeft: 15,
     color: Colors.blackColor
   },

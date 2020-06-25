@@ -71,8 +71,7 @@ export default class PreferenceScreen extends Component {
           var {preferenceData} = this.state;
           preferenceData[0].value = res[0].in_person;          
           preferenceData[1].value = res[0].live_stream;
-          
-          console.log(preferenceData)
+                    
           this.setState({
             preferenceData: preferenceData,          
           });        
@@ -194,7 +193,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: normalize(17, 'height'),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(0.5, 'height'),
+    borderWidth: normalize(0.5),
     padding: normalize(10)
   },
   topPart: {

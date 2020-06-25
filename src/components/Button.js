@@ -34,7 +34,7 @@ export default class Button extends Component {
           alignItems: 'center',
           borderColor: Colors.buttonBorderColor,
           borderRadius: 8,
-          borderWidth: 1,
+          borderWidth: normalize(1),
           backgroundColor: this.props.btnStyle.color === 'blue' ? Colors.blueButtonBackColor : '#ffffff',
         }}>
           <Text style={{

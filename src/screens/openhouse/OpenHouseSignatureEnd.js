@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     borderColor: Colors.blueColor,
-    borderWidth: normalize(2)
+    borderWidth: normalize(1)
   },
   thankyouTxt: {
     fontFamily: 'SFProText-Regular',

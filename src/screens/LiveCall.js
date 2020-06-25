@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     borderRadius: normalize(5),
     padding: 10,
     borderColor: Colors.blueColor,
-    borderWidth: normalize(2)
+    borderWidth: normalize(1)
   },
   itemName: {
     fontSize: 16,

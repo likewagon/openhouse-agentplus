@@ -66,12 +66,8 @@ export default class SideMenu extends Component {
     return (
       <ImageBackground style={styles.container} source={Images.sideBlurBack}>
         <View style={styles.sideMenuIcon}>
-          <TouchableOpacity onPress={() => this.props.onToggleMenu()}>
-            <Icon
-              name='bars'
-              size={RFPercentage(3)}
-              color={Colors.blackColor}
-            />
+          <TouchableOpacity style={{width: '100%', height: '100%'}} onPress={() => this.props.onToggleMenu()}>
+            <Image style={{width: '100%', height: '100%'}} source={Images.iconMenu} resizeMode='contain'></Image>
           </TouchableOpacity>
         </View>
         <View style={styles.profileContainer}>
@@ -128,13 +124,15 @@ const styles = StyleSheet.create({
     zIndex: 10
   },
   sideMenuIcon: {
-    width: '8%',
+    width: normalize(22),
+    height: normalize(20),
     position: 'absolute',
     top: normalize(67, 'height'),
-    left: normalize(16),
+    left: normalize(12),
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    //borderWidth: 1
   },
   profileContainer: {
     width: '80%',
@@ -149,7 +147,7 @@ const styles = StyleSheet.create({
     height: normalize(100),
     borderRadius: normalize(50),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(3)
+    borderWidth: normalize(1)
   },
   userName: {
     fontFamily: 'SFProText-Semibold',
@@ -167,7 +165,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: normalize(20, 'height'),
     borderColor: Colors.borderColor,
-    borderTopWidth: normalize(1.5, 'height')
+    borderTopWidth: normalize(1, 'height')
   },
   menuItemContainer: {
     width: '100%',
@@ -178,7 +176,7 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
   menuItemTxt: {
-    fontFamily: 'SFProText-Semibold',
+    fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
     color: Colors.blackColor
   },

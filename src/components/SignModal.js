@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 8,
     borderColor: Colors.blueColor,
-    borderWidth: 3,
+    borderWidth: normalize(1),
     padding: 0
   },
   signModalHeader: {

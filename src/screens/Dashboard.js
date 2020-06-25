@@ -156,73 +156,74 @@ export default class DashboardScreen extends Component {
         <View style={styles.headerContainer}>
           <Header title={'OPEN™ FOR AGENTS'} titleColor={Colors.blackColor} leftIcon={Images.iconMenu} onPressBack={() => this.props.navigation.goBack(null)} onPressLeftIcon={() => this.onToggleMenu()} /*rightIcon={Images.iconSearch} onPressRightIcon={() => { }}*/ />
         </View>
-        <View style={styles.recentClientContainer}>
-          <View style={styles.labelContainer}>
-            <Text style={styles.label}>RECENT CLIENTS</Text>
-          </View>
-          <View style={styles.imgsContainer}>
-            <FlatList
-              keyExtractor={item => item.displayorder.toString()}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={this.state.recentClientData}
-              renderItem={({ item }) =>
-                <View style={styles.clientItemContainer}>
-                  <View style={styles.clientImgContainer}>
-                    <Image style={styles.clientImg} source={{ uri: item.client_photourl }} />
+        <View style={styles.body}>
+          <View style={styles.recentClientContainer}>
+            <View style={styles.labelContainer}>
+              <Text style={styles.label}>RECENT CLIENTS</Text>
+            </View>
+            <View style={styles.imgsContainer}>
+              <FlatList
+                keyExtractor={item => item.displayorder.toString()}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                data={this.state.recentClientData}
+                renderItem={({ item }) =>
+                  <View style={styles.clientItemContainer}>
+                    <View style={styles.clientImgContainer}>
+                      <Image style={styles.clientImg} source={{ uri: item.client_photourl }} />
+                    </View>
+                    <View style={styles.clientNameContainer}>
+                      <Text style={styles.clientName}>{item.client_fullname}</Text>
+                    </View>
                   </View>
-                  <View style={styles.clientNameContainer}>
-                    <Text style={styles.clientName}>{item.client_fullname}</Text>
-                  </View>
-                </View>
-              }
-            />
+                }
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.recentActivityContainer}>
-          <View style={styles.labelContainer}>
-            <Text style={styles.label}>RECENT ACTIVITIES</Text>
-          </View>
-          <View style={styles.cardsContainer}>
-            <FlatList
-              keyExtractor={item => item.displayorder.toString()}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={this.state.recentActivityData}
-              renderItem={({ item }) =>
-                <View style={styles.activityContainer}>
-                  <View style={styles.activityTxtContainer}>
-                    <Text style={styles.activityTxt}>{item.query_text}</Text>
-                  </View>
-                  <View style={styles.activityDetailContainer}>
+          <View style={styles.recentActivityContainer}>
+            <View style={styles.labelContainer}>
+              <Text style={styles.label}>RECENT ACTIVITIES</Text>
+            </View>
+            <View style={styles.cardsContainer}>
+              <FlatList
+                keyExtractor={item => item.displayorder.toString()}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                data={this.state.recentActivityData}
+                renderItem={({ item }) =>
+                  <View style={styles.activityContainer}>
+                    <View style={styles.activityTxtContainer}>
+                      <Text style={styles.activityTxt} numberOfLines={5} ellipsizeMode='tail'>{item.query_text}</Text>
+                    </View>
+                    {/* <View style={styles.activityDetailContainer}>
                     <Text style={styles.detailTag}>{'>'} Details</Text>
+                  </View> */}
                   </View>
-                </View>
+                }
+              />
+            </View>
+          </View>
+          <View style={styles.mostPopularPropertyContainer}>
+            <View style={styles.labelContainer}>
+              <Text style={styles.label}>MOST POPULAR PROPERTIES</Text>
+            </View>
+            <View style={styles.propertiesContainer}>
+              <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
+              {
+                this.state.mostPopularPropertyData.length == 0 && this.state.spinner == false ?
+                  <View style={styles.emptyContainer}>
+                    <Text style={styles.emptyTxt}>No Result Data</Text>
+                  </View>
+                  :
+                  <FlatList
+                    keyExtractor={item => item.property_recordno}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    data={this.state.mostPopularPropertyData}
+                    renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                  />
               }
-            />
-          </View>
-        </View>
-
-        <View style={styles.mostPopularPropertyContainer}>
-          <View style={styles.labelContainer}>
-            <Text style={styles.label}>MOST POPULAR PROPERTIES</Text>
-          </View>
-          <View style={styles.propertiesContainer}>
-            <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
-            {
-              this.state.mostPopularPropertyData.length == 0 && this.state.spinner == false ?
-                <View style={styles.emptyContainer}>
-                  <Text style={styles.emptyTxt}>No Result Data</Text>
-                </View>
-                :
-                <FlatList
-                  keyExtractor={item => item.property_recordno}
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  data={this.state.mostPopularPropertyData}
-                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginTop: normalize(3, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
-                />
-            }
+            </View>
           </View>
         </View>
       </View>
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,1)",
     flex: 1,
     width: width,
-    height: height,
+    height: height
   },
   headerContainer: {
     width: '100%',
@@ -248,15 +249,21 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
   },
+  body:{
+    width: '100%',
+    height: height - normalize(70, 'heihgt'),
+    justifyContent: 'space-around',
+    //borderWidth: 3
+  },
   recentClientContainer: {
     width: '100%',
-    height: '20%',
+    height: normalize(145),
     justifyContent: 'space-between',
     marginTop: normalize(10, 'height'),
     //borderWidth: 1
   },
   labelContainer: {
-    height: normalize(25, 'height'),
+    height: normalize(25),
     justifyContent: 'flex-end',
     //borderWidth: 1
   },
@@ -268,15 +275,16 @@ const styles = StyleSheet.create({
   },
   imgsContainer: {
     width: '95%',
-    height: '78%',
+    height: normalize(110),
     alignSelf: 'center',
     //borderWidth: 1
   },
   clientItemContainer: {
-    width: normalize(width / 5),
-    height: normalize(100, 'height'),
-    justifyContent: 'center',
+    width: normalize(70),
+    height: normalize(110),
+    justifyContent: 'space-around',
     alignItems: 'center',
+    marginRight: normalize(10),
     //borderWidth: 1
   },
   clientImgContainer: {
@@ -290,15 +298,14 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: normalize(35),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(2)
+    borderWidth: normalize(0.5)
   },
   clientNameContainer: {
     width: '95%',
-    height: '20%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: normalize(5, 'height'),
-    //borderWidth: 1
+    height: normalize(30),
+    //justifyContent: 'center',
+    alignItems: 'center',    
+    //borderWidth: 1,
   },
   clientName: {
     fontFamily: 'SFProText-Regular',
@@ -307,38 +314,40 @@ const styles = StyleSheet.create({
   },
   recentActivityContainer: {
     width: '100%',
-    height: '22%',
+    height: normalize(145),
     justifyContent: 'space-between',
+    marginBottom: normalize(15, 'height'),
     //borderWidth: 1
   },
   cardsContainer: {
     width: '95%',
-    height: '75%',
+    height: normalize(110),
     alignSelf: 'center',
     //borderWidth: 1
   },
   activityContainer: {
     width: normalize(width * 0.7),
-    height: '95%',
-    marginRight: normalize(10),
+    height: normalize(110),
+    marginRight: normalize(8),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(1)
+    borderWidth: normalize(0.5)
   },
   activityTxtContainer: {
     width: '100%',
-    height: '75%',
+    //height: '75%',
+    height: '100%',
+    padding: normalize(10),
     //borderWidth: 1
   },
-  activityDetailContainer: {
-    width: '100%',
-    height: '25%',
-    //borderWidth: 1
-  },
+  // activityDetailContainer: {
+  //   width: '100%',
+  //   height: '25%',
+  //   borderWidth: 1
+  // },
   activityTxt: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
-    color: Colors.passiveTxtColor,
-    padding: normalize(7)
+    color: Colors.passiveTxtColor,    
   },
   detailTag: {
     fontFamily: 'SFProText-Regular',
@@ -348,14 +357,15 @@ const styles = StyleSheet.create({
   },
   mostPopularPropertyContainer: {
     width: '100%',
-    height: '50%',
+    height: normalize(280, 'height'),
     justifyContent: 'space-between',
-    marginTop: normalize(10, 'height'),
-    //borderWidth: 1
+    marginBottom: normalize(10, 'height'),
+    //borderWidth: 3
   },
   propertiesContainer: {
     width: '95%',
-    height: '90%',
+    height: normalize(245, 'height'),
+    justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     //borderWidth: 1

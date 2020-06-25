@@ -163,7 +163,7 @@ export default class SplashScreen extends Component {
     LoginInfo.longitude = -73.345718;
     LoginInfo.user_assigned_agent = 0;
     // ///////////////
-    setTimeout(() => { this.props.navigation.navigate('Welcome') }, 1000);
+    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
     // let bodyFormData = new FormData();
     // bodyFormData.append('action', 'newaccount');
     // bodyFormData.append('uniqueid', LoginInfo.uniqueid);

@@ -32,7 +32,7 @@ export default class ClientCard extends Component {
         alignItems: 'center',
         borderColor: Colors.borderColor,
         borderRadius: normalize(5),
-        borderWidth: 1,
+        borderWidth: normalize(0.5),
         padding: normalize(10)
       }}>
         <Image style={{ width: normalize(60), height: normalize(60), borderRadius: normalize(30), borderColor: Colors.borderColor, borderWidth: normalize(0.5) }} resizeMode='stretch' source={this.props.clientImg} />

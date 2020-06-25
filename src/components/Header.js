@@ -61,7 +61,12 @@ export default class Header extends Component {
             />
           </TouchableOpacity>
         }
-        <View style={[styles.title, this.props.rightLeftIcon ? { width: '66%' } : null]}>
+        {
+          this.props.rightLeftIcon ? 
+          <View style={styles.rightIcon}></View>
+          : null
+        }
+        <View style={[styles.title, this.props.rightLeftIcon ? { width: '52%' } : null]}>
           <Text style={[
             styles.titleTxt,
             {
@@ -76,7 +81,7 @@ export default class Header extends Component {
         {this.props.rightLeftIcon ?
           <View style={styles.rightIcon}>
             <TouchableOpacity style={{ flex: 1 }} onPress={this.props.onPressRightLeftIcon}>
-              <Image style={{ width: '50%', height: '60%' }} source={this.props.rightLeftIcon} resizeMode='contain' />
+              <Image style={{ width: '70%', height: '80%', /*borderWidth: 1*/ }} source={this.props.rightLeftIcon} resizeMode='contain' />
             </TouchableOpacity>
           </View>
           : null
@@ -84,11 +89,11 @@ export default class Header extends Component {
         <View style={styles.rightIcon}>
           {this.props.rightIcon ?
             <TouchableOpacity style={{ flex: 1 }} onPress={this.props.onPressRightIcon}>
-              <Image style={{ width: '50%', height: '60%' }} source={this.props.rightIcon} resizeMode='contain' />
+              <Image style={{ width: '70%', height: '80%', /*borderWidth: 1*/ }} source={this.props.rightIcon} resizeMode='contain' />
             </TouchableOpacity>
             : null
           }
-        </View>
+        </View>        
       </View>
     );
   }
@@ -117,15 +122,15 @@ const styles = StyleSheet.create({
     //borderWidth: 2
   },
   leftIcon: {
-    width: '10%',
+    width: '12%',
     height: '60%',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     alignItems: 'flex-end',
-    //borderWidth: 2
+    //borderWidth: 1
   },
   title: {
-    width: '78%',
+    width: '76%',
     height: '60%',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -140,7 +145,7 @@ const styles = StyleSheet.create({
     height: '60%',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    //borderWidth: 2
+    alignItems: 'flex-end',    
+    //borderWidth: 1
   }
 });

@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: normalize(15),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(1)
+    borderWidth: normalize(0.5)
   },
   txtContainer: {
     width: '62%',

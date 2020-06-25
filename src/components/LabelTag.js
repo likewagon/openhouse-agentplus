@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Dimensions
 } from "react-native";
-
+import normalize from "react-native-normalize";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
@@ -32,7 +32,7 @@ export default class LabelTag extends Component {
         alignItems: 'center',
         borderColor: Colors.blueColor,
         borderRadius: this.props.tagStyle.height / 2,
-        borderWidth: 1,
+        borderWidth: normalize(1),
         backgroundColor: '#B9FFF3',
       }}>
         <Text style={{
