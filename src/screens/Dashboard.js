@@ -134,9 +134,8 @@ export default class DashboardScreen extends Component {
       })
   } 
 
-  onGoClientView = (client)=>{
-    RouteParam.client = client;
-    this.props.navigation.navigate('ClientStack', {screen: 'ClientView'});
+  onGoClientView = (client)=>{    
+    this.props.navigation.navigate('ClientStack', {screen: 'ClientView', params:{client: client}});
   }
 
   onPropertyPress = (propertyRecordNo) => {

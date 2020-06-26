@@ -40,7 +40,7 @@ export default class ClientViewScreen extends Component {
     this.state = {
       spinner: false,
       tab: 'preference',
-      client: RouteParam.client,
+      client: this.props.route.params.client,
       preferenceData: [
         {
           "client_question": "I Am Currently Looking To...",

@@ -40,11 +40,9 @@ export default class OpenHouseSignatureScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleSignForm: false
-    }
-
-    //hard code
-    RouteParam.pdfUrl = "http://www.openhousemarketingsystem.com/application/data/attendeepdf/2991.pdf";
+      visibleSignForm: false,
+      pdfURL: "http://www.openhousemarketingsystem.com/application/data/attendeepdf/2991.pdf"
+    }   
   }
 
   componentDidMount() {
@@ -53,27 +51,7 @@ export default class OpenHouseSignatureScreen extends Component {
 
   onSignOK = () => {   
     // this.postSignature();
-    // this.postAttendee();
-
-    // const { from } = this.props.route.params;
-    // if(from === 'live') {
-    //   if(RouteParam.liveInfo.error === undefined) {
-    //     this.props.navigation.navigate('LiveCall');
-    //   }
-    //   console.log('live info error');      
-    // }      
-    // else if(from === 'virtual_tour') {
-    //   Linking.canOpenURL(RouteParam.browseUrl).then(supported => {
-    //     if (supported) {
-    //       Linking.openURL(RouteParam.browseUrl)
-    //         .then(() => { })
-    //         .catch((err) => console.log('open browse url error'))
-    //         this.props.navigation.navigate('Property');
-    //     } else {
-    //       console.log('open browser error');
-    //     }
-    //   });     
-    // }
+    // this.postAttendee();   
     
     this.props.navigation.navigate('OpenHouseSignatureEnd');
   }
@@ -139,7 +117,7 @@ export default class OpenHouseSignatureScreen extends Component {
         </View>
         <View style={styles.body}>
           <View style={styles.pdfContainer}>
-            <WebView source={{ uri: RouteParam.pdfUrl }} />
+            <WebView source={{ uri: this.state.pdfURL }} />
           </View>
           <View style={styles.btnContainer}>
             <Button btnTxt='AGREE AND SIGN' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.setState({ visibleSignForm: true })} />

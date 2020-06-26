@@ -43,8 +43,7 @@ export default class ClientListScreen extends Component {
   }
 
   componentDidMount() {
-    this.getClient();
-    RouteParam.clientData = this.state.clientData;
+    this.getClient();    
   }
 
   getClient = () => {
@@ -69,8 +68,7 @@ export default class ClientListScreen extends Component {
         this.setState({
           clientData: sortedRes,
           spinner: false
-        });
-        RouteParam.clientData = sortedRes;
+        });        
       })
       .catch((err) => {
         console.log('get client error', err);
@@ -78,9 +76,8 @@ export default class ClientListScreen extends Component {
       })
   }
 
-  onClickClient = (client) => {
-    RouteParam.client = client;
-    this.props.navigation.navigate('ClientView');
+  onClickClient = (client) => {    
+    this.props.navigation.navigate('ClientView', {client: client});
   }
 
   onSearch = (query) => {
@@ -88,7 +85,7 @@ export default class ClientListScreen extends Component {
   }
 
   onFastSearch = (query) => {
-    var filteredRes = RouteParam.clientData.filter((each) => each.client_fullname.toLowerCase().includes(query.toLowerCase()));
+    var filteredRes = this.state.clientData.filter((each) => each.client_fullname.toLowerCase().includes(query.toLowerCase()));
     this.setState({ clientData: filteredRes });
   }
 
@@ -96,7 +93,7 @@ export default class ClientListScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Header title={'CLIENTS'} titleColor={Colors.blackColor} rightLeftIcon={Images.iconAddPerson} rightIcon={Images.iconLocation} onPressBack={() => this.props.navigation.goBack(null)} onPressRightLeftIcon={() => { this.props.navigation.navigate('ClientInvite') }} onPressRightIcon={() => { this.props.navigation.navigate('ClientMap') }} />
+          <Header title={'CLIENTS'} titleColor={Colors.blackColor} rightLeftIcon={Images.iconAddPerson} rightIcon={Images.iconLocation} onPressBack={() => this.props.navigation.goBack(null)} onPressRightLeftIcon={() => { this.props.navigation.navigate('ClientInvite') }} onPressRightIcon={() => { this.props.navigation.navigate('ClientMap', {clientData: this.state.clientData}) }} />
         </View>
         <View style={styles.searchContainer}>
           <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} onFastSearch={this.onFastSearch} />

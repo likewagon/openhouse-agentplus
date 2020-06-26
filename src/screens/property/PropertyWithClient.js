@@ -72,8 +72,7 @@ export default class PropertyWithClientScreen extends Component {
         this.setState({
           clientData: sortedRes,
           spinner: false
-        });
-        RouteParam.clientData = sortedRes;
+        });        
       })
       .catch((err) => {
         console.log('get client by prperty error', err);
@@ -86,7 +85,7 @@ export default class PropertyWithClientScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'MLS. ' + this.state.property.property_mlsnumber} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('ClientStack', { screen: 'ClientMap' })} />
+          <Header title={'MLS. ' + this.state.property.property_mlsnumber} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('ClientStack', { screen: 'ClientMap', params:{ clientData: this.state.clientData } })} />
         </View>
         <View style={styles.propertyContainer}>
           <PropertyCard cardStyle={{ width: width * 0.94, height: normalize(245, 'height'), marginBottom: normalize(0, 'height'), marginRight: 0 }} item={this.state.property} onPress={() => this.props.navigation.goBack(null)}/>
@@ -102,8 +101,7 @@ export default class PropertyWithClientScreen extends Component {
                 return (
                   <TouchableOpacity key={index} style={styles.eachContainer}
                     onPress={() => {
-                      RouteParam.client = each;
-                      this.props.navigation.navigate('ClientStack', { screen: 'ClientView' });
+                      this.props.navigation.navigate('ClientStack', { screen: 'ClientView', params:{client: each} });
                     }}>
                     <ClientCard
                       cardStyle={{ width: wp(94) }}
