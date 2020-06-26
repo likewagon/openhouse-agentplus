@@ -78,32 +78,52 @@ export default class MlsSettingLinkScreen extends Component {
   }
 
   onClickAgent = (index) => {
-    // this.setState({ selectedIndex: index });
-    // let desc = 'Are you sure you want to select ' +
-    //   this.state.agentData[index].realtor_full_name +
-    //   ' from ' +
-    //   this.state.agentData[index].realtor_company +
-    //   ' as your preferred real estate agent?';
+    this.setState({ selectedIndex: index });
+    let desc = 'Are you sure that you want to unlink ' +
+      this.state.agentData[index].agent_fullname +
+      ' from ' +
+      this.state.agentData[index].agent_companyname +
+      ' from your Agent Plus™ account?';
 
-    // Alert.alert(
-    //   'Please confirm',
-    //   desc,
-    //   [
-    //     { text: 'Yes', onPress: () => this.onYes() },
-    //     { text: 'No', onPress: () => { } },
-    //   ],
-    //   {
-    //     cancelable: true
-    //   }
-    // );
+    Alert.alert(
+      'Please Confirm',
+      desc,
+      [
+        { text: 'Yes', onPress: () => this.onYes(index) },
+        { text: 'No', onPress: () => { } },
+      ],
+      {
+        cancelable: true
+      }
+    );
   }
 
-  onYes = async () => {
-    // let userAssignedAgent = this.state.agentData[this.state.selectedIndex].realtor_account;
-    // LoginInfo.user_assigned_agent = userAssignedAgent;
-    // await AsyncStorage.setItem('UserAssignedAgent', userAssignedAgent.toString());
-    // await AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
-    // this.props.navigation.navigate('Main');
+  onYes = async (index) => {
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'unlink_link_to_mls');
+    bodyFormData.append('account_no', LoginInfo.user_account);
+    bodyFormData.append('uniquerecord', this.state.agentData[index].uniquerecord);
+            
+    await postData(bodyFormData)
+      .then((res) => {
+        if (res.length == 0 || res[0].error) {
+          Alert.alert(
+            'Unlink is failed. \n Please Try Again',
+            '',
+            [
+              { text: 'OK', onPress: () => {} }
+            ],
+          );
+          return;
+        }
+        console.log('mls unlink success', res);                
+        
+        this.setState({ selectedIndex: -1 });
+        this.getAgent();
+      })
+      .catch((err) => {
+        console.log('mls unlink error', err);        
+      })        
   }
 
   render() {
