@@ -58,9 +58,11 @@ export default class SignModal extends Component {
     RNFetchBlob.fs
       .writeFile(signPath, sign.encoded, 'base64')
       .then((res) => {        
-        console.log('signature saved', res)
+        //console.log('signature saved', res)
       })
-      .catch(err => console.log('signature error', err));  
+      .catch(err => {
+        console.log('signature error', err);
+      });
   }
 
   render() {

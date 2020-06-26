@@ -65,7 +65,7 @@ export default class AgentListingScreen extends Component {
       
       getContentByAction(activeParam)
         .then((res) => {
-          console.log('active data', res);
+          //console.log('active data', res);
           if (res.length == 0 || res[0].error) {
             resolve();
           }
@@ -92,7 +92,7 @@ export default class AgentListingScreen extends Component {
       //console.log('inactiveParam', inactiveParam);  
       getContentByAction(inactiveParam)
         .then((res) => {
-          console.log('inactive data', res);
+          //console.log('inactive data', res);
           if (res.length == 0 || res[0].error) {
             resolve()
           }
@@ -119,7 +119,7 @@ export default class AgentListingScreen extends Component {
   
       getContentByAction(withclientsParam)
         .then((res) => {
-          console.log('withclients data', res);
+          //console.log('withclients data', res);
           if (res.length == 0 || res[0].error) {
             resolve();
           }

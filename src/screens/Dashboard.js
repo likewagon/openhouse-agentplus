@@ -95,7 +95,7 @@ export default class DashboardScreen extends Component {
     //console.log('recentActivity Param', recentActivityParam);
     getContentByAction(recentActivityParam)
       .then((res) => {
-        console.log('recent activity data', res);
+        //console.log('recent activity data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;
@@ -113,11 +113,12 @@ export default class DashboardScreen extends Component {
       action: 'dashboard_most_popular_properties',
       account_no: LoginInfo.user_account
     };
-    console.log('mostPopularProperty Param', mostPopularPropertyParam);
+    //console.log('mostPopularPropertyParam', mostPopularPropertyParam);
     this.setState({ spinner: true });
+
     getContentByAction(mostPopularPropertyParam)
       .then((res) => {
-        console.log('most popular property data', res);
+        //console.log('most popular property data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;

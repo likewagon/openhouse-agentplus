@@ -63,7 +63,7 @@ export default class PropertyWithClientScreen extends Component {
 
     getContentByAction(clientParam)
       .then((res) => {
-        console.log('clent by property data', res);
+        //console.log('clent by property data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;

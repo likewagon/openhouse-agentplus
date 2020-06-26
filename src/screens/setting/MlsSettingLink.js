@@ -64,7 +64,7 @@ export default class MlsSettingLinkScreen extends Component {
 
     getContentByAction(agentParam)
       .then((res) => {
-        console.log('agent data', res);
+        //console.log('agent data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;
@@ -120,7 +120,7 @@ export default class MlsSettingLinkScreen extends Component {
           );
           return;
         }
-        console.log('mls unlink success', res);                
+        //console.log('mls unlink success', res);                
         
         this.setState({ selectedIndex: -1 });
         this.getAgent();

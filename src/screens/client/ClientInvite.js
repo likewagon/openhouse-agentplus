@@ -112,7 +112,7 @@ export default class ClientInviteScreen extends Component {
           );
           return;
         }
-        console.log('post new client invite success', res);
+        //console.log('post new client invite success', res);
         this.setState({ spinner: false });
         this.props.navigation.navigate('ClientShare');
       })

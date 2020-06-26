@@ -79,7 +79,7 @@ export default class OpenHouseSignatureScreen extends Component {
     })
       .then(res => res.json())      
       .then(res => {        
-        console.log('post sign success', res)
+        //console.log('post sign success', res)
       })
       .catch((err)=>{
         console.log('post sign error',err);
@@ -97,7 +97,7 @@ export default class OpenHouseSignatureScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post attendee success', res);
+        //console.log('post attendee success', res);
       })
       .catch((err) => {
         console.log('post attendee error', err)

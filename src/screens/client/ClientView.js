@@ -134,7 +134,7 @@ export default class ClientViewScreen extends Component {
     //console.log('preferenceParam', preferenceParam);
     getContentByAction(preferenceParam)
       .then((res) => {
-        console.log('preference data', res);
+        //console.log('preference data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;
@@ -158,7 +158,7 @@ export default class ClientViewScreen extends Component {
     //console.log('searchedParam', searchedParam);
     getContentByAction(searchedParam)
       .then((res) => {
-        console.log('searched data', res);
+        //console.log('searched data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;
@@ -183,7 +183,7 @@ export default class ClientViewScreen extends Component {
     this.setState({ spinner: true });
     getContentByAction(viewedParam)
       .then((res) => {
-        console.log('viewed data', res);
+        //console.log('viewed data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;
@@ -210,7 +210,7 @@ export default class ClientViewScreen extends Component {
     //console.log('pdfParam', pdfParam);
     getContentByAction(pdfParam)
       .then((res) => {
-        console.log('pdf data', res);
+        //console.log('pdf data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;

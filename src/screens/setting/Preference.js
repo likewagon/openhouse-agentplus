@@ -104,7 +104,7 @@ export default class PreferenceScreen extends Component {
           );
           return;
         }
-        console.log('update preference success', res);
+        //console.log('update preference success', res);
       })
       .catch((err) => {
         console.log('update preference error', err);

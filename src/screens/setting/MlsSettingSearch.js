@@ -60,7 +60,7 @@ export default class MlsSettingSearchScreen extends Component {
 
     getContentByAction(agentParam)
       .then((res) => {
-        console.log('agent search data', res);
+        //console.log('agent search data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;
@@ -121,7 +121,7 @@ export default class MlsSettingSearchScreen extends Component {
           );
           return;
         }
-        console.log('mls link success', res);                
+        //console.log('mls link success', res);                
         
         this.props.navigation.navigate('MlsSettingLink');
       })
