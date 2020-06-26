@@ -157,12 +157,12 @@ export default class AgentListingScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'LISTINGS'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('AgentListingMap', { title: this.state.tab, listingData: this.state.listingData })} />
+          <Header title={this.state.tab === 'withclients' ? 'LISTINGS WITH CLIENTS' : this.state.tab.toUpperCase() + ' LISTINGS'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('AgentListingMap', { title: this.state.tab, listingData: this.state.listingData })} />
         </View>
         <View style={styles.btnsContainer}>
-          <Button btnTxt='ACTIVE' btnStyle={{ width: width * 0.28, height: normalize(40, 'height'), color: this.state.tab === 'active' ? 'white' : 'blue' }} onPress={() => this.onTab('active')} />
-          <Button btnTxt='INACTIVE' btnStyle={{ width: width * 0.28, height: normalize(40, 'height'), color: this.state.tab === 'inactive' ? 'white' : 'blue' }} onPress={() => this.onTab('inactive')} />
-          <Button btnTxt='WITH CLIENTS' btnStyle={{ width: width * 0.28, height: normalize(40, 'height'), color: this.state.tab === 'withclients' ? 'white' : 'blue' }} onPress={() => this.onTab('withclients')} />
+          <Button btnTxt='ACTIVE' btnStyle={{ width: width * 0.28, height: normalize(40, 'height'), color: this.state.tab === 'active' ? 'white' : 'blue', fontSize: RFPercentage(1.6) }} onPress={() => this.onTab('active')} />
+          <Button btnTxt='INACTIVE' btnStyle={{ width: width * 0.28, height: normalize(40, 'height'), color: this.state.tab === 'inactive' ? 'white' : 'blue', fontSize: RFPercentage(1.6) }} onPress={() => this.onTab('inactive')} />
+          <Button btnTxt='WITH CLIENTS' btnStyle={{ width: width * 0.28, height: normalize(40, 'height'), color: this.state.tab === 'withclients' ? 'white' : 'blue', fontSize: RFPercentage(1.6) }} onPress={() => this.onTab('withclients')} />
         </View>
         <View style={styles.mainContainer}>
           <View style={{ width: '100%', height: '100%' }}>
@@ -175,7 +175,7 @@ export default class AgentListingScreen extends Component {
                 <FlatList
                   showsVerticalScrollIndicator={false}
                   data={this.state.listingData}
-                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.94, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                  renderItem={({ item }) => <PropertyCard cardStyle={{ width: width * 0.94, height: normalize(245, 'height'), marginBottom: normalize(10, 'height'), marginRight: 0 }} item={item} inactive={this.state.tab == 'inactive' ? true : false} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                   keyExtractor={item => item.displayorder.toString()}
                 />
             }

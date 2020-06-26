@@ -58,7 +58,7 @@ export default class OpenHouseHomeScreen extends Component {
             <Image style={styles.lock} source={Images.btnLock} resizeMode='cover' />
           </TouchableOpacity>
           <View style={styles.btnContainer}>
-            <Button btnTxt='PLEASE SIGN IN' btnStyle={{ width: '100%', height: '100%', color: 'blue' }} onPress={() => this.props.navigation.navigate('OpenHouseQuestion')} />
+            <Button btnTxt='PLEASE SIGN IN' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.props.navigation.navigate('OpenHouseQuestion')} />
           </View>
         </ImageBackground>
       </View>

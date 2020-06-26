@@ -79,10 +79,10 @@ export default class OpenHouseQuestionScreen extends Component {
         </View>
 
         <View style={styles.btnContainer}>
-          <Button btnTxt='NO' btnStyle={{ width: '100%', height: '100%', color: 'blue' }} onPress={() => this.onNo()} />
+          <Button btnTxt='NO' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onNo()} />
         </View>
         <View style={styles.btnContainer}>
-          <Button btnTxt='YES' btnStyle={{ width: '100%', height: '100%', color: 'blue' }} onPress={() => this.onYes()} />
+          <Button btnTxt='YES' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onYes()} />
         </View>
 
       </View>

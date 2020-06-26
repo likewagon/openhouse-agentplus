@@ -87,7 +87,7 @@ export default class SideMenu extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.btnContainer}>
-          <Button btnTxt='Log out' btnStyle={{ width: width * 0.7, height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.props.onLogout()} />
+          <Button btnTxt='Log out' btnStyle={{ width: width * 0.7, height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.props.onLogout()} />
         </View>
       </ImageBackground>
     );

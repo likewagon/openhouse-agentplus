@@ -46,7 +46,7 @@ export default class ClientCard extends Component {
             this.props.clientTelephone &&
             <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }}>{this.props.clientTelephone}</Text>
           }
-          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.8), color: Colors.passiveTxtColor }} numberOfLines={1} ellipsizeMode={'tail'}>Last Activity on: {this.props.clientLastActivity.split('at')[0]}</Text>
+          <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.5), color: Colors.passiveTxtColor }} numberOfLines={1} ellipsizeMode={'tail'}>Active on: {this.props.clientLastActivity}</Text>
         </View>
       </View>
     );

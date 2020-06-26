@@ -68,15 +68,15 @@ export default class ClientShareScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'CLIENT REGISTERED'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
+          <Header title={'CLIENT REGISTERED'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.navigate('Dashboard')} />
         </View>
         <View style={styles.txtContainer}>
           <Text style={styles.txt}>
-            Congratulations! Your Client Was
+            Congratulations! Your Client Was Successfully
             {'\n'}
-            Successfully Registered With Open™
+            Registered With Open House Plus™
             {'\n'}{'\n'}
-            Please Share Open™ With Your Client
+            Please Share Open House Plus™ With Your Client.
             {'\n'}
             Once They Download The Application,
             {'\n'}
@@ -145,34 +145,36 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   txtContainer: {
-    width: '100%',
-    height: '18%',
+    width: '93%',
+    height: '22%',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
   },
   txt: {
     fontFamily: 'SFProText-Regular',
-    fontSize: RFPercentage(2),
+    fontSize: RFPercentage(1.9),
     color: Colors.blackColor,
     textAlign: 'center',
+    lineHeight: 22
   },
   mainContainer: {
     width: '100%',
-    height: '78%',
+    height: '68%',    
     alignItems: 'center',    
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5, 'height'),
     paddingTop: normalize(20, 'height'),
-    //borderWidth: 3
+    //borderWidth: 5
   },
   lineContainer: {
     width: '75%',
     height: '20%',//normalize(85, 'height'),
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center',    
     //borderWidth: 1
   },
   shareImg: {

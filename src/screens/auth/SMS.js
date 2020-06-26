@@ -178,7 +178,7 @@ export default class SMSScreen extends Component {
             </View>
             {this.state.isBtnShow &&
               <View style={styles.nextContainer}>
-                <Button btnTxt='Confirm' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }} onPress={() => this.onConfirm()} />
+                <Button btnTxt='Confirm' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onConfirm()} />
               </View>
             }
           </View>

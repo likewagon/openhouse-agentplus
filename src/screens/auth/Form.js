@@ -214,7 +214,7 @@ export default class FormScreen extends Component {
             </View>
             <View style={styles.nextContainer}>
               <Button btnTxt='Next'
-                btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue' }}
+                btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(1.8) }}
                 onPress={() => this.onNext()} />
             </View>
           </View>

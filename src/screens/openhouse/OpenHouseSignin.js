@@ -185,7 +185,7 @@ export default class OpenHouseSigninScreen extends Component {
           </View>
 
           <View style={styles.btnContainer}>
-            <Button btnTxt='CONTINUE' btnStyle={{ width: '100%', height: '100%', color: 'blue' }} onPress={() => this.onContinue()} />
+            <Button btnTxt='CONTINUE' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onContinue()} />
           </View>
         </View>
       </View>

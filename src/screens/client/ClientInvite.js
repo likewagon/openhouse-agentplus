@@ -68,23 +68,27 @@ export default class ClientInviteScreen extends Component {
 
   onContinue = async () => {
     if (this.state.clientFullname == '') {
-      Alert.alert('Please Enter Your Full Name');
+      Alert.alert('Please Enter Client First and Last Name');
+      return;
+    }
+    if (!this.state.clientFullname.includes(' ')) {
+      Alert.alert('Please Enter Client First and Last Name');
       return;
     }
     if (this.state.clientEmail == '') {
-      Alert.alert('Please Enter Your Email');
+      Alert.alert('Please Enter Client Email Address');
       return;
     }
     if (!this.validateEmail()) {
-      Alert.alert('Email is wrong. \n Please Enter Again');
+      Alert.alert('Please Enter A Valid Client Email Address');
       return;
     }
     if (this.state.clientTelephone == '') {
-      Alert.alert('Please Enter Your Telephone Number');
+      Alert.alert('Please Enter Client Telephone Number');
       return;
     }
     if (this.state.clientTelephone.length < 10) {
-      Alert.alert('Telephone Number is wrong. Please Enter Again');
+      Alert.alert('Please Enter A Valid Client Telephone Number');
       return;
     }
 
@@ -129,13 +133,15 @@ export default class ClientInviteScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'NEW INVITATION'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
+          <Header title={'NEW CLIENT INVITATION'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View>
         <View style={styles.txtContainer}>
           <Text style={styles.txt}>
-            To Invite Your Clients to Open™
+            To Invite Your Clients to Download
             {'\n'}
-            Please Enter Client Information
+            Open House Plus™
+            {'\n'}
+            Please Enter Your Client Information
           </Text>
         </View>
         <View style={styles.mainContainer}>
@@ -143,7 +149,7 @@ export default class ClientInviteScreen extends Component {
             style={styles.inputBox}
             autoFocus={true}
             autoCapitalize='none'
-            placeholder={'Your Full Name'}
+            placeholder={'Client First and Last Name'}
             placeholderColor={Colors.passiveTxtColor}
             value={this.state.clientFullname}
             onChangeText={(text) => this.setState({ clientFullname: text })}
@@ -151,7 +157,7 @@ export default class ClientInviteScreen extends Component {
           <TextInput
             style={styles.inputBox}
             autoCapitalize='none'
-            placeholder={'Your Email Address'}
+            placeholder={'Client Email Address'}
             placeholderColor={Colors.passiveTxtColor}
             value={this.state.clientEmail}
             onChangeText={(text) => this.setState({ clientEmail: text })}
@@ -160,7 +166,7 @@ export default class ClientInviteScreen extends Component {
             style={styles.inputBox}
             autoCapitalize='none'
             keyboardType={'numeric'}
-            placeholder={'Your Telephone Number'}
+            placeholder={'Client Telephone Number'}
             placeholderColor={Colors.passiveTxtColor}
             value={this.state.clientTelephone}
             onChangeText={(text) => this.setState({ clientTelephone: text })}
@@ -169,7 +175,7 @@ export default class ClientInviteScreen extends Component {
             refInput={ref => { this.input = ref }}
             style={styles.inputBox}
             keyboardType={'numeric'}
-            placeholder='Your Telephone Number'
+            placeholder='Client Telephone Number'
             placeholderColor={Colors.passiveTxtColor}
             value={this.state.clientTelephone}
             onChangeText={(formatted, extracted) => {
@@ -179,7 +185,7 @@ export default class ClientInviteScreen extends Component {
           />
 
           <View style={styles.btnContainer}>
-            <Button btnTxt='CONTINUE' btnStyle={{ width: '100%', height: '100%', color: 'blue' }} onPress={() => this.onContinue()} />
+            <Button btnTxt='CONTINUE' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onContinue()} />
           </View>
         </View>
       </View>
@@ -207,10 +213,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   txtContainer: {
-    width: '100%',
-    height: '10%',
+    width: '90%',
+    height: '13%',
     justifyContent: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
   },
@@ -219,6 +226,7 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
     textAlign: 'center',
+    lineHeight: 22
   },
   mainContainer: {
     width: '100%',

@@ -28,10 +28,10 @@ export default class PropertyCard extends Component {
   formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
-  });  
+  });
 
-  render() {        
-    if (this.props.item.property_main_photo_url == undefined || this.props.item.property_main_photo_url == '') return null;   
+  render() {
+    if (this.props.item.property_main_photo_url == undefined || this.props.item.property_main_photo_url == '') return null;
     return (
       <TouchableOpacity onPress={this.props.onPress}>
         <View style={{
@@ -67,9 +67,12 @@ export default class PropertyCard extends Component {
               //borderWidth: 2
             }}>
               <Image style={{ width: '100%', height: '100%', borderTopRightRadius: normalize(8), borderTopLeftRadius: normalize(8) }} source={{ uri: this.props.item.property_main_photo_url }} resizeMode='stretch'></Image>
-              <View style={{ marginTop: normalize(-25, 'height'), paddingLeft: normalize(10) }}>
-                <LabelTag tagTxt={this.props.item.property_listing_type === 'R' ? 'For Rent' : 'For Sale'} tagStyle={{ width: normalize(70), height: normalize(17, 'height') }} />
-              </View>
+              {
+                this.props.inactive ? null :
+                  <View style={{ marginTop: normalize(-25, 'height'), paddingLeft: normalize(10) }}>
+                    <LabelTag tagTxt={this.props.item.property_listing_type === 'R' ? 'For Rent' : 'For Sale'} tagStyle={{ width: normalize(70), height: normalize(17, 'height') }} />
+                  </View>
+              }
             </View>
 
             <View style={{
@@ -87,7 +90,7 @@ export default class PropertyCard extends Component {
                 <View style={{//left top part
                   width: '100%',
                   height: '50%',
-                  flexDirection: 'row',                  
+                  flexDirection: 'row',
                   paddingTop: normalize(10, 'height'),
                   paddingLeft: normalize(10),
                   //borderWidth: 2
@@ -130,12 +133,12 @@ export default class PropertyCard extends Component {
                 <View style={{//right top part
                   width: '100%',
                   height: '50%',
-                  alignItems: 'flex-end',                  
+                  alignItems: 'flex-end',
                   paddingTop: normalize(10, 'height'),
                   paddingRight: normalize(10),
                   //borderWidth: 2
                 }}>
-                  <View>                    
+                  <View>
                     <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(2), color: Colors.weakBlackColor }}>{this.formatter.format(this.props.item.property_amount).split(".")[0]}</Text>
                   </View>
                 </View>
@@ -145,8 +148,8 @@ export default class PropertyCard extends Component {
                   height: '50%',
                   flexDirection: 'row',
                   //borderWidth: 2
-                }}>                  
-                </View>                
+                }}>
+                </View>
               </View>
             </View>
           </View>
@@ -158,6 +161,7 @@ export default class PropertyCard extends Component {
 
 PropertyCard.propTypes = {
   cardStyle: PropTypes.object.isRequired,
-  item: PropTypes.object.isRequired,  
+  item: PropTypes.object.isRequired,
+  inactive: PropTypes.bool,
   onPress: PropTypes.func
 };

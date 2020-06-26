@@ -39,7 +39,7 @@ export default class Button extends Component {
         }}>
           <Text style={{
             fontFamily: 'SFProText-Semibold',
-            fontSize: RFPercentage(1.8),
+            fontSize: this.props.btnStyle.fontSize,
             color: this.props.btnStyle.color === 'blue' ? '#ffffff' : Colors.blueButtonBackColor
           }}>
             {this.props.btnTxt}
