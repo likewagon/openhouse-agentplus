@@ -65,6 +65,10 @@ export default class MlsSettingLinkScreen extends Component {
     getContentByAction(agentParam)
       .then((res) => {
         console.log('agent data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           agentData: sortedRes,
@@ -131,7 +135,7 @@ export default class MlsSettingLinkScreen extends Component {
       <View style={styles.container}>
         {/* <Spinner visible={this.state.spinner} /> */}
         <View style={styles.headerContainer}>
-          <Header title={'MLS SETTINGS'} titleColor={Colors.blackColor} rightIcon={Images.iconAddAgent} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => { this.props.navigation.navigate('MlsSettingSearch') }} />
+          <Header title={'MLS SETTINGS'} titleColor={Colors.blackColor} rightIcon={Images.iconAddPerson} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => { this.props.navigation.navigate('MlsSettingSearch') }} />
         </View>
         <View style={styles.txtContainer}>
           <Text style={styles.txt}>
@@ -188,13 +192,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   txtContainer: {
-    width: '90%',
+    width: '100%',
     height: '10%',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
+    padding: normalize(10)
   },
   txt: {
     fontFamily: 'SFProText-Regular',

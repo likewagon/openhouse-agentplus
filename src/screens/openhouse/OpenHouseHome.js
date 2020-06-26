@@ -49,16 +49,30 @@ export default class OpenHouseHomeScreen extends Component {
 
   } 
 
+  onLock = () => {
+    Alert.alert(
+      'Please Confirm',
+      'Are you sure you want the end this In-Person Open House?',
+      [
+        { text: 'Yes', onPress: () => this.props.navigation.goBack(null) },
+        { text: 'No', onPress: () => { } },
+      ],
+      {
+        cancelable: true
+      }
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <ImageBackground style={styles.propertyImgBack} source={{ uri: RouteParam.propertyMainPhotoUrl }}>
-          <TouchableOpacity style={styles.lockContainer} onPress={()=>this.props.navigation.goBack(null)}>
+          <TouchableOpacity style={styles.lockContainer} onPress={()=>this.onLock()}>
             <Image style={styles.lock} source={Images.btnLock} resizeMode='cover' />
           </TouchableOpacity>
           <View style={styles.btnContainer}>
-            <Button btnTxt='PLEASE SIGN IN' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.props.navigation.navigate('OpenHouseQuestion')} />
+            <Button btnTxt='PLEASE SIGN IN' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.props.navigation.navigate('OpenHouseQuestion')} />
           </View>
         </ImageBackground>
       </View>
@@ -90,8 +104,8 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
   lock: {
-    width: normalize(40),
-    height: normalize(40),
+    width: normalize(30),
+    height: normalize(30),
     //borderWidth: 1
   },
   btnContainer: {

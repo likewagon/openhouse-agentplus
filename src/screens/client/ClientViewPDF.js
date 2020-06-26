@@ -55,7 +55,7 @@ export default class ClientViewPDFScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={this.state.client.client_fullname.toUpperCase()} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('ClientMap', { client: this.state.client })} />
+          <Header title={this.state.client.client_fullname.toUpperCase()} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View>
         <View style={styles.topContainer}>
           <View style={styles.imgContainer}>
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     width: '100%',
-    height: '17%',
+    height: '14%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -111,8 +111,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   imgContainer: {
-    width: '30%',
-    height: '78%',
+    width: '20%',
+    height: '73%',
     //borderWidth: 1
   },
   img: {
@@ -123,10 +123,11 @@ const styles = StyleSheet.create({
     borderWidth: normalize(0.5)
   },
   txtContainer: {
-    width: '62%',
+    width: '72%',
     height: '80%',
     justifyContent: 'center',
     padding: normalize(10),
+    paddingTop: normalize(15),
     //borderWidth: 1
   },
   txt: {
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   pdfContainer: {
     width: '100%',
     height: '95%',
-    borderColor: Colors.blackColor,
+    borderColor: Colors.borderColor,
     borderWidth: normalize(0.5)
   },
   emptyContainer: {

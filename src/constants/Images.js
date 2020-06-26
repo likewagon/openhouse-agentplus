@@ -3,38 +3,23 @@ const Images = {
   logo: require('../assets/images/logo.png'), 
   splashBackground: require('../assets/images/splashBackground.png'), 
    
-  iconFavorite: require('../assets/images/iconFavorite.png'),
-  iconFilter: require('../assets/images/iconFilter.png'), 
-  iconSort: require('../assets/images/iconSort.png'), 
-  iconBrowse: require('../assets/images/iconBrowse.png'), 
   iconClose: require('../assets/images/iconClose.png'),   
-  iconDetail: require('../assets/images/iconDetail.png'), 
-  iconMap: require('../assets/images/iconMap.png'), 
   iconMenu: require('../assets/images/iconMenu.png'), 
-  iconMinus: require('../assets/images/iconMinus.png'), 
-  iconPlus: require('../assets/images/iconPlus.png'), 
   iconOK: require('../assets/images/iconOK.png'), 
   iconRefresh: require('../assets/images/iconRefresh.png'), 
   iconBlackBath: require('../assets/images/iconBlackBath.png'), 
   iconBlackBed: require('../assets/images/iconBlackBed.png'), 
-  iconWhiteBath: require('../assets/images/iconWhiteBath.png'), 
-  iconWhiteBed: require('../assets/images/iconWhiteBed.png'), 
-  iconWhiteClose: require('../assets/images/iconWhiteClose.png'),    
-  iconWhiteBookmark: require('../assets/images/iconWhiteBookmark.png'),
-  iconRedBookmark: require('../assets/images/iconRedBookmark.png'),
-  
-  iconSearch: require('../assets/images/iconSearch.png'),
-  iconAddAgent: require('../assets/images/iconAddAgent.png'),
-  iconAddClient: require('../assets/images/iconAddClient.png'),
+      
+  iconAddPerson: require('../assets/images/iconAddPerson.png'),  
   iconLocation: require('../assets/images/iconLocation.png'),
 
   iconClientPreference: require('../assets/images/iconClientPreference.png'),
   iconClientSearched: require('../assets/images/iconClientSearched.png'),
   iconClientViewed: require('../assets/images/iconClientViewed.png'),
   iconClientPDF: require('../assets/images/iconClientPDF.png'),
-  iconConferenceCall: require('../assets/images/iconConferenceCall.png'),
+  iconConference: require('../assets/images/iconConference.png'),
   iconVideoMessage: require('../assets/images/iconVideoMessage.png'),
-  iconPlayback: require('../assets/images/iconPlayback.png'),
+  iconOpen: require('../assets/images/iconOpen.png'),
   iconFacebook: require('../assets/images/iconFacebook.png'),
 
   marker: require('../assets/images/marker.png'),
@@ -42,7 +27,6 @@ const Images = {
   sideBlurBack: require('../assets/images/sideBlurBack.png'),
     
   btnGoogleLogin: require('../assets/images/googleLogin.png'),  
-  btnBookmark: require('../assets/images/btnBookmark.png'),
 
   btnCommunication: require('../assets/images/btnCommunication.png'),
   btnFacebook: require('../assets/images/btnFacebook.png'),
@@ -51,8 +35,10 @@ const Images = {
   btnLinkedin: require('../assets/images/btnLinkedin.png'),
   btnYoutube: require('../assets/images/btnYoutube.png'),
   btnTwitter: require('../assets/images/btnTwitter.png'),
-  btnSnapChat: require('../assets/images/btnSnapChat.png'),
+  btnSnapchat: require('../assets/images/btnSnapchat.png'),
   btnPinterest: require('../assets/images/btnPinterest.png'),
+  btnTiktok: require('../assets/images/btnTiktok.png'),
+  btnWhatsapp: require('../assets/images/btnWhatsapp.png'),
 
   btnLock: require('../assets/images/btnLock.png'),
 

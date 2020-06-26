@@ -7,7 +7,8 @@ const Colors = {
   passiveTxtColor: '#7C7B89',
   searchBackColor: '#F2F5F8',
   blueButtonBackColor: '#3B5998',
-  buttonBorderColor: '#44D7B6'
+  buttonBorderColor: '#44D7B6',
+  orangeColor: '#FA6400'
 }
 
 export default Colors;

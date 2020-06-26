@@ -18,6 +18,7 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
   Button,
@@ -77,8 +78,9 @@ export default class ClientListScreen extends Component {
       })
   }
 
-  onClickClient = (item) => {
-    this.props.navigation.navigate('ClientView', { client: item });
+  onClickClient = (client) => {
+    RouteParam.client = client;
+    this.props.navigation.navigate('ClientView');
   }
 
   onSearch = (query) => {
@@ -94,18 +96,13 @@ export default class ClientListScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Header title={'CLIENTS'} titleColor={Colors.blackColor} rightLeftIcon={Images.iconAddClient} rightIcon={Images.iconLocation} onPressBack={() => this.props.navigation.goBack(null)} onPressRightLeftIcon={() => { this.props.navigation.navigate('ClientInvite') }} onPressRightIcon={() => { this.props.navigation.navigate('ClientMap') }} />
+          <Header title={'CLIENTS'} titleColor={Colors.blackColor} rightLeftIcon={Images.iconAddPerson} rightIcon={Images.iconLocation} onPressBack={() => this.props.navigation.goBack(null)} onPressRightLeftIcon={() => { this.props.navigation.navigate('ClientInvite') }} onPressRightIcon={() => { this.props.navigation.navigate('ClientMap') }} />
         </View>
         <View style={styles.searchContainer}>
           <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} onFastSearch={this.onFastSearch} />
         </View>
         <ScrollView style={{ marginTop: normalize(10, 'height') }}>
-          {
-            this.state.spinner &&
-            <View style={{ width: '100%', height: height * 0.65, justifyContent: 'center', alignItems: 'center' }}>
-              <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
-            </View>
-          }
+          <Spinner visible={this.state.spinner} />
           {
             this.state.clientData.length == 0 ?
               <View style={styles.emptyContainer}>

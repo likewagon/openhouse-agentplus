@@ -55,9 +55,8 @@ export default class ClientMapScreen extends Component {
     this.setState({ markerIdentifierData: markerIdentifierData });
   }
 
-  onPressMarker = (clientAccount) => {
-    RouteParam.clientAccount = clientAccount;
-    //this.props.navigation.navigate('ClientView');    
+  onPressMarker = (clientAccount) => {    
+    
   }
 
   render() {    

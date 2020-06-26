@@ -36,16 +36,16 @@ export default class PreferenceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: -1,      
+      selectedIndex: -1,
       preferenceData: [
         {
-          id: 0,          
+          id: 0,
           title: 'IN-PERSON OPEN HOUSE AGENCY DISCLOSURE FORMS',
           desc: 'Required that every attendees that enter your In-Person Open House signs the department of state agency disclosure form and any additional disclaimers or documents required by your local Board of Realtors.',
           value: 0
-        },        
+        },
         {
-          id: 1,          
+          id: 1,
           title: 'LIVE STREAM SETTINGS',
           desc: 'Required that every attendees that enter your LIVE STREAM Open House signs the department of state agency disclosure form and any additional disclaimers or documents required by your local Board of Realtors.',
           value: 0
@@ -61,24 +61,27 @@ export default class PreferenceScreen extends Component {
   getPreference = () => {
     var preferenceParam = {
       action: 'my_preference',
-      account_no: LoginInfo.user_account,      
+      account_no: LoginInfo.user_account,
     };
-    
+
     getContentByAction(preferenceParam)
       .then((res) => {
         //console.log(res);
-        if(res){
-          var {preferenceData} = this.state;
-          preferenceData[0].value = res[0].in_person;          
-          preferenceData[1].value = res[0].live_stream;
-                    
-          this.setState({
-            preferenceData: preferenceData,          
-          });        
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
         }
+
+        var { preferenceData } = this.state;
+        preferenceData[0].value = res[0].in_person;
+        preferenceData[1].value = res[0].live_stream;
+
+        this.setState({
+          preferenceData: preferenceData,
+        });
       })
       .catch((err) => {
-        console.log('get preference error', err);        
+        console.log('get preference error', err);
       })
   }
 
@@ -88,7 +91,7 @@ export default class PreferenceScreen extends Component {
     bodyFormData.append('account_no', LoginInfo.user_account);
     bodyFormData.append('in_person', this.state.preferenceData[0].value);
     bodyFormData.append('live_stream', this.state.preferenceData[1].value);
-        
+
     await postData(bodyFormData)
       .then((res) => {
         if (res.length == 0 || res[0].error) {
@@ -96,16 +99,16 @@ export default class PreferenceScreen extends Component {
             'Update is failed. \n Please Try Again',
             '',
             [
-              { text: 'OK', onPress: () => {} }
+              { text: 'OK', onPress: () => { } }
             ],
           );
           return;
         }
-        console.log('update preference success', res);                
+        console.log('update preference success', res);
       })
       .catch((err) => {
-        console.log('update preference error', err);        
-      })    
+        console.log('update preference error', err);
+      })
   }
 
   render() {
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: '90%',
-    height: normalize(180),    
+    height: normalize(180),
     alignSelf: 'center',
     marginTop: normalize(17, 'height'),
     borderColor: Colors.borderColor,
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
-    color: Colors.blackColor,    
+    color: Colors.blackColor,
   },
   bottomPart: {
     width: '100%',

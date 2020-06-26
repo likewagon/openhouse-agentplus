@@ -209,13 +209,14 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   txtContainer: {
-    width: '90%',
-    height: '12%',
+    width: '100%',
+    height: '14%',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     borderColor: Colors.borderColor,
     borderBottomWidth: normalize(0.5, 'height'),
+    padding: normalize(10)
   },
   txt: {
     fontFamily: 'SFProText-Regular',

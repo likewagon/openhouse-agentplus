@@ -35,20 +35,20 @@ import {
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 import { getContentByAction, postData } from '../../api/rest';
 
-export default class AgentListingMapScreen extends Component {
+export default class ClientViewedPropertyMapScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       spinner: false,
-      tab: this.props.route.params.tab,
-      listingData: this.props.route.params.listingData,
+      clientName: this.props.route.params.clientName,      
+      viewedData: this.props.route.params.viewedData,
       markerData: [],
       markerIdentifierData: [],
     }
   }
 
   componentDidMount() {
-    this.getMarkerData(this.state.listingData);
+    this.getMarkerData(this.state.viewedData);
   }
 
   getMarkerData = (res) => {
@@ -78,7 +78,7 @@ export default class AgentListingMapScreen extends Component {
   }
 
   onPressMarker = (propertyRecordNo) => {
-    var index = this.state.listingData.findIndex((each) => each.property_recordno == propertyRecordNo);
+    var index = this.state.viewedData.findIndex((each) => each.property_recordno == propertyRecordNo);
 
     var param = {
       animated: true,
@@ -94,14 +94,14 @@ export default class AgentListingMapScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={this.state.tab === 'withclients' ? 'LISTINGS WITH CLIENTS' : this.state.tab.toUpperCase() + ' LISTINGS'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
+          <Header title={this.state.clientName.toUpperCase() + ' VIEWED'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View>
         <View style={styles.mapContainer}>
           <MapView
             ref={map => { this.map = map }}
             region={{
-              latitude: this.state.listingData.length > 0 ? this.state.listingData[0].property_latitude : LoginInfo.latitude,
-              longitude: this.state.listingData.length > 0 ? this.state.listingData[0].property_longitude : LoginInfo.longitude,
+              latitude: this.state.viewedData.length > 0 ? this.state.viewedData[0].property_latitude : LoginInfo.latitude,
+              longitude: this.state.viewedData.length > 0 ? this.state.viewedData[0].property_longitude : LoginInfo.longitude,
               latitudeDelta: 0.0922 / 5,
               longitudeDelta: 0.0421 / 5,
             }}
@@ -143,7 +143,7 @@ export default class AgentListingMapScreen extends Component {
         <View style={styles.mainContainer}>
           <View style={{ width: '100%', height: '100%' }}>
             {
-              this.state.listingData.length == 0 ?
+              this.state.viewedData.length == 0 ?
                 <View style={styles.emptyContainer}>
                   <Text style={styles.emptyTxt}>No Result Data</Text>
                 </View>
@@ -153,7 +153,7 @@ export default class AgentListingMapScreen extends Component {
                   ref={(ref) => { this.flatListRef = ref; }}
                   keyExtractor={item => item.displayorder.toString()}
                   showsHorizontalScrollIndicator={false}
-                  data={this.state.listingData}
+                  data={this.state.viewedData}
                   getItemLayout={(data, index) => (
                     { length: normalize(335), offset: normalize(335) * index, index }
                   )}

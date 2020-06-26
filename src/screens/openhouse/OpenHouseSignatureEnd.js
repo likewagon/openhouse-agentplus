@@ -94,13 +94,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     borderColor: Colors.blueColor,
-    borderWidth: normalize(1)
+    borderWidth: normalize(1),    
   },
-  thankyouTxt: {
-    fontFamily: 'SFProText-Regular',
-    fontSize: RFPercentage(4),
+  thankyouTxt: {        
+    fontFamily: 'Billabong',
+    fontSize: RFPercentage(5.5),
     color: Colors.blackColor,
-    textAlign: 'center',
+    textAlign: 'center',    
     //borderWidth: 1,
   }
 });

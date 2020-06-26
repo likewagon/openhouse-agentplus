@@ -142,7 +142,7 @@ export default class OpenHouseSignatureScreen extends Component {
             <WebView source={{ uri: RouteParam.pdfUrl }} />
           </View>
           <View style={styles.btnContainer}>
-            <Button btnTxt='AGREE AND SIGN' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.setState({ visibleSignForm: true })} />
+            <Button btnTxt='AGREE AND SIGN' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.setState({ visibleSignForm: true })} />
           </View>          
         </View>
       </ImageBackground>

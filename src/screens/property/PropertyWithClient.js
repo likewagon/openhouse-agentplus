@@ -41,57 +41,44 @@ export default class PropertyWithClientScreen extends Component {
     this.state = {
       spinner: false,
       property: this.props.route.params.property,
-      clientData: [
-        {
-          "client_account": "39",
-          "client_fullname": "Danielle Reese",
-          "client_email": "123closings@gmail.com",
-          "client_telephone": "(914) 497-2987",
-          "client_photo_url": "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "client_latitude": "41.027098180204625",
-          "client_longitude": "-73.75875773254012",
-          "client_last_activity": "Wednesday, June 17th at 12:48PM",
-          "displayorder": 1
-        },
-        {
-          "client_account": "38",
-          "client_fullname": "Anthony Robinson",
-          "client_email": "kelloggsx@gmail.com",
-          "client_telephone": "(305) 900-7270",
-          "client_photo_url": "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "client_latitude": "42.776859703442035",
-          "client_longitude": "-73.3456412478709",
-          "client_last_activity": "Monday, June 17th at 12:46PM",
-          "displayorder": 2
-        },
-        {
-          "client_account": "37",
-          "client_fullname": "Anthony Robinson",
-          "client_email": "kelloggsx@gmail.com",
-          "client_telephone": "(305) 900-7270",
-          "client_photo_url": "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "client_latitude": "40.876859703442035",
-          "client_longitude": "-75.3456412478709",
-          "client_last_activity": "Friday, Oct 17th at 12:46PM",
-          "displayorder": 3
-        },
-        {
-          "client_account": "36",
-          "client_fullname": "Anthony Robinson",
-          "client_email": "kelloggsx@gmail.com",
-          "client_telephone": "(305) 900-7270",
-          "client_photo_url": "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50",
-          "client_latitude": "39.776859703442035",
-          "client_longitude": "-69.3456412478709",
-          "client_last_activity": "Tuesday, June 5th at 12:46PM",
-          "displayorder": 4
-        },
-      ],
+      clientData: [],
     }
   }
 
   componentDidMount() {
+    this.getClient();
+  }
 
+  getClient = () => {
+    var clientParam = {
+      action: 'clients_by_property',
+      account_no: LoginInfo.user_account,
+      property_recordno: this.state.property.property_recordno
+    };
+    //console.log('client Param', clientParam);
+    this.setState({
+      clientData: [],
+      spinner: true
+    });
+
+    getContentByAction(clientParam)
+      .then((res) => {
+        console.log('clent by property data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
+        var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
+        this.setState({
+          clientData: sortedRes,
+          spinner: false
+        });
+        RouteParam.clientData = sortedRes;
+      })
+      .catch((err) => {
+        console.log('get client by prperty error', err);
+        this.setState({ spinner: false })
+      })
   }
 
   render() {
@@ -99,10 +86,10 @@ export default class PropertyWithClientScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'MLS. ' + this.state.property.property_mlsnumber} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('PropertyWithClientMap', { clientData: this.state.clientData })} />
+          <Header title={'MLS. ' + this.state.property.property_mlsnumber} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('ClientStack', { screen: 'ClientMap' })} />
         </View>
         <View style={styles.propertyContainer}>
-          <PropertyCard cardStyle={{ width: width * 0.94, height: normalize(245, 'height'), marginBottom: normalize(0, 'height'), marginRight: 0 }} item={this.state.property} />
+          <PropertyCard cardStyle={{ width: width * 0.94, height: normalize(245, 'height'), marginBottom: normalize(0, 'height'), marginRight: 0 }} item={this.state.property} onPress={() => this.props.navigation.goBack(null)}/>
         </View>
         <ScrollView style={{ width: '100%', height: '100%' }} showsVerticalScrollIndicator={false}>
           {
@@ -114,10 +101,13 @@ export default class PropertyWithClientScreen extends Component {
               this.state.clientData.map((each, index) => {
                 return (
                   <TouchableOpacity key={index} style={styles.eachContainer}
-                    /*onPress={() => this.onClickClient(each)}*/>
+                    onPress={() => {
+                      RouteParam.client = each;
+                      this.props.navigation.navigate('ClientStack', { screen: 'ClientView' });
+                    }}>
                     <ClientCard
-                      cardStyle={{width: wp(94)}}
-                      clientName={each.client_fullname}                      
+                      cardStyle={{ width: wp(94) }}
+                      clientName={each.client_fullname}
                       clientImg={{ uri: each.client_photo_url }}
                       clientLastActivity={each.client_last_activity}
                     />

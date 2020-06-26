@@ -68,7 +68,11 @@ export default class OpenHouseSigninScreen extends Component {
 
   onContinue = async () => {
     if (this.state.fullname == '') {
-      Alert.alert('Please Enter Your Full Name');
+      Alert.alert('Please Enter Your First and Last Name');
+      return;
+    }
+    if(!this.state.fullname.includes(' ')){
+      Alert.alert('Please Enter Your First and Last Name');
       return;
     }
     if (this.state.email == '') {
@@ -76,7 +80,7 @@ export default class OpenHouseSigninScreen extends Component {
       return;
     }
     if (!this.validateEmail()) {
-      Alert.alert('Email is wrong. \n Please Enter Again');
+      Alert.alert('Please Enter A Valid Email Address');
       return;
     }
     if (this.state.telephone == '') {
@@ -84,7 +88,7 @@ export default class OpenHouseSigninScreen extends Component {
       return;
     }
     if (this.state.telephone.length < 10) {
-      Alert.alert('Telephone Number is wrong. Please Enter Again');
+      Alert.alert('Please Enter A Valid Telephone Number');
       return;
     }
 
@@ -137,7 +141,7 @@ export default class OpenHouseSigninScreen extends Component {
             style={styles.inputBox}
             autoFocus={true}
             autoCapitalize='none'
-            placeholder={'Your Full Name'}
+            placeholder={'Your First and Last Name'}
             placeholderColor={Colors.passiveTxtColor}
             value={this.state.fullname}
             onChangeText={(text) => this.setState({ fullname: text })}
@@ -178,14 +182,14 @@ export default class OpenHouseSigninScreen extends Component {
               {'\n'}
               and granting permission to be contacted via text, 
               {'\n'}
-              email or phone calls by {RouteParam.propertyAgentFullname.toUpperCase()}
+              email or phone calls by {RouteParam.propertyAgentFullname}
               {'\n'}
-              any of affiliates.
+              any of his/her affiliates.
             </Text>
           </View>
 
           <View style={styles.btnContainer}>
-            <Button btnTxt='CONTINUE' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onContinue()} />
+            <Button btnTxt='CONTINUE' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.onContinue()} />
           </View>
         </View>
       </View>
@@ -232,7 +236,7 @@ const styles = StyleSheet.create({
   },
   txtContainer: {
     width: '100%',
-    height: '16%',
+    height: '18%',
     justifyContent: 'center',
     alignItems: 'center',
     //marginTop: normalize(25, 'height'),
@@ -246,6 +250,7 @@ const styles = StyleSheet.create({
     fontSize: RFPercentage(1.7),
     color: Colors.blackColor,
     textAlign: 'center',
+    lineHeight: 22,
     //borderWidth: 1
   },
   btnContainer: {

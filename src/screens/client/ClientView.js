@@ -40,7 +40,7 @@ export default class ClientViewScreen extends Component {
     this.state = {
       spinner: false,
       tab: 'preference',
-      client: this.props.route.params.client,
+      client: RouteParam.client,
       preferenceData: [
         {
           "client_question": "I Am Currently Looking To...",
@@ -135,6 +135,10 @@ export default class ClientViewScreen extends Component {
     getContentByAction(preferenceParam)
       .then((res) => {
         console.log('preference data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           preferenceData: sortedRes,
@@ -155,6 +159,10 @@ export default class ClientViewScreen extends Component {
     getContentByAction(searchedParam)
       .then((res) => {
         console.log('searched data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           searchedData: sortedRes,
@@ -172,16 +180,24 @@ export default class ClientViewScreen extends Component {
       client_no: this.state.client.client_account
     };
     //console.log('viewedParam', viewedParam);
+    this.setState({ spinner: true });
     getContentByAction(viewedParam)
       .then((res) => {
         console.log('viewed data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           viewedData: sortedRes,
+          spinner: false
         });
+        RouteParam.propertyData = sortedRes;
       })
       .catch((err) => {
         console.log('get viewed error', err);
+        this.setState({ spinner: false})
       })
   }
 
@@ -195,6 +211,10 @@ export default class ClientViewScreen extends Component {
     getContentByAction(pdfParam)
       .then((res) => {
         console.log('pdf data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           pdfData: sortedRes,
@@ -311,7 +331,7 @@ export default class ClientViewScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={this.state.client.client_fullname.toUpperCase()} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('ClientMap', { client: this.state.client })} />
+          <Header title={this.state.client.client_fullname.toUpperCase()} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={this.state.tab === 'viewed' ? Images.iconLocation : null} onPressRightIcon={() => this.props.navigation.navigate('ClientViewedPropertyMap', {clientName: this.state.client.client_fullname, viewedData: this.state.viewedData})} />
         </View>
         <View style={styles.topContainer}>
           <View style={styles.imgContainer}>
@@ -372,7 +392,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     width: '100%',
-    height: '17%',
+    height: '14%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -380,8 +400,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: normalize(0.5, 'height'),
   },
   imgContainer: {
-    width: '30%',
-    height: '78%',
+    width: '20%',
+    height: '73%',
     //borderWidth: 1
   },
   img: {
@@ -392,10 +412,11 @@ const styles = StyleSheet.create({
     borderWidth: normalize(1)
   },
   txtContainer: {
-    width: '62%',
+    width: '72%',
     height: '80%',
     justifyContent: 'center',
     padding: normalize(10),
+    paddingTop: normalize(15),
     //borderWidth: 1
   },
   txt: {
@@ -420,7 +441,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     width: '100%',
-    height: '63%',
+    height: '65%',
     alignItems: 'center',
     padding: normalize(10),
     //borderWidth: 3

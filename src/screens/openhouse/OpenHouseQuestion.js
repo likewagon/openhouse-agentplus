@@ -71,18 +71,20 @@ export default class OpenHouseQuestionScreen extends Component {
             {'\n'}
             REAL ESTATE AGENT?
           </Text>
-          <TouchableOpacity>
-            <Text style={styles.txtLink}>
-              Do you have a sign contract with a Realtor?
+          <Text style={styles.subTxt}>
+            Do You Have A Signed
+            {'\n'}
+            Buyer-Broker Agreement
+            {'\n'}
+            With A Real Estate Agent?
           </Text>
-          </TouchableOpacity>
         </View>
 
         <View style={styles.btnContainer}>
-          <Button btnTxt='NO' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onNo()} />
+          <Button btnTxt='NO' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.onNo()} />
         </View>
         <View style={styles.btnContainer}>
-          <Button btnTxt='YES' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(1.8) }} onPress={() => this.onYes()} />
+          <Button btnTxt='YES' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.onYes()} />
         </View>
 
       </View>
@@ -116,6 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // borderColor: Colors.borderColor,
     // borderBottomWidth: normalize(0.5, 'height'),
+    //borderWidth: 1
   },
   txt: {
     fontFamily: 'SFProText-Regular',
@@ -123,11 +126,12 @@ const styles = StyleSheet.create({
     color: Colors.blackColor,
     textAlign: 'center',
   },
-  txtLink: {
+  subTxt: {
     fontFamily: 'SFProText-Regular',
-    fontSize: RFPercentage(2),
-    color: Colors.blueColor,
-    textAlign: 'center'
+    fontSize: RFPercentage(2.2),
+    color: Colors.orangeColor,
+    textAlign: 'center',
+    marginTop: normalize(30, 'height')
   },
   btnContainer: {
     width: '85%',

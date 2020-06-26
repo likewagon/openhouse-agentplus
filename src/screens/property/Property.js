@@ -67,6 +67,10 @@ export default class PropertyScreen extends Component {
     getContentByAction(propertyParam)
       .then((res) => {
         //console.log(res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         this.setState({
           property: res[0],
           spinner: false
@@ -164,13 +168,13 @@ export default class PropertyScreen extends Component {
 
         <View style={styles.btnsContainer}>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('PropertyWithClient', {property: this.state.property})}>
-            <Image style={styles.eachBtn} source={Images.iconConferenceCall}></Image>
+            <Image style={styles.eachBtn} source={Images.iconConference}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('LiveCall')}>
             <Image style={styles.eachBtn} source={Images.iconVideoMessage}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('OpenHouseStack')}>
-            <Image style={styles.eachBtn} source={Images.iconPlayback}></Image>
+            <Image style={styles.eachBtn} source={Images.iconOpen}></Image>
           </TouchableOpacity>
           <TouchableOpacity>
             <Image style={styles.eachBtn} source={Images.iconFacebook}></Image>

@@ -59,9 +59,13 @@ export default class ClientShareScreen extends Component {
 
   onTwitter=()=>{}
 
-  onSnapChat=()=>{}
+  onSnapchat=()=>{}
 
   onPinterest=()=>{}
+
+  onTiktok=()=>{}
+
+  onWhatsapp=()=>{}
   
   render() {
     return (
@@ -112,12 +116,24 @@ export default class ClientShareScreen extends Component {
             <TouchableOpacity onPress={() => this.onTwitter()}>
               <Image style={styles.shareImg} source={Images.btnTwitter} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onSnapChat()}>
-              <Image style={styles.shareImg} source={Images.btnSnapChat} resizeMode='cover' />
+            <TouchableOpacity onPress={() => this.onSnapchat()}>
+              <Image style={styles.shareImg} source={Images.btnSnapchat} resizeMode='cover' />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.onPinterest()}>
               <Image style={styles.shareImg} source={Images.btnPinterest} resizeMode='cover' />
             </TouchableOpacity>
+          </View>
+
+          <View style={styles.lineContainer}>
+            <TouchableOpacity onPress={() => this.onTiktok()}>
+              <Image style={styles.shareImg} source={Images.btnTiktok} resizeMode='cover' />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.onWhatsapp()}>
+              <Image style={styles.shareImg} source={Images.btnWhatsapp} resizeMode='cover' />
+            </TouchableOpacity>            
+            <TouchableOpacity onPress={() => {}}>
+              <Image style={styles.shareImg} /*source={Images.btnWhatsapp}*/ resizeMode='cover' />
+            </TouchableOpacity>            
           </View>
         </View>
       </View>
@@ -166,8 +182,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',    
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5, 'height'),
-    paddingTop: normalize(20, 'height'),
-    //borderWidth: 5
+    paddingTop: normalize(35, 'height'),
+    // borderColor: '#ff0000',
+    // borderWidth: 5
   },
   lineContainer: {
     width: '75%',

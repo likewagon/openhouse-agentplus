@@ -42,6 +42,7 @@ export default class DashboardScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      clientData: [],
       recentClientData: [],
       recentActivityData: [],
       mostPopularPropertyData: [],
@@ -55,7 +56,7 @@ export default class DashboardScreen extends Component {
   componentDidMount() {
   }
 
-  componentDidFocus() {
+  componentDidFocus() {    
     this.getRecentClient();
     this.getRecentActivity();
     this.getMostPupularProperty();
@@ -64,7 +65,7 @@ export default class DashboardScreen extends Component {
   componentWillUnmount() {
     //if (this.listener) this.listener.remove();
   }
-
+  
   getRecentClient = () => {
     var recentClientParam = {
       action: 'dashboard_recent_clients',
@@ -74,6 +75,10 @@ export default class DashboardScreen extends Component {
     getContentByAction(recentClientParam)
       .then((res) => {
         //console.log('recent client data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({ recentClientData: sortedRes });
       })
@@ -91,6 +96,10 @@ export default class DashboardScreen extends Component {
     getContentByAction(recentActivityParam)
       .then((res) => {
         console.log('recent activity data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({ recentActivityData: sortedRes });
       })
@@ -109,6 +118,10 @@ export default class DashboardScreen extends Component {
     getContentByAction(mostPopularPropertyParam)
       .then((res) => {
         console.log('most popular property data', res);
+        if (res.length == 0 || res[0].error) {
+          this.setState({ spinner: false });
+          return;
+        }
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           mostPopularPropertyData: sortedRes,
@@ -119,6 +132,11 @@ export default class DashboardScreen extends Component {
         console.log('get most popular property error', err);
         this.setState({ spinner: false })
       })
+  } 
+
+  onGoClientView = (client)=>{
+    RouteParam.client = client;
+    this.props.navigation.navigate('ClientStack', {screen: 'ClientView'});
   }
 
   onPropertyPress = (propertyRecordNo) => {
@@ -154,7 +172,7 @@ export default class DashboardScreen extends Component {
           : null
         }
         <View style={styles.headerContainer}>
-          <Header title={'AGENT PLUS™'} titleColor={Colors.blackColor} leftIcon={Images.iconMenu} onPressBack={() => this.props.navigation.goBack(null)} onPressLeftIcon={() => this.onToggleMenu()} /*rightIcon={Images.iconSearch} onPressRightIcon={() => { }}*/ />
+          <Header title={'AGENT PLUS™'} titleColor={Colors.blackColor} leftIcon={Images.iconMenu} onPressBack={() => this.props.navigation.goBack(null)} onPressLeftIcon={() => this.onToggleMenu()} />
         </View>
         <View style={styles.body}>
           <View style={styles.recentClientContainer}>
@@ -168,14 +186,14 @@ export default class DashboardScreen extends Component {
                 showsHorizontalScrollIndicator={false}
                 data={this.state.recentClientData}
                 renderItem={({ item }) =>
-                  <View style={styles.clientItemContainer}>
+                  <TouchableOpacity style={styles.clientItemContainer} onPress={()=>this.onGoClientView(item)}>
                     <View style={styles.clientImgContainer}>
-                      <Image style={styles.clientImg} source={{ uri: item.client_photourl }} />
+                      <Image style={styles.clientImg} source={{ uri: item.client_photo_url }} />
                     </View>
                     <View style={styles.clientNameContainer}>
                       <Text style={styles.clientName}>{item.client_fullname}</Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 }
               />
             </View>
@@ -195,9 +213,9 @@ export default class DashboardScreen extends Component {
                     <View style={styles.activityTxtContainer}>
                       <Text style={styles.activityTxt} numberOfLines={4} ellipsizeMode='tail'>{item.query_text}</Text>
                     </View>
-                    <View style={styles.activityDetailContainer}>
+                    <TouchableOpacity style={styles.activityDetailContainer} onPress={()=>this.onGoClientView(item)}>
                       <Text style={styles.detailTag}>{'>'} Details</Text>
-                    </View>
+                    </TouchableOpacity>
                   </View>
                 }
               />
@@ -311,6 +329,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(1.5),
     color: Colors.passiveTxtColor,
+    textAlign: 'center'
   },
   recentActivityContainer: {
     width: '100%',

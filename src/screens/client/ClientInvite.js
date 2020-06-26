@@ -214,12 +214,10 @@ const styles = StyleSheet.create({
   },
   txtContainer: {
     width: '90%',
-    height: '13%',
+    height: '14%',
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',
-    borderColor: Colors.borderColor,
-    borderBottomWidth: normalize(0.5, 'height'),
+    alignSelf: 'center',    
   },
   txt: {
     fontFamily: 'SFProText-Regular',

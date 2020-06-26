@@ -14,10 +14,11 @@ export const RouteParam = {
   propertyRecordNo: '', 
   propertyMainPhotoUrl: '', 
   propertyAgentFullname: '',
+  client: {},
+  clientData: [],
   pdfUrl: '',
   browseUrl: '',  
   openHouseIntro: {},
   liveInfo: {},
   isChanged: false,  
-  clientData: [],
 }

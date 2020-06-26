@@ -157,7 +157,7 @@ export default class AgentListingScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={this.state.tab === 'withclients' ? 'LISTINGS WITH CLIENTS' : this.state.tab.toUpperCase() + ' LISTINGS'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('AgentListingMap', { title: this.state.tab, listingData: this.state.listingData })} />
+          <Header title={this.state.tab === 'withclients' ? 'LISTINGS WITH CLIENTS' : this.state.tab.toUpperCase() + ' LISTINGS'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} rightIcon={Images.iconLocation} onPressRightIcon={() => this.props.navigation.navigate('AgentListingMap', { tab: this.state.tab, listingData: this.state.listingData })} />
         </View>
         <View style={styles.btnsContainer}>
           <Button btnTxt='ACTIVE' btnStyle={{ width: width * 0.28, height: normalize(40, 'height'), color: this.state.tab === 'active' ? 'white' : 'blue', fontSize: RFPercentage(1.6) }} onPress={() => this.onTab('active')} />

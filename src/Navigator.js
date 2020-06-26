@@ -22,13 +22,13 @@ import ClientShareScreen from "./screens/client/ClientShare";
 import ClientMapScreen from "./screens/client/ClientMap";
 import ClientViewScreen from "./screens/client/ClientView";
 import ClientViewPDFScreen from "./screens/client/ClientViewPDF";
+import ClientViewedPropertyMapScreen from "./screens/client/ClientViewedPropertyMap";
 
 import AgentListingScreen from "./screens/agent/AgentListing";
 import AgentListingMapScreen from "./screens/agent/AgentListingMap";
 
 import PropertyScreen from "./screens/property/Property";
 import PropertyWithClientScreen from "./screens/property/PropertyWithClient";
-import PropertyWithClientMapScreen from "./screens/property/PropertyWithClientMap";
 
 import OpenHouseHomeScreen from "./screens/openhouse/OpenHouseHome";
 import OpenHouseQuestionScreen from "./screens/openhouse/OpenHouseQuestion";
@@ -105,6 +105,10 @@ function ClientStack() {
         name="ClientViewPDF"
         component={ClientViewPDFScreen}
       />
+      <Stack.Screen
+        name="ClientViewedPropertyMap"
+        component={ClientViewedPropertyMapScreen}
+      />
     </Stack.Navigator>
   );
 }
@@ -140,11 +144,7 @@ function PropertyStack() {
       <Stack.Screen
         name="PropertyWithClient"
         component={PropertyWithClientScreen}
-      />
-      <Stack.Screen
-        name="PropertyWithClientMap"
-        component={PropertyWithClientMapScreen}
-      />
+      />      
     </Stack.Navigator>
   );
 }
