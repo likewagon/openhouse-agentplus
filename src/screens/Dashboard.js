@@ -50,22 +50,30 @@ export default class DashboardScreen extends Component {
       spinner: false
     }
 
-    this.listener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
+    this.focusListener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
+    this.blurListener = this.props.navigation.addListener('blur', this.componentWillBlur.bind(this));
   }
 
   componentDidMount() {
   }
 
-  componentDidFocus() {    
+  componentDidFocus() {
     this.getRecentClient();
     this.getRecentActivity();
-    this.getMostPupularProperty();
+    this.getMostPupularProperty();    
+  }
+
+  componentWillBlur(){        
+    this.clientFlatListRef.scrollToIndex({index: 0});
+    this.activityFlatListRef.scrollToIndex({index: 0});
+    this.propertyFlatListRef.scrollToIndex({index: 0});    
   }
 
   componentWillUnmount() {
-    //if (this.listener) this.listener.remove();
+    //if (this.focusListener) this.focusListener.remove();
+    //if (this.blurListener) this.blurListener.remove();
   }
-  
+
   getRecentClient = () => {
     var recentClientParam = {
       action: 'dashboard_recent_clients',
@@ -133,10 +141,10 @@ export default class DashboardScreen extends Component {
         console.log('get most popular property error', err);
         this.setState({ spinner: false })
       })
-  } 
+  }
 
-  onGoClientView = (client)=>{    
-    this.props.navigation.navigate('ClientStack', {screen: 'ClientView', params:{client: client}});
+  onGoClientView = (client) => {
+    this.props.navigation.navigate('ClientStack', { screen: 'ClientView', params: { client: client } });
   }
 
   onPropertyPress = (propertyRecordNo) => {
@@ -181,12 +189,13 @@ export default class DashboardScreen extends Component {
             </View>
             <View style={styles.imgsContainer}>
               <FlatList
+                ref={(ref) => { this.clientFlatListRef = ref; }}                
                 keyExtractor={item => item.displayorder.toString()}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={this.state.recentClientData}
                 renderItem={({ item }) =>
-                  <TouchableOpacity style={styles.clientItemContainer} onPress={()=>this.onGoClientView(item)}>
+                  <TouchableOpacity style={styles.clientItemContainer} onPress={() => this.onGoClientView(item)}>
                     <View style={styles.clientImgContainer}>
                       <Image style={styles.clientImg} source={{ uri: item.client_photo_url }} />
                     </View>
@@ -194,7 +203,7 @@ export default class DashboardScreen extends Component {
                       <Text style={styles.clientName}>{item.client_fullname}</Text>
                     </View>
                   </TouchableOpacity>
-                }
+                }                
               />
             </View>
           </View>
@@ -204,20 +213,19 @@ export default class DashboardScreen extends Component {
             </View>
             <View style={styles.cardsContainer}>
               <FlatList
+                ref={(ref) => { this.activityFlatListRef = ref; }}
                 keyExtractor={item => item.displayorder.toString()}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={this.state.recentActivityData}
                 renderItem={({ item }) =>
                   <View style={styles.activityContainer}>
-                    <View style={styles.activityTxtContainer}>
-                      <Text style={styles.activityTxt} numberOfLines={4} ellipsizeMode='tail'>{item.query_text}</Text>
-                    </View>
-                    <TouchableOpacity style={styles.activityDetailContainer} onPress={()=>this.onGoClientView(item)}>
-                      <Text style={styles.detailTag}>{'>'} Details</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.activityTxt} numberOfLines={4} ellipsizeMode='tail'>{item.query_text}</Text>
+                    <TouchableOpacity onPress={() => this.onGoClientView(item)}>
+                      <Text style={[styles.detailsTag, { marginTop: normalize(10) }]}>{'>'} Details</Text>
+                    </TouchableOpacity>                    
                   </View>
-                }
+                }                
               />
             </View>
           </View>
@@ -234,11 +242,12 @@ export default class DashboardScreen extends Component {
                   </View>
                   :
                   <FlatList
+                    ref={(ref) => { this.propertyFlatListRef = ref; }}
                     keyExtractor={item => item.property_recordno}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     data={this.state.mostPopularPropertyData}
-                    renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
+                    renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}                    
                   />
               }
             </View>
@@ -334,8 +343,9 @@ const styles = StyleSheet.create({
   recentActivityContainer: {
     width: '100%',
     height: normalize(150),
-    justifyContent: 'space-between',
-    marginBottom: normalize(15, 'height'),
+    justifyContent: 'space-around',
+    marginTop: normalize(5, 'height'),
+    marginBottom: normalize(10, 'height'),
     //borderWidth: 1
   },
   cardsContainer: {
@@ -349,31 +359,18 @@ const styles = StyleSheet.create({
     height: normalize(110),
     marginRight: normalize(10),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(0.5)
-  },
-  activityTxtContainer: {
-    width: '100%',
-    height: '75%',
-    paddingLeft: normalize(10),
-    paddingTop: normalize(10),
-    paddingRight: normalize(10),
-    //borderWidth: 1
-  },
-  activityDetailContainer: {
-    width: '100%',
-    height: '25%',
-    //borderWidth: 1
+    borderWidth: normalize(0.5),
+    padding: normalize(10)
   },
   activityTxt: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(1.8),
     color: Colors.blackColor,
   },
-  detailTag: {
+  detailsTag: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
-    paddingLeft: normalize(10)
   },
   mostPopularPropertyContainer: {
     width: '100%',

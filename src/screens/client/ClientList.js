@@ -59,7 +59,7 @@ export default class ClientListScreen extends Component {
 
     getContentByAction(clientParam)
       .then((res) => {
-        console.log('clent data', res);
+        //console.log('clent data', res);
         if (res.length == 0 || res[0].error) {
           this.setState({ spinner: false });
           return;
