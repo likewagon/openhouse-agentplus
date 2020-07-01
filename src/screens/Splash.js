@@ -17,7 +17,7 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-//import GetLocation from 'react-native-get-location';
+import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
 
@@ -34,7 +34,14 @@ import {
 } from '@components';
 import { Colors, Images, LoginInfo } from '@constants';
 
+import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple } from '../api/rest';
+
+import messaging from '@react-native-firebase/messaging';
+messaging().onMessage(async remoteMessage => {
+  //console.log('remotemessage', remoteMessage);
+  Alert.alert('Open House Plus Notification!', remoteMessage.data.body);
+});
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -45,6 +52,7 @@ export default class SplashScreen extends Component {
     }
 
     this.keyboardManager();
+    //firebaseInit();
   }
 
   async componentDidMount() {
@@ -60,8 +68,33 @@ export default class SplashScreen extends Component {
     //   }
     // }    
 
-    // skip
-    this.submit();    
+    this.requestUserMessagingPermission();
+  }
+
+  async requestUserMessagingPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      //console.log('Authorization status:', authStatus);
+
+      messaging()
+        .getToken()
+        .then(token => {
+          console.log('my token', token);
+          LoginInfo.fcmToken = token;
+
+          // skip
+          this.submit();
+        });
+    }
+    else {
+      console.log('Authorization status: disabled');
+      LoginInfo.fcmToken = '';
+
+      // skip
+      this.submit();
+    }
   }
 
   keyboardManager = () => {
@@ -128,12 +161,13 @@ export default class SplashScreen extends Component {
           LoginInfo.fullname = info.fullname;
           LoginInfo.email = info.email;
           LoginInfo.telephone = info.telephone;
-          LoginInfo.photourl = info.photourl;
           LoginInfo.providerid = info.providerid;
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.phone_verified = info.phone_verified;
+          LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;          
-
+          LoginInfo.user_photourl = info.user_photourl;
+          
           this.submit();          
         }
         else {
@@ -148,47 +182,52 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     // skip
-    LoginInfo.uniqueid = '123';
-    LoginInfo.user_account = 2;
-    LoginInfo.fullname = 'Anthony Robinson';
-    LoginInfo.email = 'kelloggsx@gmail.com';
-    LoginInfo.telephone = '+13059007270';
-    LoginInfo.photourl = '';
+    LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
+    LoginInfo.fullname = 'Danielle Reese';
+    LoginInfo.email = 'danielle@daniellereesegroup.com';
+    LoginInfo.telephone = '+19144972987';
     LoginInfo.providerid = 'apple';
     LoginInfo.title = 'Licensed Real Estate Salesperson';
-    LoginInfo.company = 'Keller Williams, Real Estate Company';
-    LoginInfo.email_verified = 1;
-    LoginInfo.phone_verified = 1;
-    LoginInfo.latitude = 40.776611;
-    LoginInfo.longitude = -73.345718;
-    LoginInfo.user_assigned_agent = 0;
+    LoginInfo.company = 'Keller Williams';
+    // LoginInfo.email_verified = 1;
+    // LoginInfo.phone_verified = 1;
+    // LoginInfo.latitude = 40.776611;
+    // LoginInfo.longitude = -73.345718;
+    LoginInfo.user_account = 2;
+    LoginInfo.user_photourl = '';
+    
+    //setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
     // ///////////////
-    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
-    // let bodyFormData = new FormData();
-    // bodyFormData.append('action', 'newaccount');
-    // bodyFormData.append('uniqueid', LoginInfo.uniqueid);
-    // bodyFormData.append('fullname', LoginInfo.fullname);
-    // bodyFormData.append('email', LoginInfo.email);
-    // bodyFormData.append('telephone', LoginInfo.telephone);
-    // bodyFormData.append('photourl', LoginInfo.photourl);
-    // bodyFormData.append('providerid', LoginInfo.providerid);
+
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'login');
+    bodyFormData.append('uniqueid', LoginInfo.uniqueid);
+    bodyFormData.append('fullname', LoginInfo.fullname);
+    bodyFormData.append('email', LoginInfo.email);
+    bodyFormData.append('telephone', LoginInfo.telephone);
+    //bodyFormData.append('photourl', LoginInfo.photourl);
+    bodyFormData.append('providerid', LoginInfo.providerid);
     // bodyFormData.append('email_verified', LoginInfo.email_verified);
+    // bodyFormData.append('phone_verified', LoginInfo.phone_verified);
+    bodyFormData.append('fcmToken', LoginInfo.fcmToken);
     // bodyFormData.append('user_latitude', LoginInfo.latitude);
     // bodyFormData.append('user_longitude', LoginInfo.longitude);
-    // bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
-    // bodyFormData.append('referredby', 0);
-
-    // await postData(bodyFormData)
-    //   .then((res) => {
-    //     //console.log('post login info success', res);
-    //     LoginInfo.photourl = res[0].user_photourl;
-    //     LoginInfo.user_account = res[0].user_account;        
+    bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
+    bodyFormData.append('title', 'CEO');
+    bodyFormData.append('companyname', 'ecapture,inc.');    
+    
+    await postData(bodyFormData)
+      .then((res) => {
+        //console.log('post login info success', res);
+        LoginInfo.user_account = res[0].user_account;        
+        LoginInfo.user_photourl = res[0].user_photourl;
+        LoginInfo.fcmToken = res[0].fcmToken;
         
-    //     setTimeout(() => { this.props.navigation.navigate('Welcome') }, 2000);
-    //   })
-    //   .catch((err) => {
-    //     console.log('post login info error', err)
-    //   })
+        setTimeout(() => { this.props.navigation.navigate('Welcome') }, 2000);
+      })
+      .catch((err) => {
+        console.log('post login info error', err)
+      })
   }
 
   render() {

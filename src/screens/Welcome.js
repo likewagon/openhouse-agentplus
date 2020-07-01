@@ -12,7 +12,7 @@ import {
   Dimensions
 } from "react-native";
 import normalize from 'react-native-normalize';
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import SafeAreaView from 'react-native-safe-area-view';
@@ -62,19 +62,14 @@ export default class WelcomeScreen extends Component {
   }
 
   onEnter = (index) => {
-    if(LoginInfo.user_pick_an_agent){
-      setTimeout(() => { this.props.navigation.navigate('Agent') }, 1000);
-    }
-    else{
-      setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
-    }
+    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <SliderBox      
-          ref={ref=>this.ref=ref}    
+        <SliderBox
+          ref={ref => this.ref = ref}
           images={this.state.images}
           sliderBoxHeight={sliderBoxHeight}
           currentImageEmitter={index => this.setState({ index: index })}
@@ -90,7 +85,7 @@ export default class WelcomeScreen extends Component {
             <Text style={styles.description}>
               {this.state.description[this.state.index]}
             </Text>
-          </View>          
+          </View>
         </View>
       </View>
     );
@@ -127,7 +122,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Bold',
     fontSize: RFPercentage(5),
     color: Colors.blackColor,
-    textAlign: 'center',    
+    textAlign: 'center',
   },
   descriptionContainer: {
     width: '93%',

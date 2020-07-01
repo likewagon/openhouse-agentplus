@@ -31,7 +31,7 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo } from '@constants';
-import { appleSignin, fbSignin, googleSignin } from '../../api/Firebase';
+import { appleSignin, googleSignin } from '../../api/Firebase';
 
 import { postData } from '../../api/rest';
 
@@ -87,27 +87,7 @@ export default class SocialLoginScreen extends Component {
         //Alert.alert('Google SignIn is failed');
         console.log('google signin error', err)
       })
-  }
-
-  // onFBSignin = async () => {
-  //   await fbSignin()
-  //     .then(async (res) => {
-  //       //console.log('fb signin success', res);        
-  //       LoginInfo.uniqueid = res.user.uid;
-  //       LoginInfo.fullname = res.user.displayName;
-  //       LoginInfo.email = res.user.email;
-  //       LoginInfo.telephone = res.user.phoneNumber;
-  //       LoginInfo.photourl = res.user.photoURL;
-  //       LoginInfo.providerid = 'facebook';
-  //       LoginInfo.email_verified = res.user.emailVerified;
-
-  //       this.props.navigation.navigate('Form');
-  //     })
-  //     .catch((err) => {
-  //       //Alert.alert('Facebook SignIn is failed');
-  //       console.log('fb signin error', err)
-  //     })
-  // }   
+  } 
 
   render() {
     return (
@@ -128,12 +108,7 @@ export default class SocialLoginScreen extends Component {
             </Text>
           </View>
 
-          <View style={styles.btnsContainer}>
-            {/* <View style={styles.btnContainer}>
-              <TouchableOpacity style={styles.btnImg} onPress={() => this.onFBSignin()}>
-                <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnFBLogin} resizeMode='stretch' />
-              </TouchableOpacity>
-            </View> */}
+          <View style={styles.btnsContainer}>            
             <View style={styles.btnContainer}>
               <TouchableOpacity style={styles.btnImg} onPress={() => this.onGoogleSignin()}>
                 <Image style={{ width: '100%', height: '100%', borderRadius: normalize(5) }} source={Images.btnGoogleLogin} resizeMode='stretch' />

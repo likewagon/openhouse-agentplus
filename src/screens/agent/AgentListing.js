@@ -66,8 +66,9 @@ export default class AgentListingScreen extends Component {
       getContentByAction(activeParam)
         .then((res) => {
           //console.log('active data', res);
-          if (res.length == 0 || res[0].error) {
+          if (res.length == 0 || res[0].error) {            
             resolve();
+            return;
           }
           var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
           this.setState({
@@ -94,7 +95,8 @@ export default class AgentListingScreen extends Component {
         .then((res) => {
           //console.log('inactive data', res);
           if (res.length == 0 || res[0].error) {
-            resolve()
+            resolve();
+            return;
           }
           var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
           this.setState({
@@ -122,6 +124,7 @@ export default class AgentListingScreen extends Component {
           //console.log('withclients data', res);
           if (res.length == 0 || res[0].error) {
             resolve();
+            return;
           }
           var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
           this.setState({

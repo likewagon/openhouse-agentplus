@@ -19,6 +19,7 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+
 import { WebView } from 'react-native-webview';//ios
 import PDFView from 'react-native-view-pdf';//android
 import Spinner from 'react-native-loading-spinner-overlay';

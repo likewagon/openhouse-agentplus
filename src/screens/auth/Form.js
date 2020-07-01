@@ -16,6 +16,8 @@ import {
   Platform,
 } from "react-native";
 import normalize from "react-native-normalize";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import TextInputMask from 'react-native-text-input-mask';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -118,28 +120,29 @@ export default class FormScreen extends Component {
   // for apple reivew skip
   submit = async () => {
     let bodyFormData = new FormData();
-    bodyFormData.append('action', 'newaccount');
+    bodyFormData.append('action', 'login');
     bodyFormData.append('uniqueid', LoginInfo.uniqueid);
     bodyFormData.append('fullname', LoginInfo.fullname);
     bodyFormData.append('email', LoginInfo.email);
     bodyFormData.append('telephone', LoginInfo.telephone);
-    bodyFormData.append('photourl', LoginInfo.photourl);
+    //bodyFormData.append('photourl', LoginInfo.photourl);
+    bodyFormData.append('fcmToken', LoginInfo.fcmToken);
     bodyFormData.append('providerid', LoginInfo.providerid);
-    bodyFormData.append('email_verified', LoginInfo.email_verified);
-    bodyFormData.append('phone_verified', 0);
-    bodyFormData.append('user_latitude', LoginInfo.latitude);
-    bodyFormData.append('user_longitude', LoginInfo.longitude);
-    bodyFormData.append('appid', 'com.openhousemarketingsystem.open');
-    bodyFormData.append('referredby', 0);
+    // bodyFormData.append('email_verified', LoginInfo.email_verified);
+    // bodyFormData.append('phone_verified', 0);
+    // bodyFormData.append('user_latitude', LoginInfo.latitude);
+    // bodyFormData.append('user_longitude', LoginInfo.longitude);
+    bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
+    bodyFormData.append('title', 'CEO');
+    bodyFormData.append('companyname', 'ecapture,inc.');    
 
     await postData(bodyFormData)
       .then((res) => {
         //console.warn('post login info success', res);
 
-        LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.user_account = res[0].user_account;
-        LoginInfo.user_pick_an_agent = res[0].user_pick_an_agent;
-        LoginInfo.user_assigned_agent = res[0].user_assigned_agent;
+        LoginInfo.user_photourl = res[0].user_photourl;
+        LoginInfo.fcmToken = res[0].fcmToken;        
 
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');

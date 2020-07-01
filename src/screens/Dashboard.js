@@ -47,7 +47,7 @@ export default class DashboardScreen extends Component {
       recentActivityData: [],
       mostPopularPropertyData: [],
       toggleMenuVisible: false,
-      spinner: false
+      spinner: false,
     }
 
     this.focusListener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
@@ -60,13 +60,13 @@ export default class DashboardScreen extends Component {
   componentDidFocus() {
     this.getRecentClient();
     this.getRecentActivity();
-    this.getMostPupularProperty();    
+    this.getMostPupularProperty();
   }
 
-  componentWillBlur(){        
-    this.clientFlatListRef.scrollToIndex({index: 0});
-    this.activityFlatListRef.scrollToIndex({index: 0});
-    this.propertyFlatListRef.scrollToIndex({index: 0});    
+  componentWillBlur() {
+    if(this.state.recentClientData.length > 0) this.clientFlatListRef.scrollToIndex({ index: 0 });
+    if(this.state.recentActivityData.length > 0) this.activityFlatListRef.scrollToIndex({ index: 0 });
+    if(this.state.mostPopularPropertyData.length > 0) this.propertyFlatListRef.scrollToIndex({ index: 0 });
   }
 
   componentWillUnmount() {
@@ -189,7 +189,7 @@ export default class DashboardScreen extends Component {
             </View>
             <View style={styles.imgsContainer}>
               <FlatList
-                ref={(ref) => { this.clientFlatListRef = ref; }}                
+                ref={(ref) => { this.clientFlatListRef = ref; }}
                 keyExtractor={item => item.displayorder.toString()}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
@@ -203,7 +203,7 @@ export default class DashboardScreen extends Component {
                       <Text style={styles.clientName}>{item.client_fullname}</Text>
                     </View>
                   </TouchableOpacity>
-                }                
+                }
               />
             </View>
           </View>
@@ -223,9 +223,9 @@ export default class DashboardScreen extends Component {
                     <Text style={styles.activityTxt} numberOfLines={4} ellipsizeMode='tail'>{item.query_text}</Text>
                     <TouchableOpacity onPress={() => this.onGoClientView(item)}>
                       <Text style={[styles.detailsTag, { marginTop: normalize(10) }]}>{'>'} Details</Text>
-                    </TouchableOpacity>                    
+                    </TouchableOpacity>
                   </View>
-                }                
+                }
               />
             </View>
           </View>
@@ -247,7 +247,7 @@ export default class DashboardScreen extends Component {
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     data={this.state.mostPopularPropertyData}
-                    renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}                    
+                    renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
                   />
               }
             </View>
