@@ -194,9 +194,7 @@ export default class SplashScreen extends Component {
     // LoginInfo.latitude = 40.776611;
     // LoginInfo.longitude = -73.345718;
     LoginInfo.user_account = 2;
-    LoginInfo.user_photourl = '';
-    
-    //setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+    LoginInfo.user_photourl = '';        
     // ///////////////
 
     let bodyFormData = new FormData();

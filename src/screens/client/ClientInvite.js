@@ -67,6 +67,11 @@ export default class ClientInviteScreen extends Component {
   }
 
   onContinue = async () => {
+    /////
+    this.props.navigation.navigate('ClientShare');
+    return;
+    /////
+
     if (this.state.clientFullname == '') {
       Alert.alert('Please Enter Client First and Last Name');
       return;
