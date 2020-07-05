@@ -17,6 +17,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* agentplusTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* agentplusTests.m */; };
 		52996E4E52466A5DD0501A77 /* libPods-agentplus-agentplusTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CB733E76E905B798754E15C3 /* libPods-agentplus-agentplusTests.a */; };
+		7B8FF92524B1B5ED0074C223 /* RNBackgroundFetch+AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B8FF92424B1B5ED0074C223 /* RNBackgroundFetch+AppDelegate.m */; };
 		8477DC582494ED46004EB485 /* SFProText-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8477DC542494ED46004EB485 /* SFProText-Semibold.ttf */; };
 		8477DC592494ED46004EB485 /* SFProText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8477DC552494ED46004EB485 /* SFProText-Regular.ttf */; };
 		8477DC5A2494ED46004EB485 /* Billabong.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8477DC562494ED46004EB485 /* Billabong.ttf */; };
@@ -65,6 +66,7 @@
 		2D02E4901E0B4A5D006451C7 /* agentplus-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "agentplus-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3530220D45CFDFB1651D0BC3 /* libPods-agentplus-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-agentplus-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F6B16AA0B89EAD72CF5341A /* Pods-agentplus-agentplusTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-agentplus-agentplusTests.debug.xcconfig"; path = "Target Support Files/Pods-agentplus-agentplusTests/Pods-agentplus-agentplusTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7B8FF92424B1B5ED0074C223 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
 		838FD803BAF6CB37BB032889 /* libPods-agentplus.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-agentplus.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8477DC542494ED46004EB485 /* SFProText-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFProText-Semibold.ttf"; path = "../src/assets/fonts/SFProText-Semibold.ttf"; sourceTree = "<group>"; };
 		8477DC552494ED46004EB485 /* SFProText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFProText-Regular.ttf"; path = "../src/assets/fonts/SFProText-Regular.ttf"; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				7B8FF92424B1B5ED0074C223 /* RNBackgroundFetch+AppDelegate.m */,
 				849068FE24AA5DE20006BD9F /* GoogleService-Info.plist */,
 				8477DC562494ED46004EB485 /* Billabong.ttf */,
 				8477DC572494ED46004EB485 /* SFProText-Bold.ttf */,
@@ -711,6 +714,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B8FF92524B1B5ED0074C223 /* RNBackgroundFetch+AppDelegate.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);

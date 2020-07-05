@@ -84,7 +84,7 @@ export default class SplashScreen extends Component {
           LoginInfo.fcmToken = token;
 
           // skip
-          //this.submit();
+          this.submit();
         });
 
       messaging().onMessage(async remoteMessage => {
@@ -92,7 +92,7 @@ export default class SplashScreen extends Component {
         // PushNotification.localNotification({
         //   title: 'notification.title',
         //   message: 'notification.body!',
-        // });    
+        // });            
         PushNotificationIOS.presentLocalNotification({
           alertTitle: 'Open House Notification',
           alertBody: 'Client Picked You As Preferred Agent'
@@ -104,7 +104,7 @@ export default class SplashScreen extends Component {
       LoginInfo.fcmToken = '';
 
       // skip
-      //this.submit();
+      this.submit();
     }    
   }
 
