@@ -38,10 +38,9 @@ import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple } from '../api/rest';
 
 import messaging from '@react-native-firebase/messaging';
-messaging().onMessage(async remoteMessage => {
-  //console.log('remotemessage', remoteMessage);
-  Alert.alert('Open House Plus Notification!', remoteMessage.data.body);
-});
+
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+var PushNotification = require("react-native-push-notification");
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -52,7 +51,7 @@ export default class SplashScreen extends Component {
     }
 
     this.keyboardManager();
-    //firebaseInit();
+    //firebaseInit();    
   }
 
   async componentDidMount() {
@@ -68,7 +67,7 @@ export default class SplashScreen extends Component {
     //   }
     // }    
 
-    this.requestUserMessagingPermission();
+    this.requestUserMessagingPermission();        
   }
 
   async requestUserMessagingPermission() {
@@ -85,16 +84,28 @@ export default class SplashScreen extends Component {
           LoginInfo.fcmToken = token;
 
           // skip
-          this.submit();
+          //this.submit();
         });
+
+      messaging().onMessage(async remoteMessage => {
+        //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));  
+        // PushNotification.localNotification({
+        //   title: 'notification.title',
+        //   message: 'notification.body!',
+        // });    
+        PushNotificationIOS.presentLocalNotification({
+          alertTitle: 'Open House Notification',
+          alertBody: 'Client Picked You As Preferred Agent'
+        })
+      });
     }
     else {
       console.log('Authorization status: disabled');
       LoginInfo.fcmToken = '';
 
       // skip
-      this.submit();
-    }
+      //this.submit();
+    }    
   }
 
   keyboardManager = () => {
@@ -143,7 +154,7 @@ export default class SplashScreen extends Component {
       .then(location => {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
-                
+
         this.isLoggedInProc();
       })
       .catch(ex => {
@@ -151,7 +162,7 @@ export default class SplashScreen extends Component {
       });
   }
 
-  isLoggedInProc = () => {  
+  isLoggedInProc = () => {
     AsyncStorage.getItem('LoginInfo')
       .then(async (loginInfo) => {
         if (loginInfo) {
@@ -165,10 +176,10 @@ export default class SplashScreen extends Component {
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.phone_verified = info.phone_verified;
           LoginInfo.fcmToken = info.fcmToken;
-          LoginInfo.user_account = info.user_account;          
+          LoginInfo.user_account = info.user_account;
           LoginInfo.user_photourl = info.user_photourl;
-          
-          this.submit();          
+
+          this.submit();
         }
         else {
           setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
@@ -194,7 +205,7 @@ export default class SplashScreen extends Component {
     // LoginInfo.latitude = 40.776611;
     // LoginInfo.longitude = -73.345718;
     LoginInfo.user_account = 2;
-    LoginInfo.user_photourl = '';        
+    LoginInfo.user_photourl = '';
     // ///////////////
 
     let bodyFormData = new FormData();
@@ -212,15 +223,15 @@ export default class SplashScreen extends Component {
     // bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
     bodyFormData.append('title', 'CEO');
-    bodyFormData.append('companyname', 'ecapture,inc.');    
-    
+    bodyFormData.append('companyname', 'ecapture,inc.');
+
     await postData(bodyFormData)
       .then((res) => {
         //console.log('post login info success', res);
-        LoginInfo.user_account = res[0].user_account;        
+        LoginInfo.user_account = res[0].user_account;
         LoginInfo.user_photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
-        
+
         setTimeout(() => { this.props.navigation.navigate('Welcome') }, 2000);
       })
       .catch((err) => {
@@ -274,7 +285,7 @@ export default class SplashScreen extends Component {
                   <View style={styles.btnContainer}>
                     <TouchableOpacity onPress={() => this._requestLocation()}>
                       <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
-                    </TouchableOpacity>                    
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
