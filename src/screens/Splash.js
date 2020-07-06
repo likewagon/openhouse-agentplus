@@ -39,8 +39,8 @@ import { postData, getReviewGeoForApple } from '../api/rest';
 
 import messaging from '@react-native-firebase/messaging';
 
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
 var PushNotification = require("react-native-push-notification");
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -67,7 +67,7 @@ export default class SplashScreen extends Component {
     //   }
     // }    
 
-    this.requestUserMessagingPermission();        
+    this.requestUserMessagingPermission();
   }
 
   async requestUserMessagingPermission() {
@@ -75,8 +75,6 @@ export default class SplashScreen extends Component {
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      //console.log('Authorization status:', authStatus);
-
       messaging()
         .getToken()
         .then(token => {
@@ -88,7 +86,7 @@ export default class SplashScreen extends Component {
         });
 
       messaging().onMessage(async remoteMessage => {
-        //Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));  
+        Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));  
         // PushNotification.localNotification({
         //   title: 'notification.title',
         //   message: 'notification.body!',
@@ -98,6 +96,10 @@ export default class SplashScreen extends Component {
           alertBody: 'Client Picked You As Preferred Agent'
         })
       });
+
+      
+      PushNotificationIOS.addEventListener('notification', this.iOSNotificationReceived.bind(this));
+      
     }
     else {
       console.log('Authorization status: disabled');
@@ -105,7 +107,11 @@ export default class SplashScreen extends Component {
 
       // skip
       this.submit();
-    }    
+    }
+  }
+
+  iOSNotificationReceived(data){
+    console.log('notificationData', data);
   }
 
   keyboardManager = () => {

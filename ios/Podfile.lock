@@ -51,8 +51,7 @@ PODS:
     - FirebaseCoreDiagnosticsInterop (~> 1.2)
     - GoogleUtilities/Environment (~> 6.5)
     - GoogleUtilities/Logger (~> 6.5)
-  - FirebaseCoreDiagnostics (1.3.0):
-    - FirebaseCoreDiagnosticsInterop (~> 1.2)
+  - FirebaseCoreDiagnostics (1.4.0):
     - GoogleDataTransportCCTSupport (~> 3.1)
     - GoogleUtilities/Environment (~> 6.5)
     - GoogleUtilities/Logger (~> 6.5)
@@ -140,7 +139,7 @@ PODS:
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (~> 1.30905.0)
   - GoogleDataTransport (6.2.1)
-  - GoogleDataTransportCCTSupport (3.1.0):
+  - GoogleDataTransportCCTSupport (3.2.0):
     - GoogleDataTransport (~> 6.1)
     - nanopb (~> 1.30905.0)
   - GoogleSignIn (5.0.2):
@@ -438,22 +437,20 @@ PODS:
     - React-Core
   - RNAppleAuthentication (1.1.0):
     - React
-  - RNBackgroundFetch (3.1.0):
-    - React
   - RNCAsyncStorage (1.11.0):
     - React
   - RNCMaskedView (0.1.10):
     - React
   - RNCPushNotificationIOS (1.3.0):
     - React
-  - RNFBApp (8.0.0):
+  - RNFBApp (8.0.1):
     - Firebase/CoreOnly (~> 6.25.0)
     - React
-  - RNFBAuth (8.0.9):
+  - RNFBAuth (8.0.10):
     - Firebase/Auth (~> 6.25.0)
     - React
     - RNFBApp
-  - RNFBMessaging (7.2.1):
+  - RNFBMessaging (7.3.1):
     - Firebase/Analytics (~> 6.25.0)
     - Firebase/Messaging (~> 6.25.0)
     - React
@@ -534,7 +531,6 @@ DEPENDENCIES:
   - ReactNativeKeyboardManager (from `../node_modules/react-native-keyboard-manager`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
-  - RNBackgroundFetch (from `../node_modules/react-native-background-fetch`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
@@ -661,8 +657,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNAppleAuthentication:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
-  RNBackgroundFetch:
-    :path: "../node_modules/react-native-background-fetch"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
@@ -704,7 +698,7 @@ SPEC CHECKSUMS:
   FirebaseAuth: 7047aec89c0b17ecd924a550c853f0c27ac6015e
   FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
   FirebaseCore: 6023faeada5afa95a349fccafb40900e32e9ac42
-  FirebaseCoreDiagnostics: 4a773a47bd83bbd5a9b1ccf1ce7caa8b2d535e67
+  FirebaseCoreDiagnostics: 4505e4d4009b1d93f605088ee7d7764d5f0d1c84
   FirebaseCoreDiagnosticsInterop: 296e2c5f5314500a850ad0b83e9e7c10b011a850
   FirebaseInstallations: 6f5f680e65dc374397a483c32d1799ba822a395b
   FirebaseInstanceID: cef67c4967c7cecb56ea65d8acbb4834825c587b
@@ -720,7 +714,7 @@ SPEC CHECKSUMS:
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: 137afe68bfa406c3f4221b9395253d9e5d4654cf
   GoogleDataTransport: 9a8a16f79feffc7f42096743de2a7c4815e84020
-  GoogleDataTransportCCTSupport: d70a561f7d236af529fee598835caad5e25f6d3d
+  GoogleDataTransportCCTSupport: 489c1265d2c85b68187a83a911913d190012158d
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GoogleUtilities: 39530bc0ad980530298e9c4af8549e991fd033b1
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
@@ -761,13 +755,12 @@ SPEC CHECKSUMS:
   ReactNativeKeyboardManager: b657632ca39d78a409949835d92fc3bed537c826
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: a895967f8e0883d400f7ea3d5cf1923935fe96f4
-  RNBackgroundFetch: 81c690aa5e8e67dbc3f86ecb7f26629c00c6060d
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNCPushNotificationIOS: 23c5b5fdae79f105c63236de5ca306a70c00c444
-  RNFBApp: 7025b9e7ed4e305f8a4e5ee15c79238c03dfb756
-  RNFBAuth: e9ac57126a8eaeccf350ffa7a7b77dff768e2d9a
-  RNFBMessaging: d149d0b48f6d6a449afb05876a1466b4e4494280
+  RNFBApp: 49e1b8ce7e7d175b751c5b8568eafd51eac59b42
+  RNFBAuth: 6ba1d2b66df886075b8ecddcf7670a84365511b0
+  RNFBMessaging: 5d1f4a6331b9e3780707dad84e733661d412aab0
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
