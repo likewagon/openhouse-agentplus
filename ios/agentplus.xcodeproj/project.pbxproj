@@ -317,6 +317,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 564S48WBSJ;
 						LastSwiftMigration = 1120;
 						ProvisioningStyle = Manual;
 					};
@@ -813,7 +814,7 @@
 				CODE_SIGN_ENTITLEMENTS = agentplus/agentplus.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 564S48WBSJ;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -828,7 +829,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.agentplus;
 				PRODUCT_NAME = agentplus;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = likewagonAgentPlusDevSierra;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -844,7 +845,7 @@
 				CODE_SIGN_ENTITLEMENTS = agentplus/agentplus.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 564S48WBSJ;
 				INFOPLIST_FILE = agentplus/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -854,7 +855,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ecaptureinc.agentplus;
 				PRODUCT_NAME = agentplus;
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = likewagonAgentPlusDevSierra;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

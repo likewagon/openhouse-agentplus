@@ -78,7 +78,7 @@ target 'agentplus' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNInputMask', :path => '../node_modules/react-native-text-input-mask/ios/InputMask'
-  
+
   target 'agentplusTests' do
     inherit! :complete
     # Pods for testing

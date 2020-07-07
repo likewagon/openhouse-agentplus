@@ -450,7 +450,7 @@ PODS:
     - Firebase/Auth (~> 6.25.0)
     - React
     - RNFBApp
-  - RNFBMessaging (7.3.1):
+  - RNFBMessaging (7.3.2):
     - Firebase/Analytics (~> 6.25.0)
     - Firebase/Messaging (~> 6.25.0)
     - React
@@ -760,7 +760,7 @@ SPEC CHECKSUMS:
   RNCPushNotificationIOS: 23c5b5fdae79f105c63236de5ca306a70c00c444
   RNFBApp: 49e1b8ce7e7d175b751c5b8568eafd51eac59b42
   RNFBAuth: 6ba1d2b66df886075b8ecddcf7670a84365511b0
-  RNFBMessaging: 5d1f4a6331b9e3780707dad84e733661d412aab0
+  RNFBMessaging: 0891dd5bb7c5ffaa9d7670819fc934714883e316
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
@@ -771,6 +771,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 55307ab1e717588aefbd83460b69470bcc8d14e8
+PODFILE CHECKSUM: e2f9857cb014298b6a66966c36d31df6ddfe1456
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.9.2
