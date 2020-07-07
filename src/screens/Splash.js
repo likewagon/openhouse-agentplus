@@ -13,6 +13,7 @@ import {
   Dimensions,
   Platform,
   ImageBackground,
+  AppState
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -39,8 +40,61 @@ import { postData, getReviewGeoForApple } from '../api/rest';
 
 import messaging from '@react-native-firebase/messaging';
 
-var PushNotification = require("react-native-push-notification");
+import PushNotification from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
+
+PushNotification.configure({
+  //senderID: '1006237194994',
+  // (optional) Called when Token is generated (iOS and Android)
+  onRegister: function (token) {
+    console.log("TOKEN:", token);
+  },
+
+  // (required) Called when a remote is received or opened, or local notification is opened
+  onNotification: function (notification) {
+    console.log("NOTIFICATION:", notification);
+
+    // process the notification
+
+    // (required) Called when a remote is received or opened, or local notification is opened
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },  
+
+  // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
+  onAction: function (notification) {
+    console.log("ACTION:", notification.action);
+    console.log("NOTIFICATION:", notification);
+
+    // process the action
+  },
+
+  // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
+  onRegistrationError: function (err) {
+    console.error(err.message, err);
+  },
+
+  // IOS ONLY (optional): default: all - Permissions to register.
+  permissions: {
+    alert: true,
+    badge: true,
+    sound: true,
+  },
+
+  // Should the initial notification be popped automatically
+  // default: true
+  popInitialNotification: true,
+
+  /**
+   * (optional) default: true
+   * - Specified if permissions (ios) and token (android and ios) will requested or not,
+   * - if not, you must call PushNotificationsHandler.requestPermissions() later
+   * - if you are not using remote notification or do not have Firebase installed, use this:
+   *     requestPermissions: Platform.OS === 'ios'
+   */
+  requestPermissions: true,
+});
+
+PushNotificationIOS.addEventListener('registrationError', (err)=>{ console.log('registration error', err)})
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -66,8 +120,8 @@ export default class SplashScreen extends Component {
     //     this.initialGetLocation();
     //   }
     // }    
-
-    this.requestUserMessagingPermission();
+    
+    this.requestUserMessagingPermission();    
   }
 
   async requestUserMessagingPermission() {
@@ -75,31 +129,27 @@ export default class SplashScreen extends Component {
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      messaging()
-        .getToken()
-        .then(token => {
-          console.log('my token', token);
-          LoginInfo.fcmToken = token;
 
-          // skip
-          this.submit();
-        });
+      var fcmToken = await messaging().getToken();
+      LoginInfo.fcmToken = fcmToken;
+      console.log('fcmToken', fcmToken);
 
       messaging().onMessage(async remoteMessage => {
-        Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));  
-        // PushNotification.localNotification({
-        //   title: 'notification.title',
-        //   message: 'notification.body!',
-        // });            
-        PushNotificationIOS.presentLocalNotification({
-          alertTitle: 'Open House Notification',
-          alertBody: 'Client Picked You As Preferred Agent'
-        })
+        // console.log('Message arrived', remoteMessage);        
+
+        PushNotification.localNotification({
+          title: 'Open House Notification',
+          message: remoteMessage.data.body
+        });
+
+        // PushNotificationIOS.presentLocalNotification({
+        //   alertTitle: 'Open House Notification',
+        //   alertBody: 'Client Picked You As Preferred Agent'
+        // })
       });
 
-      
-      PushNotificationIOS.addEventListener('notification', this.iOSNotificationReceived.bind(this));
-      
+      // skip
+      this.submit();
     }
     else {
       console.log('Authorization status: disabled');
@@ -108,10 +158,6 @@ export default class SplashScreen extends Component {
       // skip
       this.submit();
     }
-  }
-
-  iOSNotificationReceived(data){
-    console.log('notificationData', data);
   }
 
   keyboardManager = () => {
