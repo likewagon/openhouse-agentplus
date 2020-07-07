@@ -12,8 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
-  ImageBackground,
-  AppState
+  ImageBackground,  
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -40,8 +39,9 @@ import { postData, getReviewGeoForApple } from '../api/rest';
 
 import messaging from '@react-native-firebase/messaging';
 
-import PushNotification from "react-native-push-notification";
+var PushNotification = require("react-native-push-notification");
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import BackgroundFetch from 'react-native-background-fetch';
 
 PushNotification.configure({
   //senderID: '1006237194994',
@@ -58,7 +58,7 @@ PushNotification.configure({
 
     // (required) Called when a remote is received or opened, or local notification is opened
     notification.finish(PushNotificationIOS.FetchResult.NoData);
-  },  
+  },
 
   // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
   onAction: function (notification) {
@@ -94,7 +94,36 @@ PushNotification.configure({
   requestPermissions: true,
 });
 
-PushNotificationIOS.addEventListener('registrationError', (err)=>{ console.log('registration error', err)})
+PushNotificationIOS.addEventListener('registrationError', (err) => { console.log('registration error', err) })
+
+BackgroundFetch.configure({
+  minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
+  stopOnTerminate: false,   // <-- Android-only,
+  startOnBoot: true         // <-- Android-only
+}, () => {
+  console.log("[js] Received background-fetch event");
+  // Required: Signal completion of your task to native code
+  // If you fail to do this, the OS can terminate your app
+  // or assign battery-blame for consuming too much background-time
+  BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+}, (error) => {
+  console.log("[js] RNBackgroundFetch failed to start");
+});
+
+// Optional: Query the authorization status.
+BackgroundFetch.status((status) => {
+  switch (status) {
+    case BackgroundFetch.STATUS_RESTRICTED:
+      console.log("BackgroundFetch restricted");
+      break;
+    case BackgroundFetch.STATUS_DENIED:
+      console.log("BackgroundFetch denied");
+      break;
+    case BackgroundFetch.STATUS_AVAILABLE:
+      console.log("BackgroundFetch is enabled");
+      break;
+  }
+});
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -120,8 +149,8 @@ export default class SplashScreen extends Component {
     //     this.initialGetLocation();
     //   }
     // }    
-    
-    this.requestUserMessagingPermission();    
+
+    this.requestUserMessagingPermission();
   }
 
   async requestUserMessagingPermission() {
@@ -137,15 +166,15 @@ export default class SplashScreen extends Component {
       messaging().onMessage(async remoteMessage => {
         // console.log('Message arrived', remoteMessage);        
 
-        PushNotification.localNotification({
-          title: 'Open House Notification',
-          message: remoteMessage.data.body
-        });
+        // PushNotification.localNotification({
+        //   title: 'Open House Notification',
+        //   message: remoteMessage.data.body
+        // });
 
-        // PushNotificationIOS.presentLocalNotification({
-        //   alertTitle: 'Open House Notification',
-        //   alertBody: 'Client Picked You As Preferred Agent'
-        // })
+        PushNotificationIOS.presentLocalNotification({
+          alertTitle: 'Open House Notification',
+          alertBody: remoteMessage.data.body
+        })
       });
 
       // skip

@@ -437,6 +437,8 @@ PODS:
     - React-Core
   - RNAppleAuthentication (1.1.0):
     - React
+  - RNBackgroundFetch (3.1.0):
+    - React
   - RNCAsyncStorage (1.11.0):
     - React
   - RNCMaskedView (0.1.10):
@@ -531,6 +533,7 @@ DEPENDENCIES:
   - ReactNativeKeyboardManager (from `../node_modules/react-native-keyboard-manager`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
+  - RNBackgroundFetch (from `../node_modules/react-native-background-fetch`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
@@ -657,6 +660,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/rn-fetch-blob"
   RNAppleAuthentication:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
+  RNBackgroundFetch:
+    :path: "../node_modules/react-native-background-fetch"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
@@ -755,6 +760,7 @@ SPEC CHECKSUMS:
   ReactNativeKeyboardManager: b657632ca39d78a409949835d92fc3bed537c826
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: a895967f8e0883d400f7ea3d5cf1923935fe96f4
+  RNBackgroundFetch: 81c690aa5e8e67dbc3f86ecb7f26629c00c6060d
   RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
   RNCPushNotificationIOS: 23c5b5fdae79f105c63236de5ca306a70c00c444
