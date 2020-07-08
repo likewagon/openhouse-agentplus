@@ -131,8 +131,8 @@ export default class SMSScreen extends Component {
     bodyFormData.append('providerid', LoginInfo.providerid);
     // bodyFormData.append('email_verified', LoginInfo.email_verified);
     // bodyFormData.append('phone_verified', this.state.isVerified);
-    // bodyFormData.append('user_latitude', LoginInfo.latitude);
-    // bodyFormData.append('user_longitude', LoginInfo.longitude);
+    bodyFormData.append('user_latitude', LoginInfo.latitude);
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
     bodyFormData.append('title', 'CEO');
     bodyFormData.append('companyname', 'ecapture,inc.');       

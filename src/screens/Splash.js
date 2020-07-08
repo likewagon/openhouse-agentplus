@@ -130,7 +130,8 @@ export default class SplashScreen extends Component {
     super(props);
     this.state = {
       logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform',
-      geoSettingVisible: false
+      geoSettingVisible: false,
+      pnSettingVisible: false
     }
 
     this.keyboardManager();
@@ -138,56 +139,19 @@ export default class SplashScreen extends Component {
   }
 
   async componentDidMount() {
-    // let res = await getReviewGeoForApple();    
-    // if(res){
-    //   if(res[0].under_review_by_apple){
-    //     LoginInfo.latitude = res[0].user_latitude;
-    //     LoginInfo.longitude = res[0].user_longitude;
-    //     this.isLoggedInProc();
-    //   }
-    //   else{
-    //     this.initialGetLocation();
-    //   }
-    // }    
-
-    this.requestUserMessagingPermission();
+    let res = await getReviewGeoForApple();    
+    if(res){
+      if(res[0].under_review_by_apple){
+        LoginInfo.latitude = res[0].user_latitude;
+        LoginInfo.longitude = res[0].user_longitude;
+        this.isLoggedInProc();
+      }
+      else{
+        this.initialGetLocation();
+      }
+    }        
   }
 
-  async requestUserMessagingPermission() {
-    const authStatus = await messaging().requestPermission();
-    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-
-      var fcmToken = await messaging().getToken();
-      LoginInfo.fcmToken = fcmToken;
-      console.log('fcmToken', fcmToken);
-
-      messaging().onMessage(async remoteMessage => {
-        // console.log('Message arrived', remoteMessage);        
-
-        // PushNotification.localNotification({
-        //   title: 'Open House Notification',
-        //   message: remoteMessage.data.body
-        // });
-
-        PushNotificationIOS.presentLocalNotification({
-          alertTitle: 'Open House Notification',
-          alertBody: remoteMessage.data.body
-        })
-      });
-
-      // skip
-      this.submit();
-    }
-    else {
-      console.log('Authorization status: disabled');
-      LoginInfo.fcmToken = '';
-
-      // skip
-      this.submit();
-    }
-  }
 
   keyboardManager = () => {
     if (Platform.OS === 'ios') {
@@ -220,14 +184,14 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.isLoggedInProc();
+        this.requestNotification();
       })
       .catch(ex => {
         this.setState({ geoSettingVisible: true })
       });
   }
 
-  _requestLocation = () => {
+  requestLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 150000,
@@ -236,12 +200,45 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.isLoggedInProc();
+        this.requestNotification();
       })
       .catch(ex => {
+        console.log('geo settting')
         GetLocation.openAppSettings();
       });
   }
+
+  async requestNotification() {
+    const authStatus = await messaging().requestPermission();
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      var fcmToken = await messaging().getToken();
+      LoginInfo.fcmToken = fcmToken;
+      console.log('fcmToken', fcmToken);
+
+      messaging().onMessage(async remoteMessage => {
+        // console.log('Message arrived', remoteMessage);        
+
+        // PushNotification.localNotification({
+        //   title: 'Open House Notification',
+        //   message: remoteMessage.data.body
+        // });
+
+        PushNotificationIOS.presentLocalNotification({
+          alertTitle: 'Open House Notification',
+          alertBody: remoteMessage.data.body
+        })
+      });
+
+      this.isLoggedInProc();
+    }
+    else {
+      console.log('Authorization status: disabled');          
+      this.setState({ pnSettingVisible: true });
+    }
+  }
+
 
   isLoggedInProc = () => {
     AsyncStorage.getItem('LoginInfo')
@@ -274,19 +271,19 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     // skip
-    LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
-    LoginInfo.fullname = 'Danielle Reese';
-    LoginInfo.email = 'danielle@daniellereesegroup.com';
-    LoginInfo.telephone = '+19144972987';
-    LoginInfo.providerid = 'apple';
-    LoginInfo.title = 'Licensed Real Estate Salesperson';
-    LoginInfo.company = 'Keller Williams';
-    // LoginInfo.email_verified = 1;
-    // LoginInfo.phone_verified = 1;
+    // LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
+    // LoginInfo.fullname = 'Danielle Reese';
+    // LoginInfo.email = 'danielle@daniellereesegroup.com';
+    // LoginInfo.telephone = '+19144972987';
+    // LoginInfo.providerid = 'apple';
+    // LoginInfo.title = 'Licensed Real Estate Salesperson';
+    // LoginInfo.company = 'Keller Williams';
+    // // LoginInfo.email_verified = 1;
+    // // LoginInfo.phone_verified = 1;
     // LoginInfo.latitude = 40.776611;
     // LoginInfo.longitude = -73.345718;
-    LoginInfo.user_account = 2;
-    LoginInfo.user_photourl = '';
+    // LoginInfo.user_account = 2;
+    // LoginInfo.user_photourl = '';
     // ///////////////
 
     let bodyFormData = new FormData();
@@ -300,8 +297,8 @@ export default class SplashScreen extends Component {
     // bodyFormData.append('email_verified', LoginInfo.email_verified);
     // bodyFormData.append('phone_verified', LoginInfo.phone_verified);
     bodyFormData.append('fcmToken', LoginInfo.fcmToken);
-    // bodyFormData.append('user_latitude', LoginInfo.latitude);
-    // bodyFormData.append('user_longitude', LoginInfo.longitude);
+    bodyFormData.append('user_latitude', LoginInfo.latitude);
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
     bodyFormData.append('title', 'CEO');
     bodyFormData.append('companyname', 'ecapture,inc.');
@@ -324,7 +321,7 @@ export default class SplashScreen extends Component {
     return (
       <ImageBackground style={styles.container} source={Images.splashBackground}>
         {
-          !this.state.geoSettingVisible ?
+          !this.state.geoSettingVisible && !this.state.pnSettingVisible ?
             (
               <View style={styles.modalBack}>
                 <View style={{ width: '100%', height: '9%', /*borderWidth: 1*/ }}></View>
@@ -344,19 +341,20 @@ export default class SplashScreen extends Component {
               </View>
             )
             :
+            this.state.geoSettingVisible ? 
             (
-              <View style={styles.modalBackGeo}>
+              <View style={styles.modalBackSetting}>
                 <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
-                <View style={styles.logoImgContainerGeo}>
+                <View style={styles.logoImgContainerSetting}>
                   <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
                 </View>
                 <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
-                <View style={styles.logoNameContainerGeo}>
+                <View style={styles.logoNameContainerSetting}>
                   <Text style={styles.logoName}>Open House</Text>
                   <Text style={styles.logoPlusLabel}>+</Text>
                 </View>
 
-                <View style={styles.geoSettingContainer}>
+                <View style={styles.settingContainer}>
                   <View style={styles.settingTxtContainer}>
                     <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
                       Open™
@@ -364,15 +362,42 @@ export default class SplashScreen extends Component {
                       This will enhance our ability to display properties in your area.</Text>
                   </View>
                   <View style={styles.btnContainer}>
-                    <TouchableOpacity onPress={() => this._requestLocation()}>
+                    <TouchableOpacity onPress={() => this.requestLocation()}>
                       <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
             )
-        }
+            :
+            (
+              <View style={styles.modalBackSetting}>
+                <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                <View style={styles.logoImgContainerSetting}>
+                  <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
+                </View>
+                <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
+                <View style={styles.logoNameContainerSetting}>
+                  <Text style={styles.logoName}>Open House</Text>
+                  <Text style={styles.logoPlusLabel}>+</Text>
+                </View>
 
+                <View style={styles.settingContainer}>
+                  <View style={styles.settingTxtContainer}>
+                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
+                      Agent™
+                      requires notification setting.
+                      This will help you contact with client.</Text>
+                  </View>
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity onPress={() => this.requestNotification()}>
+                      <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Check Permission</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            )
+        }
       </ImageBackground>
     );
   }
@@ -450,7 +475,7 @@ const styles = StyleSheet.create({
   },
 
   /////////////////////////////////////////////////
-  modalBackGeo: {
+  modalBackSetting: {
     backgroundColor: 'rgba(255,255,255,1)',
     width: wp(75),
     height: hp(60),
@@ -466,14 +491,14 @@ const styles = StyleSheet.create({
     shadowRadius: 16.00,
     elevation: 24,
   },
-  logoImgContainerGeo: {
+  logoImgContainerSetting: {
     width: '88%',
     height: '46%',
     justifyContent: 'center',
     alignItems: 'center',
     //borderWidth: 1
   },
-  logoNameContainerGeo: {
+  logoNameContainerSetting: {
     width: '88%',
     height: '15%',
     flexDirection: 'row',
@@ -496,7 +521,7 @@ const styles = StyleSheet.create({
     marginBottom: normalize(10, 'height'),
     //borderWidth: 1
   },
-  geoSettingContainer: {
+  settingContainer: {
     width: '83%',
     height: '50%',
     //borderWidth: 1
