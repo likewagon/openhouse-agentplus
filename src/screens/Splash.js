@@ -144,6 +144,7 @@ export default class SplashScreen extends Component {
       if(res[0].under_review_by_apple){
         LoginInfo.latitude = res[0].user_latitude;
         LoginInfo.longitude = res[0].user_longitude;
+        RouteParam.deviceType = 'pad';
         this.isLoggedInProc();
       }
       else{
@@ -330,7 +331,7 @@ export default class SplashScreen extends Component {
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
     bodyFormData.append('title', 'CEO');
-    bodyFormData.append('companyname', 'ecapture,inc.');
+    bodyFormData.append('user_companyname', 'ecapture,inc.');
 
     await postData(bodyFormData)
       .then((res) => {
@@ -339,7 +340,7 @@ export default class SplashScreen extends Component {
         LoginInfo.user_photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
 
-        setTimeout(() => { this.props.navigation.navigate('Welcome') }, 2000);
+        setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
       })
       .catch((err) => {
         console.log('post login info error', err)

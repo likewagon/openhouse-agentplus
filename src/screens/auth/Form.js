@@ -73,10 +73,10 @@ export default class FormScreen extends Component {
     LoginInfo.email = this.state.email;
     LoginInfo.telephone = this.state.telephone;
 
-    // if (RouteParam.deviceType === 'pad') {
-    //   this.submit();
-    //   return;
-    // }
+    if (RouteParam.deviceType === 'pad') {
+      this.submit();
+      return;
+    }
 
     this.setState({ spinner: true });
 
@@ -134,7 +134,7 @@ export default class FormScreen extends Component {
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
     bodyFormData.append('title', 'CEO');
-    bodyFormData.append('companyname', 'ecapture,inc.');    
+    bodyFormData.append('user_companyname', 'ecapture,inc.');    
 
     await postData(bodyFormData)
       .then((res) => {

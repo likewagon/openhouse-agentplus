@@ -155,7 +155,7 @@ export default class ClientInviteScreen extends Component {
             autoFocus={true}
             autoCapitalize='none'
             placeholder={'Client First and Last Name'}
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.clientFullname}
             onChangeText={(text) => this.setState({ clientFullname: text })}
           />
@@ -163,7 +163,7 @@ export default class ClientInviteScreen extends Component {
             style={styles.inputBox}
             autoCapitalize='none'
             placeholder={'Client Email Address'}
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.clientEmail}
             onChangeText={(text) => this.setState({ clientEmail: text })}
           />
@@ -172,7 +172,7 @@ export default class ClientInviteScreen extends Component {
             autoCapitalize='none'
             keyboardType={'numeric'}
             placeholder={'Client Telephone Number'}
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.clientTelephone}
             onChangeText={(text) => this.setState({ clientTelephone: text })}
           /> */}
@@ -181,7 +181,7 @@ export default class ClientInviteScreen extends Component {
             style={styles.inputBox}
             keyboardType={'numeric'}
             placeholder='Client Telephone Number'
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.clientTelephone}
             onChangeText={(formatted, extracted) => {
               this.setState({ clientTelephone: extracted });

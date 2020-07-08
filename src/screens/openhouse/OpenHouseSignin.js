@@ -142,7 +142,7 @@ export default class OpenHouseSigninScreen extends Component {
             autoFocus={true}
             autoCapitalize='none'
             placeholder={'Your First and Last Name'}
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.fullname}
             onChangeText={(text) => this.setState({ fullname: text })}
           />
@@ -150,7 +150,7 @@ export default class OpenHouseSigninScreen extends Component {
             style={styles.inputBox}
             autoCapitalize='none'
             placeholder={'Your Email Address'}
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.email}
             onChangeText={(text) => this.setState({ email: text })}
           />
@@ -159,7 +159,7 @@ export default class OpenHouseSigninScreen extends Component {
             autoCapitalize='none'
             keyboardType={'numeric'}
             placeholder={'Your Telephone Number'}
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.telephone}
             onChangeText={(text) => this.setState({ telephone: text })}
           /> */}
@@ -168,7 +168,7 @@ export default class OpenHouseSigninScreen extends Component {
             style={styles.inputBox}
             keyboardType={'numeric'}
             placeholder='Your Telephone Number'
-            placeholderColor={Colors.passiveTxtColor}
+            placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.telephone}
             onChangeText={(formatted, extracted) => {
               this.setState({ telephone: extracted });
