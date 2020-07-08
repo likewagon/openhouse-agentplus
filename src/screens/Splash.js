@@ -235,6 +235,7 @@ export default class SplashScreen extends Component {
     else {
       console.log('Authorization status: disabled');          
       this.setState({ pnSettingVisible: true });
+      Linking.openSettings();
     }
   }
 
