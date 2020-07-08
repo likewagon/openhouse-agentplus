@@ -202,8 +202,7 @@ export default class SplashScreen extends Component {
 
         this.requestNotification();
       })
-      .catch(ex => {
-        console.log('geo settting')
+      .catch(ex => {        
         GetLocation.openAppSettings();
       });
   }
@@ -391,7 +390,7 @@ export default class SplashScreen extends Component {
                   </View>
                   <View style={styles.btnContainer}>
                     <TouchableOpacity onPress={() => this.requestNotification()}>
-                      <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Check Permission</Text>
+                      <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Check Notification / Go To Settings</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
