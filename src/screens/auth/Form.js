@@ -81,7 +81,7 @@ export default class FormScreen extends Component {
     this.setState({ spinner: true });
 
     if (this.validatePhoneNumber()) {      
-      var phoneNumber = this.state.country_additional_prefix ? '+86' + this.state.telephone : this.state.telephone;
+      var phoneNumber = this.state.country_additional_prefix ? '+1' + this.state.telephone : this.state.telephone;
       console.log('phonenumber', phoneNumber);
       await verifyPhoneNumber(phoneNumber)
         .then((verifyResult) => {
@@ -212,7 +212,7 @@ export default class FormScreen extends Component {
                 onChangeText={(formatted, extracted) => {
                   this.setState({ telephone: extracted });
                 }}
-                mask={"+86 ([000]) [0000] - [0000]"}
+                mask={"+1 ([000]) [000] - [0000]"}
               />
             </View>
             <View style={styles.nextContainer}>
