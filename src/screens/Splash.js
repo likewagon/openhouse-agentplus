@@ -184,7 +184,7 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.requestNotification();
+        this.initialRequestNotification();
       })
       .catch(ex => {
         this.setState({ geoSettingVisible: true })
@@ -200,11 +200,42 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.requestNotification();
+        this.initialRequestNotification();
       })
       .catch(ex => {        
         GetLocation.openAppSettings();
       });
+  }
+
+  async initialRequestNotification() {
+    const authStatus = await messaging().requestPermission();
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      var fcmToken = await messaging().getToken();
+      LoginInfo.fcmToken = fcmToken;
+      console.log('fcmToken', fcmToken);
+
+      messaging().onMessage(async remoteMessage => {
+        // console.log('Message arrived', remoteMessage);        
+
+        // PushNotification.localNotification({
+        //   title: 'Open House Notification',
+        //   message: remoteMessage.data.body
+        // });
+
+        PushNotificationIOS.presentLocalNotification({
+          alertTitle: 'Open House Notification',
+          alertBody: remoteMessage.data.body
+        })
+      });
+
+      this.isLoggedInProc();
+    }
+    else {
+      console.log('Authorization status: disabled');          
+      this.setState({ pnSettingVisible: true });      
+    }
   }
 
   async requestNotification() {
@@ -233,12 +264,10 @@ export default class SplashScreen extends Component {
       this.isLoggedInProc();
     }
     else {
-      console.log('Authorization status: disabled');          
-      this.setState({ pnSettingVisible: true });
+      console.log('Authorization status: disabled');                
       Linking.openSettings();
     }
   }
-
 
   isLoggedInProc = () => {
     AsyncStorage.getItem('LoginInfo')
