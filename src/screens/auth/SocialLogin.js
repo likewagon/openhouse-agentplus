@@ -60,6 +60,8 @@ export default class SocialLoginScreen extends Component {
         LoginInfo.providerid = 'apple';
         LoginInfo.email_verified = res.user.emailVerified;
 
+        console.log('apple avatar url', LoginInfo.photourl);
+
         this.props.navigation.navigate('Form');
       })
       .catch((err) => {

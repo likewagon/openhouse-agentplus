@@ -125,7 +125,7 @@ export default class FormScreen extends Component {
     bodyFormData.append('fullname', LoginInfo.fullname);
     bodyFormData.append('email', LoginInfo.email);
     bodyFormData.append('telephone', LoginInfo.telephone);
-    //bodyFormData.append('photourl', LoginInfo.photourl);
+    bodyFormData.append('photourl', LoginInfo.photourl);
     bodyFormData.append('fcmToken', LoginInfo.fcmToken);
     bodyFormData.append('providerid', LoginInfo.providerid);
     // bodyFormData.append('email_verified', LoginInfo.email_verified);
