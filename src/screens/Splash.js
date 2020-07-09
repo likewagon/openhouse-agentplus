@@ -148,7 +148,10 @@ export default class SplashScreen extends Component {
         this.isLoggedInProc();
       }
       else{
-        this.initialGetLocation();
+        //this.initialGetLocation();
+
+        //skip
+        this.initialRequestNotification();
       }
     }        
   }
@@ -232,6 +235,9 @@ export default class SplashScreen extends Component {
       });
 
       this.isLoggedInProc();
+
+      // skip
+      //this.submit();
     }
     else {
       console.log('Authorization status: disabled');          
@@ -312,7 +318,7 @@ export default class SplashScreen extends Component {
     // // LoginInfo.phone_verified = 1;
     // LoginInfo.latitude = 40.776611;
     // LoginInfo.longitude = -73.345718;
-    // LoginInfo.user_account = 2;
+    // LoginInfo.user_account = 1;
     // LoginInfo.user_photourl = '';
     // ///////////////
 
@@ -336,7 +342,7 @@ export default class SplashScreen extends Component {
     await postData(bodyFormData)
       .then((res) => {
         //console.log('post login info success', res);
-        LoginInfo.user_account = res[0].user_account;
+        LoginInfo.user_account = 1, //res[0].user_account;
         LoginInfo.user_photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
 

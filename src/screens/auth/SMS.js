@@ -141,7 +141,7 @@ export default class SMSScreen extends Component {
       .then((res) => {
         //console.log('post login info success', res);
 
-        LoginInfo.user_account = res[0].user_account;
+        LoginInfo.user_account = 1, //res[0].user_account;
         LoginInfo.user_photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;        
 

@@ -66,12 +66,7 @@ export default class ClientInviteScreen extends Component {
     return formatTelephone; //(305) 900 - 7270
   }
 
-  onContinue = async () => {
-    /////
-    this.props.navigation.navigate('ClientShare');
-    return;
-    /////
-
+  onContinue = async () => {    
     if (this.state.clientFullname == '') {
       Alert.alert('Please Enter Client First and Last Name');
       return;

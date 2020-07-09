@@ -72,7 +72,7 @@ export default class ClientShareScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'CLIENT REGISTERED'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.navigate('Dashboard')} />
+          <Header title={'CLIENT REGISTERED'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.navigate('ClientList')} />
         </View>
         <View style={styles.txtContainer}>
           <Text style={styles.txt}>
