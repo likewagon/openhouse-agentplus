@@ -141,7 +141,7 @@ export default class FormScreen extends Component {
         //console.warn('post login info success', res);
 
         LoginInfo.user_account = res[0].user_account;
-        LoginInfo.user_photourl = res[0].user_photourl;
+        LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;        
 
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));

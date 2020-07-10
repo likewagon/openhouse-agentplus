@@ -66,7 +66,7 @@ export default class SideMenu extends Component {
         </View>
         <View style={styles.profileContainer}>
           <View style={styles.profileImgContainer}>
-            <Image style={{ width: '100%', height: '100%', borderRadius: normalize(50) }} source={{ uri: LoginInfo.user_photourl }} resizeMode='stretch' />
+            <Image style={{ width: '100%', height: '100%', borderRadius: normalize(50) }} source={{ uri: LoginInfo.photourl }} resizeMode='stretch' />
           </View>
           <Text style={styles.userName}>{LoginInfo.fullname}</Text>
           <Text style={styles.userTitle}>{LoginInfo.title}</Text>

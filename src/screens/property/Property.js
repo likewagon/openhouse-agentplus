@@ -104,6 +104,21 @@ export default class PropertyScreen extends Component {
       })
     }
   }
+  
+  onVideoMessage = async () => {
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'start_live_stream');
+    bodyFormData.append('account_no', LoginInfo.user_account);
+    bodyFormData.append('property_no', RouteParam.propertyRecordNo);    
+
+    await postData(bodyFormData)
+      .then((res) => {
+        console.log('create live call success', res);        
+      })
+      .catch((err) => {
+        console.log('create live call error', err)
+      })
+  }
 
   render() {
     return (
@@ -170,7 +185,7 @@ export default class PropertyScreen extends Component {
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('PropertyWithClient', {property: this.state.property})}>
             <Image style={styles.eachBtn} source={Images.iconConference}></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('LiveCall')}>
+          <TouchableOpacity onPress={()=>this.onVideoMessage()}>
             <Image style={styles.eachBtn} source={Images.iconVideoMessage}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('OpenHouseStack')}>

@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
-  ImageBackground,  
+  ImageBackground,
 } from "react-native";
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -32,10 +32,10 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 
 import { firebaseInit } from '../api/Firebase';
-import { postData, getReviewGeoForApple } from '../api/rest';
+import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
 
 import messaging from '@react-native-firebase/messaging';
 
@@ -139,23 +139,22 @@ export default class SplashScreen extends Component {
   }
 
   async componentDidMount() {
-    let res = await getReviewGeoForApple();    
-    if(res){
-      if(res[0].under_review_by_apple){
+    let res = await getReviewGeoForApple();
+    if (res) {
+      if (res[0].under_review_by_apple) {
         LoginInfo.latitude = res[0].user_latitude;
         LoginInfo.longitude = res[0].user_longitude;
         RouteParam.deviceType = 'pad';
         this.isLoggedInProc();
       }
-      else{
+      else {
         //this.initialGetLocation();
 
         //skip
         this.initialRequestNotification();
       }
-    }        
+    }
   }
-
 
   keyboardManager = () => {
     if (Platform.OS === 'ios') {
@@ -206,7 +205,7 @@ export default class SplashScreen extends Component {
 
         this.initialRequestNotification();
       })
-      .catch(ex => {        
+      .catch(ex => {
         GetLocation.openAppSettings();
       });
   }
@@ -223,25 +222,45 @@ export default class SplashScreen extends Component {
       messaging().onMessage(async remoteMessage => {
         // console.log('Message arrived', remoteMessage);        
 
-        // PushNotification.localNotification({
-        //   title: 'Open House Notification',
-        //   message: remoteMessage.data.body
-        // });
+        if (Platform.OS === 'android') {
+          PushNotification.localNotification({
+            title: remoteMessage.data.title,
+            message: remoteMessage.data.body
+          });
+        }
+        else {
+          PushNotificationIOS.presentLocalNotification({
+            alertTitle: remoteMessage.data.title,
+            alertBody: remoteMessage.data.body
+          })
+        }
 
-        PushNotificationIOS.presentLocalNotification({
-          alertTitle: 'Open House Notification',
-          alertBody: remoteMessage.data.body
-        })
+        if (remoteMessage.data.propertyNo) {
+          Alert.alert(
+            'Will you accept live call?',
+            '',
+            [
+              { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
+              { text: 'No', onPress: () => { } },
+            ],
+            {
+              cancelable: true
+            }
+          );
+        }
       });
 
-      this.isLoggedInProc();
+      //this.isLoggedInProc();
 
       // skip
-      //this.submit();
+      this.submit();
     }
     else {
-      console.log('Authorization status: disabled');          
-      this.setState({ pnSettingVisible: true });      
+      console.log('Authorization status: disabled');
+      this.setState({ pnSettingVisible: true });
+
+      // skip
+      this.submit();
     }
   }
 
@@ -255,25 +274,65 @@ export default class SplashScreen extends Component {
       console.log('fcmToken', fcmToken);
 
       messaging().onMessage(async remoteMessage => {
-        // console.log('Message arrived', remoteMessage);        
+        console.log('Message arrived', remoteMessage);
 
-        // PushNotification.localNotification({
-        //   title: 'Open House Notification',
-        //   message: remoteMessage.data.body
-        // });
+        if (Platform.OS === 'android') {
+          PushNotification.localNotification({
+            title: 'Open House Notification',
+            message: remoteMessage.data.body
+          });
+        }
+        else {
+          PushNotificationIOS.presentLocalNotification({
+            alertTitle: 'Open House Notification',
+            alertBody: remoteMessage.data.body
+          })
+        }
 
-        PushNotificationIOS.presentLocalNotification({
-          alertTitle: 'Open House Notification',
-          alertBody: remoteMessage.data.body
-        })
+        if (remoteMessage.data.propertyNo) {
+          Alert.alert(
+            'Will you accept live call?',
+            '',
+            [
+              { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
+              { text: 'No', onPress: () => { } },
+            ],
+            {
+              cancelable: true
+            }
+          );
+        }
       });
 
       this.isLoggedInProc();
     }
     else {
-      console.log('Authorization status: disabled');                
+      console.log('Authorization status: disabled');
       Linking.openSettings();
     }
+  }
+
+  onLiveCallYes = (propertyNo) => {
+    var param = {
+      user_account: LoginInfo.user_account,
+      user_fullname: LoginInfo.fullname,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      property_recordno: propertyNo
+    };
+    console.log('live info param', param);
+
+    getLiveInfo(param)
+      .then((res) => {
+        console.log('live info', res);
+        RouteParam.liveInfo = res[0];
+        if (RouteParam.liveInfo.error === undefined) {
+          this.props.navigation.navigate('LiveCall');
+        }
+      })
+      .catch((err) => {
+        console.log('get live info error', err);
+      })
   }
 
   isLoggedInProc = () => {
@@ -287,11 +346,11 @@ export default class SplashScreen extends Component {
           LoginInfo.email = info.email;
           LoginInfo.telephone = info.telephone;
           LoginInfo.providerid = info.providerid;
+          LoginInfo.photourl = info.photourl;
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.phone_verified = info.phone_verified;
           LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;
-          LoginInfo.user_photourl = info.user_photourl;
 
           this.submit();
         }
@@ -307,19 +366,19 @@ export default class SplashScreen extends Component {
 
   submit = async () => {
     // skip
-    // LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
-    // LoginInfo.fullname = 'Danielle Reese';
-    // LoginInfo.email = 'danielle@daniellereesegroup.com';
-    // LoginInfo.telephone = '+19144972987';
-    // LoginInfo.providerid = 'apple';
-    // LoginInfo.title = 'Licensed Real Estate Salesperson';
-    // LoginInfo.company = 'Keller Williams';
-    // // LoginInfo.email_verified = 1;
-    // // LoginInfo.phone_verified = 1;
-    // LoginInfo.latitude = 40.776611;
-    // LoginInfo.longitude = -73.345718;
-    // LoginInfo.user_account = 1;
-    // LoginInfo.user_photourl = '';
+    LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
+    LoginInfo.fullname = 'Tomas Andersson';
+    LoginInfo.email = 'eastsea1020n@gmail.com';
+    LoginInfo.telephone = '+15330894205';
+    LoginInfo.photourl = '';
+    LoginInfo.providerid = 'google';
+    LoginInfo.title = 'Licensed Real Estate Salesperson';
+    LoginInfo.company = 'Keller Williams';
+    // LoginInfo.email_verified = 1;
+    // LoginInfo.phone_verified = 1;
+    LoginInfo.latitude = 40.776611;
+    LoginInfo.longitude = -73.345718;
+    LoginInfo.user_account = 54;
     // ///////////////
 
     let bodyFormData = new FormData();
@@ -343,7 +402,7 @@ export default class SplashScreen extends Component {
       .then((res) => {
         //console.log('post login info success', res);
         LoginInfo.user_account = res[0].user_account;
-        LoginInfo.user_photourl = res[0].user_photourl;
+        LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
 
         setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
@@ -377,62 +436,62 @@ export default class SplashScreen extends Component {
               </View>
             )
             :
-            this.state.geoSettingVisible ? 
-            (
-              <View style={styles.modalBackSetting}>
-                <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
-                <View style={styles.logoImgContainerSetting}>
-                  <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
-                </View>
-                <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
-                <View style={styles.logoNameContainerSetting}>
-                  <Text style={styles.logoName}>Open House</Text>
-                  <Text style={styles.logoPlusLabel}>+</Text>
-                </View>
+            this.state.geoSettingVisible ?
+              (
+                <View style={styles.modalBackSetting}>
+                  <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                  <View style={styles.logoImgContainerSetting}>
+                    <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
+                  </View>
+                  <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
+                  <View style={styles.logoNameContainerSetting}>
+                    <Text style={styles.logoName}>Open House</Text>
+                    <Text style={styles.logoPlusLabel}>+</Text>
+                  </View>
 
-                <View style={styles.settingContainer}>
-                  <View style={styles.settingTxtContainer}>
-                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
-                      Open™
-                      requires access to your geo location to operate.
+                  <View style={styles.settingContainer}>
+                    <View style={styles.settingTxtContainer}>
+                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
+                        Open™
+                        requires access to your geo location to operate.
                       This will enhance our ability to display properties in your area.</Text>
+                    </View>
+                    <View style={styles.btnContainer}>
+                      <TouchableOpacity onPress={() => this.requestLocation()}>
+                        <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <View style={styles.btnContainer}>
-                    <TouchableOpacity onPress={() => this.requestLocation()}>
-                      <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
-                    </TouchableOpacity>
+                </View>
+              )
+              :
+              (
+                <View style={styles.modalBackSetting}>
+                  <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                  <View style={styles.logoImgContainerSetting}>
+                    <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
                   </View>
-                </View>
-              </View>
-            )
-            :
-            (
-              <View style={styles.modalBackSetting}>
-                <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
-                <View style={styles.logoImgContainerSetting}>
-                  <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
-                </View>
-                <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
-                <View style={styles.logoNameContainerSetting}>
-                  <Text style={styles.logoName}>Open House</Text>
-                  <Text style={styles.logoPlusLabel}>+</Text>
-                </View>
+                  <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
+                  <View style={styles.logoNameContainerSetting}>
+                    <Text style={styles.logoName}>Open House</Text>
+                    <Text style={styles.logoPlusLabel}>+</Text>
+                  </View>
 
-                <View style={styles.settingContainer}>
-                  <View style={styles.settingTxtContainer}>
-                    <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
-                      Agent™
-                      requires notification setting.
+                  <View style={styles.settingContainer}>
+                    <View style={styles.settingTxtContainer}>
+                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
+                        Agent™
+                        requires notification setting.
                       This will help you contact with client.</Text>
-                  </View>
-                  <View style={styles.btnContainer}>
-                    <TouchableOpacity onPress={() => this.requestNotification()}>
-                      <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Notification / Go To Settings</Text>
-                    </TouchableOpacity>
+                    </View>
+                    <View style={styles.btnContainer}>
+                      <TouchableOpacity onPress={() => this.requestNotification()}>
+                        <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Notification / Go To Settings</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            )
+              )
         }
       </ImageBackground>
     );
