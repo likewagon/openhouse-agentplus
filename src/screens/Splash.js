@@ -103,8 +103,7 @@ BackgroundFetch.configure({
 }, () => {
   console.log("[js] Received background-fetch event");
   // Required: Signal completion of your task to native code
-  // If you fail to do this, the OS can terminate your app
-  // or assign battery-blame for consuming too much background-time
+  // If you fail to do this, the OS can terminate your app or assign battery-blame for consuming too much background-time
   BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
 }, (error) => {
   console.log("[js] RNBackgroundFetch failed to start");
@@ -236,17 +235,19 @@ export default class SplashScreen extends Component {
         }
 
         if (remoteMessage.data.propertyNo) {
-          Alert.alert(
-            'Will you accept live call?',
-            '',
-            [
-              { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
-              { text: 'No', onPress: () => { } },
-            ],
-            {
-              cancelable: true
-            }
-          );
+          setTimeout(() => {
+            Alert.alert(
+              remoteMessage.data.alertTitle,
+              remoteMessage.data.alertBody,
+              [
+                { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
+                { text: 'No', onPress: () => { } },
+              ],
+              {
+                cancelable: true
+              }
+            )
+          }, 1500);
         }
       });
 
@@ -290,17 +291,19 @@ export default class SplashScreen extends Component {
         }
 
         if (remoteMessage.data.propertyNo) {
-          Alert.alert(
-            'Will you accept live call?',
-            '',
-            [
-              { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
-              { text: 'No', onPress: () => { } },
-            ],
-            {
-              cancelable: true
-            }
-          );
+          setTimeout(() => {
+            Alert.alert(
+              remoteMessage.data.alertTitle,
+              remoteMessage.data.alertBody,
+              [
+                { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
+                { text: 'No', onPress: () => { } },
+              ],
+              {
+                cancelable: true
+              }
+            )
+          }, 1500);
         }
       });
 
@@ -327,7 +330,7 @@ export default class SplashScreen extends Component {
         console.log('live info', res);
         RouteParam.liveInfo = res[0];
         if (RouteParam.liveInfo.error === undefined) {
-          this.props.navigation.navigate('LiveCall');
+          this.props.navigation.navigate('Main', { screen: 'LiveCall' });
         }
       })
       .catch((err) => {
@@ -367,9 +370,9 @@ export default class SplashScreen extends Component {
   submit = async () => {
     // skip
     LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
-    LoginInfo.fullname = 'Tomas Andersson';
-    LoginInfo.email = 'eastsea1020n@gmail.com';
-    LoginInfo.telephone = '+15330894205';
+    LoginInfo.fullname = 'Anthony Robinson';
+    LoginInfo.email = 'kelloggsx@gmail.com';
+    LoginInfo.telephone = '+13059007270';
     LoginInfo.photourl = '';
     LoginInfo.providerid = 'google';
     LoginInfo.title = 'Licensed Real Estate Salesperson';
@@ -378,7 +381,8 @@ export default class SplashScreen extends Component {
     // LoginInfo.phone_verified = 1;
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
-    LoginInfo.user_account = 54;
+    LoginInfo.user_account = 1;
+    //LoginInfo.fcmToken = 'elt7hH0ddEtOt-0xVy9SIE:APA91bGqFs0WovCUWcQl9_u7LMPYJxdutAWKum_N3tBWCR9B0movGUYsdeNyxHX01oJS9qVLFsxIDwI2vWv9PWG-7a-iDkhlQ5mGu3eqb_ZNW0jGac5sEVFk6RQ2BaQi4m9rGnIa9Ado';
     // ///////////////
 
     let bodyFormData = new FormData();

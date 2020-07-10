@@ -44,7 +44,6 @@
     "react-native-screens": "^2.7.0",
     "react-native-signature-capture": "^0.4.10",
     "react-native-slider": "^0.11.0",
-    "react-native-super-grid": "^4.0.2",
     "react-native-switch-selector": "^2.0.4",
     "react-native-text-input-mask": "^2.0.0",
     "react-native-twilio-video-webrtc": "git+https://github.com/blackuy/react-native-twilio-video-webrtc.git",

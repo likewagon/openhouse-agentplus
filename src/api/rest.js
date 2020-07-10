@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_V1_POST_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/post.php';
 const API_V1_GET_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/get.php';
-const API_V1_GET_LIVEINFO_URL = 'http://www.openhousemarketingsystem.com/application/virtualplus/v1/connect_to_live_oh.php'
+const API_V1_GET_LIVEINFO_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/connect_to_live_oh.php'
 const API_V1_GET_GEO_REVIEW_FOR_APPLE_URL = 'http://www.openhousemarketingsystem.com/application/virtualplus/v1/underview.php'
 
 const axios_post_instance = axios.create({
