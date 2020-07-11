@@ -18,6 +18,7 @@ import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
+import KeepAwake from 'react-native-keep-awake';
 import {
   TwilioVideoLocalView,
   TwilioVideoParticipantView,
@@ -39,10 +40,10 @@ import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 export default class LiveCallScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {      
+    this.state = {
       mute: true,
-      mic: true,
-      call: true,
+      end: true,
+      flip: true,
       isVideoEnabled: true,
       status: "disconnected",
       participants: new Map(),
@@ -51,7 +52,12 @@ export default class LiveCallScreen extends Component {
   }
 
   componentDidMount() {
+    KeepAwake.activate();
     this._onConnectButtonPress();
+  }
+
+  componentWillUnmount(){
+    KeepAwake.deactivate();
   }
 
   _onConnectButtonPress = () => {
@@ -59,7 +65,7 @@ export default class LiveCallScreen extends Component {
       console.log(this.state.roomName, this.state.token,
         RouteParam.liveInfo.roomname, RouteParam.liveInfo.token);
 
-      this.twilioRef.connect({        
+      this.twilioRef.connect({
         roomName: RouteParam.liveInfo.roomname,
         accessToken: RouteParam.liveInfo.token
       });
@@ -71,7 +77,7 @@ export default class LiveCallScreen extends Component {
 
   _onEndButtonPress = () => {
     this.twilioRef.disconnect();
-    this.props.navigation.navigate('Property');
+    this.props.navigation.goBack(null);
   };
 
   _onMuteButtonPress = () => {
@@ -130,10 +136,9 @@ export default class LiveCallScreen extends Component {
   render() {
     return (
       <ImageBackground style={styles.container} source={{ uri: RouteParam.propertyMainPhotoUrl }}>
-        <View style={styles.headerContainer}>
+        {/* <View style={styles.headerContainer}>
           <Header title={'LIVE CALL'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
-        </View>    
-        <TwilioVideoLocalView enabled={true} style={styles.localVideo} />    
+        </View>         */}
         {this.state.status === "connected" && (
           <View style={styles.remoteGrid}>
             {Array.from(
@@ -150,25 +155,22 @@ export default class LiveCallScreen extends Component {
             )}
           </View>
         )}
+        <View style={styles.smallVideoContainer}>
+          <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+        </View>
         <View style={styles.btnsContainer}>
           <TouchableOpacity onPress={() => {
-            this.setState({ mute: !this.state.mute });
             this._onMuteButtonPress();
+            this.setState({ mute: !this.state.mute });
           }}>
             <Image style={styles.btnImg} source={this.state.mute ? Images.btnUnmute : Images.btnMute} resizeMode='cover' />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            this.setState({ mic: !this.state.mic });
-            this._onEndButtonPress();
-          }}>
-            <Image style={styles.btnImg} source={this.state.mic ? Images.btnMicOn : Images.btnMicOff} resizeMode='cover' />
+          <TouchableOpacity onPress={() => this._onFlipButtonPress()}>
+            <Image style={styles.btnImg} source={Images.btnFlipCam} resizeMode='cover' />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {
-            this.setState({ call: !this.state.call });
-            this._onFlipButtonPress();
-          }}>
-            <Image style={styles.btnImg} source={this.state.call ? Images.btnCallOn : Images.btnCallOff} resizeMode='cover' />
-          </TouchableOpacity>          
+          <TouchableOpacity onPress={() => this._onEndButtonPress()}>
+            <Image style={styles.btnImg} source={Images.btnCallOff} resizeMode='cover' />
+          </TouchableOpacity>
         </View>
 
         <TwilioVideo
@@ -202,7 +204,35 @@ const styles = StyleSheet.create({
     // borderColor: Colors.borderColor,
     // borderBottomWidth: normalize(0.5, 'height'),
   },  
+  remoteGrid: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap"
+  },
+  remoteVideo: {
+    width: '100%',
+    height: '100%',
+    // borderWidth: 2,
+    // borderColor: '#ff0000'
+  },
+  smallVideoContainer: {
+    position: 'absolute',
+    top: normalize(40, 'height'),        
+    width: '100%',
+    height: normalize(100),
+    flexDirection: 'row',
+  },
+  localVideo: {    
+    width: normalize(100),
+    height: normalize(100),
+    marginLeft: normalize(18),
+    borderRadius: normalize(5),
+    borderWidth: normalize(2),
+    borderColor: '#4e4e4e'
+  },  
   btnsContainer: {
+    position: 'absolute',
+    bottom: normalize(15, 'height'),
     width: '75%',
     height: '17%',
     flexDirection: 'row',
@@ -214,22 +244,5 @@ const styles = StyleSheet.create({
   btnImg: {
     width: normalize(60),
     height: normalize(60),
-  },
-  localVideo: {    
-    width: normalize(100),
-    height: normalize(100),            
-    marginTop: normalize(20, 'height'),
-    borderRadius: normalize(5),
-    borderWidth: normalize(2),
-    borderColor: '#4e4e4e'
-  },
-  remoteGrid: {
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap"
-  },
-  remoteVideo: {
-    width: '100%',
-    height: '100%'
   },
 });

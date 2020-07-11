@@ -44,10 +44,8 @@ const Images = {
 
   btnMute: require('../assets/images/btnMute.png'),
   btnUnmute: require('../assets/images/btnUnmute.png'),
-  btnMicOn: require('../assets/images/btnMicOn.png'),
-  btnMicOff: require('../assets/images/btnMicOff.png'),
-  btnCallOn: require('../assets/images/btnCallOn.png'),
-  btnCallOff: require('../assets/images/btnCallOff.png')
+  btnFlipCam: require('../assets/images/btnFlipCam.png'),  
+  btnCallOff: require('../assets/images/btnCallOff.png'),  
 }
 
 export default Images;
