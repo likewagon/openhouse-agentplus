@@ -18,7 +18,7 @@ import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import KeepAwake from 'react-native-keep-awake';
+import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
 import {
   TwilioVideoLocalView,
   TwilioVideoParticipantView,
@@ -41,10 +41,7 @@ export default class LiveCallScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mute: true,
-      end: true,
-      flip: true,
-      isVideoEnabled: true,
+      mute: false,      
       status: "disconnected",
       participants: new Map(),
       videoTracks: new Map(),
@@ -52,19 +49,16 @@ export default class LiveCallScreen extends Component {
   }
 
   componentDidMount() {
-    KeepAwake.activate();
+    activateKeepAwake();
     this._onConnectButtonPress();
   }
 
   componentWillUnmount(){
-    KeepAwake.deactivate();
+    deactivateKeepAwake();
   }
 
   _onConnectButtonPress = () => {
     try {
-      console.log(this.state.roomName, this.state.token,
-        RouteParam.liveInfo.roomname, RouteParam.liveInfo.token);
-
       this.twilioRef.connect({
         roomName: RouteParam.liveInfo.roomname,
         accessToken: RouteParam.liveInfo.token
@@ -77,7 +71,13 @@ export default class LiveCallScreen extends Component {
 
   _onEndButtonPress = () => {
     this.twilioRef.disconnect();
-    this.props.navigation.goBack(null);
+    if(RouteParam.liveCallFromBackgroundNotification){
+      RouteParam.liveCallFromBackgroundNotification = false;
+      this.props.navigation.navigate('Splash');
+    }
+    else{
+      this.props.navigation.goBack(null);
+    }
   };
 
   _onMuteButtonPress = () => {
@@ -163,7 +163,7 @@ export default class LiveCallScreen extends Component {
             this._onMuteButtonPress();
             this.setState({ mute: !this.state.mute });
           }}>
-            <Image style={styles.btnImg} source={this.state.mute ? Images.btnUnmute : Images.btnMute} resizeMode='cover' />
+            <Image style={styles.btnImg} source={this.state.mute ? Images.btnMute : Images.btnUnmute} resizeMode='cover' />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this._onFlipButtonPress()}>
             <Image style={styles.btnImg} source={Images.btnFlipCam} resizeMode='cover' />

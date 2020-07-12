@@ -44,72 +44,47 @@ import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import BackgroundFetch from 'react-native-background-fetch';
 
 PushNotification.configure({
-  //senderID: '1006237194994',
-  // (optional) Called when Token is generated (iOS and Android)
   onRegister: function (token) {
     console.log("TOKEN:", token);
   },
 
-  // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     console.log("NOTIFICATION:", notification);
-
-    // process the notification
-
-    // (required) Called when a remote is received or opened, or local notification is opened
     notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
 
-  // (optional) Called when Registered Action is pressed and invokeApp is false, if true onNotification will be called (Android)
   onAction: function (notification) {
     console.log("ACTION:", notification.action);
     console.log("NOTIFICATION:", notification);
-
-    // process the action
   },
 
-  // (optional) Called when the user fails to register for remote notifications. Typically occurs when APNS is having issues, or the device is a simulator. (iOS)
   onRegistrationError: function (err) {
     console.error(err.message, err);
   },
 
-  // IOS ONLY (optional): default: all - Permissions to register.
   permissions: {
     alert: true,
     badge: true,
     sound: true,
   },
 
-  // Should the initial notification be popped automatically
-  // default: true
   popInitialNotification: true,
-
-  /**
-   * (optional) default: true
-   * - Specified if permissions (ios) and token (android and ios) will requested or not,
-   * - if not, you must call PushNotificationsHandler.requestPermissions() later
-   * - if you are not using remote notification or do not have Firebase installed, use this:
-   *     requestPermissions: Platform.OS === 'ios'
-   */
   requestPermissions: true,
 });
 
 PushNotificationIOS.addEventListener('registrationError', (err) => { console.log('registration error', err) })
 
 BackgroundFetch.configure({
-  minimumFetchInterval: 15, // <-- minutes (15 is minimum allowed)
-  stopOnTerminate: false,   // <-- Android-only,
-  startOnBoot: true         // <-- Android-only
+  minimumFetchInterval: 15,
+  stopOnTerminate: false, // Android-only,
+  startOnBoot: true // Android-only
 }, () => {
   console.log("[js] Received background-fetch event");
-  // Required: Signal completion of your task to native code
-  // If you fail to do this, the OS can terminate your app or assign battery-blame for consuming too much background-time
   BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
 }, (error) => {
   console.log("[js] RNBackgroundFetch failed to start");
 });
 
-// Optional: Query the authorization status.
 BackgroundFetch.status((status) => {
   switch (status) {
     case BackgroundFetch.STATUS_RESTRICTED:
@@ -124,6 +99,7 @@ BackgroundFetch.status((status) => {
   }
 });
 
+
 export default class SplashScreen extends Component {
   constructor(props) {
     super(props);
@@ -137,22 +113,22 @@ export default class SplashScreen extends Component {
     //firebaseInit();    
   }
 
-  async componentDidMount() {
+  async componentDidMount() {    
     let res = await getReviewGeoForApple();
     if (res) {
       if (res[0].under_review_by_apple) {
         LoginInfo.latitude = res[0].user_latitude;
         LoginInfo.longitude = res[0].user_longitude;
         RouteParam.deviceType = 'pad';
-        this.isLoggedInProc();
+        this.isLoggedInProc();        
       }
       else {
-        //this.initialGetLocation();
+        //this.requestLocation();
 
         //skip
-        this.initialRequestNotification();
+        this.requestNotification();        
       }
-    }
+    }    
   }
 
   keyboardManager = () => {
@@ -177,22 +153,6 @@ export default class SplashScreen extends Component {
     }
   }
 
-  initialGetLocation = () => {
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 150000,
-    })
-      .then(location => {
-        LoginInfo.latitude = location.latitude;
-        LoginInfo.longitude = location.longitude;
-
-        this.initialRequestNotification();
-      })
-      .catch(ex => {
-        this.setState({ geoSettingVisible: true })
-      });
-  }
-
   requestLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -202,14 +162,15 @@ export default class SplashScreen extends Component {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
-        this.initialRequestNotification();
+        this.requestNotification();
       })
       .catch(ex => {
+        this.setState({ geoSettingVisible: true });
         GetLocation.openAppSettings();
       });
-  }
+  }  
 
-  async initialRequestNotification() {
+  async requestNotification() {
     const authStatus = await messaging().requestPermission();
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
@@ -259,61 +220,12 @@ export default class SplashScreen extends Component {
     else {
       console.log('Authorization status: disabled');
       this.setState({ pnSettingVisible: true });
+      //Linking.openSettings();
 
       // skip
       this.submit();
     }
-  }
-
-  async requestNotification() {
-    const authStatus = await messaging().requestPermission();
-    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    if (enabled) {
-      var fcmToken = await messaging().getToken();
-      LoginInfo.fcmToken = fcmToken;
-      console.log('fcmToken', fcmToken);
-
-      messaging().onMessage(async remoteMessage => {
-        console.log('Message arrived', remoteMessage);
-
-        if (Platform.OS === 'android') {
-          PushNotification.localNotification({
-            title: 'Open House Notification',
-            message: remoteMessage.data.body
-          });
-        }
-        else {
-          PushNotificationIOS.presentLocalNotification({
-            alertTitle: 'Open House Notification',
-            alertBody: remoteMessage.data.body
-          })
-        }
-
-        if (remoteMessage.data.propertyNo) {
-          setTimeout(() => {
-            Alert.alert(
-              remoteMessage.data.alertTitle,
-              remoteMessage.data.alertBody,
-              [
-                { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
-                { text: 'No', onPress: () => { } },
-              ],
-              {
-                cancelable: true
-              }
-            )
-          }, 1500);
-        }
-      });
-
-      this.isLoggedInProc();
-    }
-    else {
-      console.log('Authorization status: disabled');
-      Linking.openSettings();
-    }
-  }
+  }  
 
   onLiveCallYes = (propertyNo) => {
     var param = {
@@ -381,8 +293,7 @@ export default class SplashScreen extends Component {
     // LoginInfo.phone_verified = 1;
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
-    LoginInfo.user_account = 1;
-    //LoginInfo.fcmToken = 'elt7hH0ddEtOt-0xVy9SIE:APA91bGqFs0WovCUWcQl9_u7LMPYJxdutAWKum_N3tBWCR9B0movGUYsdeNyxHX01oJS9qVLFsxIDwI2vWv9PWG-7a-iDkhlQ5mGu3eqb_ZNW0jGac5sEVFk6RQ2BaQi4m9rGnIa9Ado';
+    LoginInfo.user_account = 1;    
     // ///////////////
 
     let bodyFormData = new FormData();

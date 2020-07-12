@@ -20,6 +20,7 @@ const Images = {
   iconConference: require('../assets/images/iconConference.png'),
   iconVideoMessage: require('../assets/images/iconVideoMessage.png'),
   iconOpen: require('../assets/images/iconOpen.png'),
+  iconEnterRoom: require('../assets/images/iconEnterRoom.png'),
   iconFacebook: require('../assets/images/iconFacebook.png'),
 
   marker: require('../assets/images/marker.png'),

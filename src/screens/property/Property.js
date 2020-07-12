@@ -35,7 +35,7 @@ import {
 } from '@components';
 
 import { Colors, Images, RouteParam, LoginInfo } from '@constants';
-import { getContentByAction, postData } from '../../api/rest';
+import { getContentByAction, postData, getLiveInfo } from '../../api/rest';
 
 export default class PropertyScreen extends Component {
   constructor(props) {
@@ -113,10 +113,35 @@ export default class PropertyScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('create live call success', res);        
+        console.log('create live call success', res);
+        Alert.alert('You can have live call for this property!');
       })
       .catch((err) => {
         console.log('create live call error', err)
+        Alert.alert('Live call is not applied');
+      })
+  }
+
+  onEnterRoom = () => {
+    var param = {
+      user_account: LoginInfo.user_account,
+      user_fullname: LoginInfo.fullname,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      property_recordno: RouteParam.propertyRecordNo
+    };
+    //console.log('live info param', param);
+
+    getLiveInfo(param)
+      .then((res) => {
+        console.log('live info', res);
+        RouteParam.liveInfo = res[0];
+        if (RouteParam.liveInfo.error === undefined) {
+          this.props.navigation.navigate('Main', { screen: 'LiveCall' });
+        }
+      })
+      .catch((err) => {
+        console.log('get live info error', err);
       })
   }
 
@@ -190,6 +215,9 @@ export default class PropertyScreen extends Component {
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('OpenHouseStack')}>
             <Image style={styles.eachBtn} source={Images.iconOpen}></Image>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>this.onEnterRoom()}>
+            <Image style={styles.eachBtn} source={Images.iconEnterRoom}></Image>
           </TouchableOpacity>
           <TouchableOpacity>
             <Image style={styles.eachBtn} source={Images.iconFacebook}></Image>

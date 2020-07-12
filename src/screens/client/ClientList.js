@@ -93,7 +93,7 @@ export default class ClientListScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Header title={'CLIENTS'} titleColor={Colors.blackColor} rightLeftIcon={Images.iconAddPerson} rightIcon={Images.iconLocation} onPressBack={() => this.props.navigation.goBack(null)} onPressRightLeftIcon={() => { this.props.navigation.navigate('ClientInvite') }} onPressRightIcon={() => { this.props.navigation.navigate('ClientMap', {clientData: this.state.clientData}) }} />
+          <Header title={'CLIENTS'} titleColor={Colors.blackColor} rightLeftIcon={Images.iconAddPerson} rightIcon={Images.iconLocation} onPressBack={() => this.props.navigation.goBack(null)} onPressRightLeftIcon={() => { this.props.navigation.navigate('ClientShare') }} onPressRightIcon={() => { this.props.navigation.navigate('ClientMap', {clientData: this.state.clientData}) }} />
         </View>
         <View style={styles.searchContainer}>
           <SearchBox boxStyle={{ width: width * 0.9, height: normalize(35, 'height'), backgroundColor: Colors.searchBackColor, borderColor: Colors.blueColor, btnColor: Colors.blueColor }} onSearch={this.onSearch} onFastSearch={this.onFastSearch} />

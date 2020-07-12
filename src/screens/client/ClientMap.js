@@ -70,8 +70,8 @@ export default class ClientMapScreen extends Component {
           <MapView
             ref={map => { this.map = map }}
             region={{
-              latitude: this.state.clientData[0].client_latitude,
-              longitude: this.state.clientData[0].client_longitude,
+              latitude: this.state.clientData.length > 0 && this.state.clientData[0].client_latitude,
+              longitude: this.state.clientData.length > 0 && this.state.clientData[0].client_longitude,
               latitudeDelta: 0.0922 / 5,
               longitudeDelta: 0.0421 / 5,
             }}
