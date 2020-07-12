@@ -109,8 +109,7 @@ export default class SplashScreen extends Component {
       pnSettingVisible: false
     }
 
-    this.keyboardManager();
-    //firebaseInit();    
+    this.keyboardManager();    
   }
 
   async componentDidMount() {    
