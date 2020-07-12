@@ -182,6 +182,14 @@ PODS:
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
+  - Permission-Camera (2.1.5):
+    - RNPermissions
+  - Permission-LocationAlways (2.1.5):
+    - RNPermissions
+  - Permission-LocationWhenInUse (2.1.5):
+    - RNPermissions
+  - Permission-Microphone (2.1.5):
+    - RNPermissions
   - PromisesObjC (1.2.9)
   - Protobuf (3.12.0)
   - RCTRequired (0.62.2)
@@ -467,6 +475,8 @@ PODS:
   - RNInputMask (4.1.0)
   - RNPDF (0.10.2):
     - React
+  - RNPermissions (2.1.5):
+    - React
   - RNScreens (2.8.0):
     - React
   - RNVectorIcons (6.6.0):
@@ -501,6 +511,10 @@ DEPENDENCIES:
   - FlipperKit/SKIOSNetworkPlugin (~> 0.33.1)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
+  - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways.podspec`)
+  - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec`)
+  - Permission-Microphone (from `../node_modules/react-native-permissions/ios/Microphone.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -547,6 +561,7 @@ DEPENDENCIES:
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNInputMask (from `../node_modules/react-native-text-input-mask/ios/InputMask`)
   - RNPDF (from `../node_modules/react-native-view-pdf`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -601,6 +616,14 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+  Permission-Camera:
+    :path: "../node_modules/react-native-permissions/ios/Camera.podspec"
+  Permission-LocationAlways:
+    :path: "../node_modules/react-native-permissions/ios/LocationAlways.podspec"
+  Permission-LocationWhenInUse:
+    :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec"
+  Permission-Microphone:
+    :path: "../node_modules/react-native-permissions/ios/Microphone.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -687,6 +710,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-text-input-mask/ios/InputMask"
   RNPDF:
     :path: "../node_modules/react-native-view-pdf"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNVectorIcons:
@@ -732,6 +757,10 @@ SPEC CHECKSUMS:
   IQKeyboardManager: 8eab4d8111418414619d1df8e4779ce5d0f8d7e2
   nanopb: c43f40fadfe79e8b8db116583945847910cbabc9
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
+  Permission-Camera: 53d46bd722aea28d796e20f05fb3cbe6cde6ccb6
+  Permission-LocationAlways: 14ec76aa2912ea3a7ddc5b564d781bff51a5f3c8
+  Permission-LocationWhenInUse: 16ecd20d82341c6b4336dfe5520c098bea85a2f5
+  Permission-Microphone: af45e35013788b52eecf3cd8f13185c4b6f7bff7
   PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
   Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
@@ -777,12 +806,13 @@ SPEC CHECKSUMS:
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNPDF: f6adfcb6299b2ad7f7d14600c578764ab472ff54
+  RNPermissions: 1888705aebcc81714efa5dbff94351e4388ae012
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   TwilioVideo: dec31712aab578a783703c8f699c838bea4adf06
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: e2f9857cb014298b6a66966c36d31df6ddfe1456
+PODFILE CHECKSUM: cd0282b35b942eed0a72b76acdb431958c8f6128
 
 COCOAPODS: 1.9.2

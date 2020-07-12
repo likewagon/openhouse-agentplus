@@ -21,6 +21,12 @@ import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
 
+import { request, requestMultiple, check, checkMultiple, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import messaging from '@react-native-firebase/messaging';
+var PushNotification = require("react-native-push-notification");
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import BackgroundFetch from 'react-native-background-fetch';
+
 import {
   BrowseCard,
   Button,
@@ -36,43 +42,6 @@ import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 
 import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
-
-import messaging from '@react-native-firebase/messaging';
-
-var PushNotification = require("react-native-push-notification");
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
-import BackgroundFetch from 'react-native-background-fetch';
-
-PushNotification.configure({
-  onRegister: function (token) {
-    console.log("TOKEN:", token);
-  },
-
-  onNotification: function (notification) {
-    console.log("NOTIFICATION:", notification);
-    notification.finish(PushNotificationIOS.FetchResult.NoData);
-  },
-
-  onAction: function (notification) {
-    console.log("ACTION:", notification.action);
-    console.log("NOTIFICATION:", notification);
-  },
-
-  onRegistrationError: function (err) {
-    console.error(err.message, err);
-  },
-
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-
-  popInitialNotification: true,
-  requestPermissions: true,
-});
-
-PushNotificationIOS.addEventListener('registrationError', (err) => { console.log('registration error', err) })
 
 BackgroundFetch.configure({
   minimumFetchInterval: 15,
@@ -109,25 +78,31 @@ export default class SplashScreen extends Component {
       pnSettingVisible: false
     }
 
-    this.keyboardManager();    
+    this.keyboardManager();
   }
 
-  async componentDidMount() {    
+  async componentDidMount() {
     let res = await getReviewGeoForApple();
     if (res) {
       if (res[0].under_review_by_apple) {
         LoginInfo.latitude = res[0].user_latitude;
         LoginInfo.longitude = res[0].user_longitude;
         RouteParam.deviceType = 'pad';
-        this.isLoggedInProc();        
+        this.isLoggedInProc();
       }
       else {
-        //this.requestLocation();
+        this.requestCameraMicroPhonePermission()
+          .then(() => {
+            //this.requestLocation();
 
-        //skip
-        this.requestNotification();        
+            // skip
+            this.submit();
+          })
+          .catch((err) => {
+            console.log('request camera and microphone error', err);
+          })
       }
-    }    
+    }
   }
 
   keyboardManager = () => {
@@ -152,6 +127,20 @@ export default class SplashScreen extends Component {
     }
   }
 
+  requestCameraMicroPhonePermission = () => {
+    return new Promise((resolve, reject) => {
+      requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE]).then(
+        (statuses) => {
+          console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
+          console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
+          resolve();
+        },
+      ).catch((err) => {
+        reject(err);
+      })
+    })
+  }
+
   requestLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -167,7 +156,7 @@ export default class SplashScreen extends Component {
         this.setState({ geoSettingVisible: true });
         GetLocation.openAppSettings();
       });
-  }  
+  }
 
   async requestNotification() {
     const authStatus = await messaging().requestPermission();
@@ -211,20 +200,14 @@ export default class SplashScreen extends Component {
         }
       });
 
-      //this.isLoggedInProc();
-
-      // skip
-      this.submit();
+      this.isLoggedInProc();      
     }
     else {
       console.log('Authorization status: disabled');
       this.setState({ pnSettingVisible: true });
-      //Linking.openSettings();
-
-      // skip
-      this.submit();
+      Linking.openSettings();
     }
-  }  
+  }
 
   onLiveCallYes = (propertyNo) => {
     var param = {
@@ -292,7 +275,7 @@ export default class SplashScreen extends Component {
     // LoginInfo.phone_verified = 1;
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
-    LoginInfo.user_account = 1;    
+    LoginInfo.user_account = 1;
     // ///////////////
 
     let bodyFormData = new FormData();
