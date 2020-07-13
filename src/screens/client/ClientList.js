@@ -38,6 +38,7 @@ export default class ClientListScreen extends Component {
     super(props);
     this.state = {
       clientData: [],
+      clientCopyData: [],
       spinner: false
     }
   }
@@ -54,6 +55,7 @@ export default class ClientListScreen extends Component {
     //console.log('client Param', clientParam);
     this.setState({
       clientData: [],
+      clientCopyData: [],
       spinner: true
     });
 
@@ -67,6 +69,7 @@ export default class ClientListScreen extends Component {
         var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
         this.setState({
           clientData: sortedRes,
+          clientCopyData: sortedRes,
           spinner: false
         });        
       })
@@ -85,7 +88,7 @@ export default class ClientListScreen extends Component {
   }
 
   onFastSearch = (query) => {
-    var filteredRes = this.state.clientData.filter((each) => each.client_fullname.toLowerCase().includes(query.toLowerCase()));
+    var filteredRes = this.state.clientCopyData.filter((each) => each.client_fullname.toLowerCase().includes(query.toLowerCase()));
     this.setState({ clientData: filteredRes });
   }
 
