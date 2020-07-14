@@ -190,6 +190,8 @@ PODS:
     - RNPermissions
   - Permission-Microphone (2.1.5):
     - RNPermissions
+  - Permission-Notifications (2.1.5):
+    - RNPermissions
   - PromisesObjC (1.2.9)
   - Protobuf (3.12.0)
   - RCTRequired (0.62.2)
@@ -515,6 +517,7 @@ DEPENDENCIES:
   - Permission-LocationAlways (from `../node_modules/react-native-permissions/ios/LocationAlways.podspec`)
   - Permission-LocationWhenInUse (from `../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec`)
   - Permission-Microphone (from `../node_modules/react-native-permissions/ios/Microphone.podspec`)
+  - Permission-Notifications (from `../node_modules/react-native-permissions/ios/Notifications.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -624,6 +627,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions/ios/LocationWhenInUse.podspec"
   Permission-Microphone:
     :path: "../node_modules/react-native-permissions/ios/Microphone.podspec"
+  Permission-Notifications:
+    :path: "../node_modules/react-native-permissions/ios/Notifications.podspec"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -761,6 +766,7 @@ SPEC CHECKSUMS:
   Permission-LocationAlways: 14ec76aa2912ea3a7ddc5b564d781bff51a5f3c8
   Permission-LocationWhenInUse: 16ecd20d82341c6b4336dfe5520c098bea85a2f5
   Permission-Microphone: af45e35013788b52eecf3cd8f13185c4b6f7bff7
+  Permission-Notifications: 5ecb0f433b585c5621dc30b168772d60ae8574c2
   PromisesObjC: b48e0338dbbac2207e611750777895f7a5811b75
   Protobuf: 2793fcd0622a00b546c60e7cbbcc493e043e9bb9
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
@@ -813,6 +819,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: cd0282b35b942eed0a72b76acdb431958c8f6128
+PODFILE CHECKSUM: 4534da456d0fe77710b43bc5692d756f0ad08dfb
 
 COCOAPODS: 1.9.2

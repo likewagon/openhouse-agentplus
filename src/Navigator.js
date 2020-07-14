@@ -246,12 +246,12 @@ function App() {
     prefixes: ['agentplus://'],
   };
   return (
-    <NavigationContainer linking={linking} fallback={<Text>Loading...</Text>}>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Auth" component={AuthStack} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Main" component={MainStack} />
+        <Stack.Screen name="Main" component={MainStack} path="Main"/>
       </Stack.Navigator>
     </NavigationContainer>
   );

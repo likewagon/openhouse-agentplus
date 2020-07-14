@@ -10,7 +10,7 @@ var PushNotification = require("react-native-push-notification");
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 import { getLiveInfo } from './src/api/rest';
-import { RouteParam } from './src/constants'
+import { RouteParam, LoginInfo } from './src/constants'
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   //console.log('Message handled in the background!', remoteMessage);  
@@ -61,23 +61,20 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
         RouteParam.liveInfo = res[0];
         if (RouteParam.liveInfo.error === undefined) {  
           RouteParam.liveCallFromBackgroundNotification = true;        
-          Linking.openURL('agentplus://LiveCall')
+          Linking.openURL('agentplus://Main/LiveCall');
         }
       })
       .catch((err) => {
         console.log('get live info error', err);
       })
-
   }
   else {
     Alert.alert('Please Signin the App');
     return;
   }
-
-
 });
 
-AppRegistry.registerComponent(appName, () => App);
+// AppRegistry.registerComponent(appName, () => App);
 
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {

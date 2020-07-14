@@ -89,6 +89,13 @@ export default class SMSScreen extends Component {
               ]
             );
           }
+          else if (err == "auth/provider-already-linked") {
+            this.setState({
+              spinner: false,
+              isVerified: 1
+            });                    
+            this.submit();
+          }
           else{
             Alert.alert(
               'Confirmation Failed. Try again later',
@@ -100,8 +107,7 @@ export default class SMSScreen extends Component {
                     this.setState({
                       spinner: false,
                       isVerified: 0
-                    });
-                    this.submit();
+                    });                    
                   }
                 }
               ]

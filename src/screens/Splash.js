@@ -43,6 +43,10 @@ import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
 
+PushNotificationIOS.addEventListener('register', ()=>{console.log('pn registered')});
+PushNotificationIOS.addEventListener('registrationError', ()=>{console.log('pn register error')});
+PushNotificationIOS.addEventListener('notification', ()=>{console.log('pn remote notification listener')});
+
 BackgroundFetch.configure({
   minimumFetchInterval: 15,
   stopOnTerminate: false, // Android-only,
@@ -67,7 +71,6 @@ BackgroundFetch.status((status) => {
       break;
   }
 });
-
 
 export default class SplashScreen extends Component {
   constructor(props) {
@@ -96,6 +99,7 @@ export default class SplashScreen extends Component {
             //this.requestLocation();
 
             // skip
+            this.requestNotification();
             this.submit();
           })
           .catch((err) => {
