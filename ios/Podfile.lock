@@ -474,6 +474,8 @@ PODS:
   - RNGoogleSignin (4.0.3):
     - GoogleSignIn (~> 5.0.0)
     - React
+  - RNIap (4.5.0):
+    - React
   - RNInputMask (4.1.0)
   - RNPDF (0.10.2):
     - React
@@ -562,6 +564,7 @@ DEPENDENCIES:
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
+  - RNIap (from `../node_modules/react-native-iap`)
   - RNInputMask (from `../node_modules/react-native-text-input-mask/ios/InputMask`)
   - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -711,6 +714,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-community/google-signin"
+  RNIap:
+    :path: "../node_modules/react-native-iap"
   RNInputMask:
     :path: "../node_modules/react-native-text-input-mask/ios/InputMask"
   RNPDF:
@@ -810,6 +815,7 @@ SPEC CHECKSUMS:
   RNFBMessaging: 0891dd5bb7c5ffaa9d7670819fc934714883e316
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
+  RNIap: 9a5ad5e38905b4946fc4eadf542a575084821fe2
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNPDF: f6adfcb6299b2ad7f7d14600c578764ab472ff54
   RNPermissions: 1888705aebcc81714efa5dbff94351e4388ae012

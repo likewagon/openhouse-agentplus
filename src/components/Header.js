@@ -53,18 +53,23 @@ export default class Header extends Component {
             <Image style={{ width: '50%', height: '60%' }} source={this.props.leftIcon} resizeMode='contain' />
           </TouchableOpacity>
           :
-          <TouchableOpacity style={styles.leftIcon} onPress={this.props.onPressBack}>
-            <Icon
-              name='angle-left'
-              size={30}
-              color={this.props.titleColor}
-            />
-          </TouchableOpacity>
+          this.props.noLeftIcon ?
+            <View style={styles.leftIcon}>
+
+            </View>
+          :
+            <TouchableOpacity style={styles.leftIcon} onPress={this.props.onPressBack}>
+              <Icon
+                name='angle-left'
+                size={30}
+                color={this.props.titleColor}
+              />
+            </TouchableOpacity>          
         }
         {
-          this.props.rightLeftIcon ? 
-          <View style={styles.rightIcon}></View>
-          : null
+          this.props.rightLeftIcon ?
+            <View style={styles.rightIcon}></View>
+            : null
         }
         <View style={[styles.title, this.props.rightLeftIcon ? { width: '52%' } : null]}>
           <Text style={[
@@ -93,7 +98,7 @@ export default class Header extends Component {
             </TouchableOpacity>
             : null
           }
-        </View>        
+        </View>
       </View>
     );
   }
@@ -103,6 +108,7 @@ Header.propTypes = {
   title: PropTypes.string.isRequired,
   titleColor: PropTypes.string.isRequired,
   leftIcon: PropTypes.number,
+  noLeftIcon: PropTypes.any,
   rightLeftIcon: PropTypes.number,
   rightIcon: PropTypes.number,
   isSticky: PropTypes.bool,
@@ -145,7 +151,7 @@ const styles = StyleSheet.create({
     height: '60%',
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'flex-end',    
+    alignItems: 'flex-end',
     //borderWidth: 1
   }
 });

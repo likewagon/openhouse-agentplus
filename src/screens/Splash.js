@@ -85,6 +85,11 @@ export default class SplashScreen extends Component {
   }
 
   async componentDidMount() {
+    let activate = await AsyncStorage.getItem('activate');
+    if(activate){
+      RouteParam.activate = activate;
+    }
+
     let res = await getReviewGeoForApple();
     if (res) {
       if (res[0].under_review_by_apple) {
@@ -256,7 +261,8 @@ export default class SplashScreen extends Component {
           this.submit();
         }
         else {
-          setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
+          console.log('no login info');
+          //setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
         }
       })
       .catch((err) => {
@@ -266,6 +272,11 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
+    if(RouteParam.activate != 'active'){      
+      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+      return;
+    }
+
     // skip
     LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
     LoginInfo.fullname = 'Anthony Robinson';
@@ -381,9 +392,9 @@ export default class SplashScreen extends Component {
                   <View style={styles.settingContainer}>
                     <View style={styles.settingTxtContainer}>
                       <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
-                        Agent™
+                        Agent Plus™
                         requires notification setting.
-                      This will help you contact with client.</Text>
+                        This will help you contact with client.</Text>
                     </View>
                     <View style={styles.btnContainer}>
                       <TouchableOpacity onPress={() => this.requestNotification()}>

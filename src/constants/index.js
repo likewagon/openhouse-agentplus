@@ -8,7 +8,8 @@ export const LoginInfo = {}
 
 export const RouteParam = {
   deviceType: 'phone',  
-  verifyResult: {},
+  verifyResult: {},  
+  activate: 'deactive',
   liveCallFromBackgroundNotification: false,
   propertyRecordNo: '', 
   propertyMainPhotoUrl: '', 

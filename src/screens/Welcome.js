@@ -29,7 +29,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 
 export default class WelcomeScreen extends Component {
   constructor(props) {
@@ -62,6 +62,11 @@ export default class WelcomeScreen extends Component {
   }
 
   onEnter = (index) => {
+    if(RouteParam.activate != 'active'){
+      setTimeout(() => { this.props.navigation.navigate('IAP') }, 1000);
+      return;
+    };
+
     setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
   }
 

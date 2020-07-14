@@ -8,7 +8,8 @@ const Colors = {
   searchBackColor: '#F2F5F8',
   blueButtonBackColor: '#3B5998',
   buttonBorderColor: '#44D7B6',
-  orangeColor: '#FA6400'
+  orangeColor: '#FA6400',
+  greenColor: '#44DD66'
 }
 
 export default Colors;

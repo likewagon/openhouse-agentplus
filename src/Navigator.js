@@ -37,6 +37,7 @@ import OpenHouseSignatureScreen from "./screens/openhouse/OpenHouseSignature";
 import OpenHouseSignatureEndScreen from "./screens/openhouse/OpenHouseSignatureEnd";
 
 import LiveCallScreen from './screens/LiveCall';
+import IAPScreen from './screens/IAP';
 
 const Stack = createStackNavigator();
 
@@ -252,6 +253,7 @@ function App() {
         <Stack.Screen name="Auth" component={AuthStack} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Main" component={MainStack} path="Main"/>
+        <Stack.Screen name="IAP" component={IAPScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
