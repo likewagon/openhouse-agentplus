@@ -39,14 +39,6 @@ export default class ClientShareScreen extends Component {
     super(props);
     this.state = {
       spinner: false,
-      shareOption: {
-        title: 'Agent Plus™',
-        message: this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,
-        url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',
-        social: '',
-        subject: 'Agent Plus™',
-        email: this.props.route.params.clientEmail
-      }
     }
   }
 
@@ -54,28 +46,55 @@ export default class ClientShareScreen extends Component {
 
   }
 
-  onShare = (socialKind) => {
-    //supported: facebook, whatsapp, instagram, email, pinterest, snapchat, messenger, linkedin, 
-    //not supported: youtube, twitter, tiktok
-    if (socialKind == 'youtube' || socialKind == 'twitter' || socialKind == 'tiktok') {
-      this.unSupportedShare(socialKind);
-    }
-    else {
-      this.supportedShare(socialKind);
-    }
-  }
+  onSupportedShare = (socialKind) => {
+    //supported: facebook, instagram, twitter, whatsapp
 
-  supportedShare = (socialKind) => {
-    var { shareOption } = this.state;
-    shareOption.social = socialKind;
+    let shareOption = {
+      title: 'Agent Plus™',
+      message: 'test message', //this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,
+      url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',
+      social: socialKind,
+      subject: 'Agent Plus™',
+      email: 'example@gmail.com', //this.props.route.params.clientEmail
+    };
+
     setTimeout(() => {
-      Share.shareSingle(shareOption);
+      this.setState({ spinner: true });
+      Share.shareSingle(shareOption)
+        .then((res) => {
+          console.log('share result', res);
+          this.setState({ spinner: false });
+        })
+        .catch((err) => {
+          console.log('share error', err);
+          this.setState({ spinner: false });
+        })
     }, 500);
   }
 
-  unSupportedShare = (socialKind) => {
+  onUnSupportedShare = (socialKind) => {
+    //not supported: messenger, email, linkedin, youtube, snapchat, pinterest, tiktok
+    let shareOption = {
+      title: 'Agent Plus™',
+      message: 'test message', //this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,
+      url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',      
+      subject: 'Agent Plus™',
+      email: 'example@gmail.com', //this.props.route.params.clientEmail
+    };
 
-  }
+    setTimeout(() => {
+      this.setState({ spinner: true });
+      Share.open(shareOption)
+        .then((res) => {
+          console.log('share result', res);
+          this.setState({ spinner: false });
+        })
+        .catch((err) => {
+          console.log('share error', err);
+          this.setState({ spinner: false });
+        })
+    }, 500);
+  }  
 
   render() {
     return (
@@ -99,46 +118,46 @@ export default class ClientShareScreen extends Component {
         </View>
         <View style={styles.mainContainer}>
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onShare('messenger')}>
+            <TouchableOpacity onPress={() => this.onUnSupportedShare('messenger')}>
               <Image style={styles.shareImg} source={Images.btnMessenger} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onShare('facebook')}>
+            <TouchableOpacity onPress={() => this.onSupportedShare(Share.Social.FACEBOOK)}>
               <Image style={styles.shareImg} source={Images.btnFacebook} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onShare('email')}>
+            <TouchableOpacity onPress={() => this.onUnSupportedShare('email')}>
               <Image style={styles.shareImg} source={Images.btnEmail} resizeMode='cover' />
             </TouchableOpacity>
           </View>
 
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onShare('instagram')}>
+            <TouchableOpacity onPress={() => this.onSupportedShare(Share.Social.INSTAGRAM)}>
               <Image style={styles.shareImg} source={Images.btnInstagram} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onShare('linkedin')}>
+            <TouchableOpacity onPress={() => this.onUnSupportedShare('linkedin')}>
               <Image style={styles.shareImg} source={Images.btnLinkedin} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onShare('youtube')}>
+            <TouchableOpacity onPress={() => this.onUnSupportedShare('youtube')}>
               <Image style={styles.shareImg} source={Images.btnYoutube} resizeMode='cover' />
             </TouchableOpacity>
           </View>
 
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onShare('twitter')}>
+            <TouchableOpacity onPress={() => this.onSupportedShare(Share.Social.TWITTER)}>
               <Image style={styles.shareImg} source={Images.btnTwitter} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onShare('snapchat')}>
+            <TouchableOpacity onPress={() => this.onUnSupportedShare('snapchat')}>
               <Image style={styles.shareImg} source={Images.btnSnapchat} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onShare('pinterest')}>
+            <TouchableOpacity onPress={() => this.onUnSupportedShare('pinterest')}>
               <Image style={styles.shareImg} source={Images.btnPinterest} resizeMode='cover' />
             </TouchableOpacity>
           </View>
 
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onShare('tiktok')}>
+            <TouchableOpacity onPress={() => this.onUnSupportedShare('tiktok')}>
               <Image style={styles.shareImg} source={Images.btnTiktok} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onShare('whatsapp')}>
+            <TouchableOpacity onPress={() => this.onSupportedShare(Share.Social.WHATSAPP)}>
               <Image style={styles.shareImg} source={Images.btnWhatsapp} resizeMode='cover' />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { }}>
