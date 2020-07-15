@@ -9,7 +9,7 @@ export const LoginInfo = {}
 export const RouteParam = {
   deviceType: 'phone',  
   verifyResult: {},  
-  activate: 'deactive',
+  activate: 'active',
   liveCallFromBackgroundNotification: false,
   propertyRecordNo: '', 
   propertyMainPhotoUrl: '', 

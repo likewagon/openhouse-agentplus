@@ -29,9 +29,9 @@ const Images = {
     
   btnGoogleLogin: require('../assets/images/googleLogin.png'),  
 
-  btnCommunication: require('../assets/images/btnCommunication.png'),
+  btnCommunication: require('../assets/images/btnMessenger.png'),
   btnFacebook: require('../assets/images/btnFacebook.png'),
-  btnMessage: require('../assets/images/btnMessage.png'), 
+  btnMessage: require('../assets/images/btnEmail.png'), 
   btnInstagram: require('../assets/images/btnInstagram.png'),
   btnLinkedin: require('../assets/images/btnLinkedin.png'),
   btnYoutube: require('../assets/images/btnYoutube.png'),

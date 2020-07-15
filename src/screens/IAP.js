@@ -81,7 +81,7 @@ export default class IAPScreen extends Component {
 
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase) => {
-        const receipt = purchase.transactionReceipt;        
+        const receipt = purchase.transactionReceipt;
         if (receipt) {
           try {
             if (Platform.OS === 'ios') {
@@ -104,7 +104,7 @@ export default class IAPScreen extends Component {
         Alert.alert('Purchase Error', JSON.stringify(error));
       },
     );
-    
+
     this.setState({ spinner: true });
     this.getAvailablePurchases();
     this.getItems();
@@ -120,7 +120,7 @@ export default class IAPScreen extends Component {
       purchaseErrorSubscription = null;
     }
     RNIap.endConnection();
-  } 
+  }
 
   getItems = async () => {
     try {
@@ -154,21 +154,21 @@ export default class IAPScreen extends Component {
   requestSubscription = async (sku) => {
     try {
       RNIap.requestSubscription(sku)
-      .then((res)=>{
-        console.log('request subscription result', res);
-      })
-      .catch((err)=>{
-        console.log('request subscription error', err);
-      })
+        .then((res) => {
+          console.log('request subscription result', res);
+        })
+        .catch((err) => {
+          console.log('request subscription error', err);
+        })
     } catch (err) {
       console.log('request subscription error', err.message);
       Alert.alert('Request Subscription Error', err.message);
     }
   };
 
-  goNext = () => {        
+  goNext = () => {
     console.log('receipt', this.state.receipt);
-    this.setState({result: true});
+    this.setState({ result: true });
     AsyncStorage.setItem('activate', 'active');
   };
 
@@ -229,7 +229,7 @@ export default class IAPScreen extends Component {
             <View style={styles.mainContainerFirstPage}>
               {
                 this.state.productList.length == 3 &&
-                <>
+                <View style={styles.btnsPart}>
                   <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[0] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[0])}>
                     <View style={styles.btnLeft}>
                       <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[0].price)}</Text>
@@ -277,10 +277,10 @@ export default class IAPScreen extends Component {
                       </Text>
                     </View>
                   </TouchableOpacity>
-                </>
+                </View>
               }
 
-              <View style={styles.bottomTxtContainer}>
+              <View style={styles.bottomTxtPart}>
                 <Text style={styles.bottomTxt}>
                   Limited time offer. You will be charged the selected price on the same day each month until you cancel.
                   All subscriptions renew automatically. You can cancel anytime. Mobile apps are not supported on all devices.
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
   mainContainerFirstPage: {
     width: '100%',
     height: '62%',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5, 'height'),
@@ -400,12 +400,18 @@ const styles = StyleSheet.create({
     // borderWidth: 5,
     padding: normalize(20),
   },
+  btnsPart: {
+    width: '100%',
+    height: '82%',
+    justifyContent: 'space-between',
+    alignItems: 'center',    
+  },
   btn: {
     width: '100%',
-    height: '23%',
+    height: '29%',
     flexDirection: 'row',
     backgroundColor: Colors.blueColor,
-    marginBottom: normalize(17, 'height'),
+    //marginBottom: normalize(17, 'height'),
     borderRadius: normalize(10)
   },
   btnLeft: {
@@ -446,15 +452,16 @@ const styles = StyleSheet.create({
     lineHeight: 23
   },
 
-  bottomTxtContainer: {
+  bottomTxtPart: {
     width: '100%',
+    height: '15%',
     justifyContent: 'center',
     alignItems: 'center',
     //borderWidth: 2
   },
   bottomTxt: {
     fontFamily: 'SFProText-Regular',
-    fontSize: RFPercentage(1.5),
+    fontSize: RFPercentage(1.1),
     color: Colors.blackColor,
     textAlign: 'center',
   },

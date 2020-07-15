@@ -19,6 +19,7 @@ import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import Spinner from 'react-native-loading-spinner-overlay';
+import Share from 'react-native-share';
 
 import {
   Button,
@@ -38,35 +39,44 @@ export default class ClientShareScreen extends Component {
     super(props);
     this.state = {
       spinner: false,
+      shareOption: {
+        title: 'Agent Plus™',
+        message: this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,
+        url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',
+        social: '',
+        subject: 'Agent Plus™',
+        email: this.props.route.params.clientEmail
+      }
     }
   }
 
   componentDidMount() {
 
   }
- 
-  onCommunication =()=>{}
-  
-  onFacebook=()=>{}
 
-  onMessage=()=>{}
+  onShare = (socialKind) => {
+    //supported: facebook, whatsapp, instagram, email, pinterest, snapchat, messenger, linkedin, 
+    //not supported: youtube, twitter, tiktok
+    if (socialKind == 'youtube' || socialKind == 'twitter' || socialKind == 'tiktok') {
+      this.unSupportedShare(socialKind);
+    }
+    else {
+      this.supportedShare(socialKind);
+    }
+  }
 
-  onInstagram=()=>{}
+  supportedShare = (socialKind) => {
+    var { shareOption } = this.state;
+    shareOption.social = socialKind;
+    setTimeout(() => {
+      Share.shareSingle(shareOption);
+    }, 500);
+  }
 
-  onLinkedin=()=>{}
+  unSupportedShare = (socialKind) => {
 
-  onYoutube=()=>{}
+  }
 
-  onTwitter=()=>{}
-
-  onSnapchat=()=>{}
-
-  onPinterest=()=>{}
-
-  onTiktok=()=>{}
-
-  onWhatsapp=()=>{}
-  
   render() {
     return (
       <View style={styles.container}>
@@ -89,51 +99,51 @@ export default class ClientShareScreen extends Component {
         </View>
         <View style={styles.mainContainer}>
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onCommunication()}>
-              <Image style={styles.shareImg} source={Images.btnCommunication} resizeMode='cover' />
+            <TouchableOpacity onPress={() => this.onShare('messenger')}>
+              <Image style={styles.shareImg} source={Images.btnMessenger} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onFacebook()}>
+            <TouchableOpacity onPress={() => this.onShare('facebook')}>
               <Image style={styles.shareImg} source={Images.btnFacebook} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onMessage()}>
-              <Image style={styles.shareImg} source={Images.btnMessage} resizeMode='cover' />
+            <TouchableOpacity onPress={() => this.onShare('email')}>
+              <Image style={styles.shareImg} source={Images.btnEmail} resizeMode='cover' />
             </TouchableOpacity>
           </View>
 
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onInstagram()}>
+            <TouchableOpacity onPress={() => this.onShare('instagram')}>
               <Image style={styles.shareImg} source={Images.btnInstagram} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onLinkedin()}>
+            <TouchableOpacity onPress={() => this.onShare('linkedin')}>
               <Image style={styles.shareImg} source={Images.btnLinkedin} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onYoutube()}>
+            <TouchableOpacity onPress={() => this.onShare('youtube')}>
               <Image style={styles.shareImg} source={Images.btnYoutube} resizeMode='cover' />
             </TouchableOpacity>
           </View>
 
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onTwitter()}>
+            <TouchableOpacity onPress={() => this.onShare('twitter')}>
               <Image style={styles.shareImg} source={Images.btnTwitter} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onSnapchat()}>
+            <TouchableOpacity onPress={() => this.onShare('snapchat')}>
               <Image style={styles.shareImg} source={Images.btnSnapchat} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onPinterest()}>
+            <TouchableOpacity onPress={() => this.onShare('pinterest')}>
               <Image style={styles.shareImg} source={Images.btnPinterest} resizeMode='cover' />
             </TouchableOpacity>
           </View>
 
           <View style={styles.lineContainer}>
-            <TouchableOpacity onPress={() => this.onTiktok()}>
+            <TouchableOpacity onPress={() => this.onShare('tiktok')}>
               <Image style={styles.shareImg} source={Images.btnTiktok} resizeMode='cover' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.onWhatsapp()}>
+            <TouchableOpacity onPress={() => this.onShare('whatsapp')}>
               <Image style={styles.shareImg} source={Images.btnWhatsapp} resizeMode='cover' />
-            </TouchableOpacity>            
-            <TouchableOpacity onPress={() => {}}>
-              <Image style={styles.shareImg} /*source={Images.btnWhatsapp}*/ resizeMode='cover' />
-            </TouchableOpacity>            
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { }}>
+              <Image style={styles.shareImg} /*source={Images.btn}*/ resizeMode='cover' />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -178,8 +188,8 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     width: '100%',
-    height: '68%',    
-    alignItems: 'center',    
+    height: '68%',
+    alignItems: 'center',
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5, 'height'),
     paddingTop: normalize(35, 'height'),
@@ -191,7 +201,7 @@ const styles = StyleSheet.create({
     height: '20%',//normalize(85, 'height'),
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',    
+    alignItems: 'center',
     //borderWidth: 1
   },
   shareImg: {

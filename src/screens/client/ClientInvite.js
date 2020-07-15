@@ -114,7 +114,7 @@ export default class ClientInviteScreen extends Component {
         }
         //console.log('post new client invite success', res);
         this.setState({ spinner: false });
-        this.props.navigation.navigate('ClientShare');
+        this.props.navigation.navigate('ClientShare', {clientFullname: this.state.clientFullname, clientEmail: this.state.clientEmail});
       })
       .catch((err) => {
         console.log('post new client invite error', err);
