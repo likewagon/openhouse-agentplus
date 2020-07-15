@@ -14,6 +14,8 @@ import {
 import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import AsyncStorage from '@react-native-community/async-storage';
+import RNIap from 'react-native-iap';
 
 import SafeAreaView from 'react-native-safe-area-view';
 import { SliderBox } from "react-native-image-slider-box";
@@ -30,6 +32,7 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import { isUserSubscriptionActive } from '@constants';
 
 export default class WelcomeScreen extends Component {
   constructor(props) {
@@ -61,11 +64,14 @@ export default class WelcomeScreen extends Component {
 
   }
 
-  onEnter = (index) => {
-    if(RouteParam.activate != 'active'){
-      setTimeout(() => { this.props.navigation.navigate('IAP') }, 1000);
+  onEnter = async (index) => {
+    let subscription = await AsyncStorage.getItem('subscription');
+    let activate = await isUserSubscriptionActive(subscription);
+    if (!activate) {
+      await AsyncStorage.removeItem('subscription');
+      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
       return;
-    };
+    }  
 
     setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
   }

@@ -26,6 +26,7 @@ import messaging from '@react-native-firebase/messaging';
 var PushNotification = require("react-native-push-notification");
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import BackgroundFetch from 'react-native-background-fetch';
+import RNIap from 'react-native-iap';
 
 import {
   BrowseCard,
@@ -39,13 +40,14 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import { isUserSubscriptionActive } from '@constants';
 
 import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
 
-PushNotificationIOS.addEventListener('register', ()=>{console.log('pn registered')});
-PushNotificationIOS.addEventListener('registrationError', ()=>{console.log('pn register error')});
-PushNotificationIOS.addEventListener('notification', ()=>{console.log('pn remote notification listener')});
+PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
+PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
+PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
 
 BackgroundFetch.configure({
   minimumFetchInterval: 15,
@@ -86,7 +88,7 @@ export default class SplashScreen extends Component {
 
   async componentDidMount() {
     let activate = await AsyncStorage.getItem('activate');
-    if(activate){
+    if (activate) {
       RouteParam.activate = activate;
     }
 
@@ -209,7 +211,7 @@ export default class SplashScreen extends Component {
         }
       });
 
-      this.isLoggedInProc();      
+      this.isLoggedInProc();
     }
     else {
       console.log('Authorization status: disabled');
@@ -272,9 +274,13 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
-    if(RouteParam.activate != 'active'){      
-      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-      return;
+    let subscription = await AsyncStorage.getItem('subscription');
+    let activate = await isUserSubscriptionActive(subscription);
+    console.log('activate', activate);
+    if (!activate) {
+      await AsyncStorage.removeItem('subscription');
+       setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+       return;
     }
 
     // skip

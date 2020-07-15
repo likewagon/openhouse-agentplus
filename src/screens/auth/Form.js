@@ -22,6 +22,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import TextInputMask from 'react-native-text-input-mask';
 import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
+import RNIap from 'react-native-iap';
 
 import {
   Button,
@@ -80,18 +81,18 @@ export default class FormScreen extends Component {
 
     this.setState({ spinner: true });
 
-    if (this.validatePhoneNumber()) {      
+    if (this.validatePhoneNumber()) {
       var phoneNumber = this.state.country_additional_prefix ? '+1' + this.state.telephone : this.state.telephone;
       console.log('phonenumber', phoneNumber);
       await verifyPhoneNumber(phoneNumber)
         .then((verifyResult) => {
           //console.log('verifyResult', verifyResult)
           RouteParam.verifyResult = verifyResult;
-          
+
           this.setState({ spinner: false });
           this.props.navigation.navigate('SMS');
         })
-        .catch((err) => {          
+        .catch((err) => {
           // Alert.alert(
           //   'Verify Phone Number Failed. Try again later',
           //   '',
@@ -102,7 +103,7 @@ export default class FormScreen extends Component {
 
           this.setState({ spinner: false }); this.submit();
 
-          console.log('verify phone number error', err);                    
+          console.log('verify phone number error', err);
         })
     }
     else {
@@ -134,7 +135,7 @@ export default class FormScreen extends Component {
     bodyFormData.append('user_longitude', LoginInfo.longitude);
     bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
     bodyFormData.append('title', 'CEO');
-    bodyFormData.append('user_companyname', 'ecapture,inc.');    
+    bodyFormData.append('user_companyname', 'ecapture,inc.');
 
     await postData(bodyFormData)
       .then((res) => {
@@ -142,7 +143,7 @@ export default class FormScreen extends Component {
 
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.photourl = res[0].user_photourl;
-        LoginInfo.fcmToken = res[0].fcmToken;        
+        LoginInfo.fcmToken = res[0].fcmToken;
 
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');

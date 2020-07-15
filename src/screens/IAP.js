@@ -50,7 +50,7 @@ const itemSkus = Platform.select({
   ios: [
     '12MONTHAGENTPLUS',
     '6MONTHAGENTPLUS',
-    '1MONTHAGENTPLUS',
+    '1MONTHSAGENTPLUS',
   ],
   android: [],
 });
@@ -122,7 +122,7 @@ export default class IAPScreen extends Component {
     RNIap.endConnection();
   }
 
-  getItems = async () => {
+  getItems = async () => {    
     try {
       const products = await RNIap.getProducts(itemSkus);
       var sortedProducts = products.sort((a, b) => { return a.price - b.price });
@@ -169,7 +169,7 @@ export default class IAPScreen extends Component {
   goNext = () => {
     console.log('receipt', this.state.receipt);
     this.setState({ result: true });
-    AsyncStorage.setItem('activate', 'active');
+    AsyncStorage.setItem('subscription', this.state.currentPlan);
   };
 
   onPressPlan = (plan) => {
@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '82%',
     justifyContent: 'space-between',
-    alignItems: 'center',    
+    alignItems: 'center',        
   },
   btn: {
     width: '100%',
