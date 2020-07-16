@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import RNIap from 'react-native-iap';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export const isUserSubscriptionActive = (subscriptionId) => {
   return new Promise(async (resolve, reject) => {
@@ -20,6 +21,7 @@ export const isUserSubscriptionActive = (subscriptionId) => {
               return subscriptionId === element.productId;
             });
             console.log('subscription', subscription);
+            AsyncStorage.setItem('availablePurchases', JSON.stringify(subscription));
             if (subscription) {
               // check for the autoRenewingAndroid flag. If it is false the sub period is over
               resolve(subscription["autoRenewingIOS"] == true);
@@ -37,7 +39,7 @@ export const isUserSubscriptionActive = (subscriptionId) => {
         });
     }
     catch (err) {
-      console.log(err.code, err.message);
+      console.log('get available purchase error', err.code, err.message);
       Alert.alert('Available Purchase Error', err.message);
       resolve(false);
     }

@@ -135,19 +135,26 @@ export default class IAPScreen extends Component {
   };
 
   getAvailablePurchases = async () => {
-    try {
-      const purchases = await RNIap.getAvailablePurchases();
-      console.log('Available purchases :: ', purchases);
-
-      if (purchases && purchases.length > 0) {
-        this.setState({
-          availableItemsMessage: `Got ${purchases.length} items.`,
-          receipt: purchases[0].transactionReceipt,
-        });
+    let purchases = AsyncStorage.getItem('availablePurchases');
+    console.log('purchases', purchases);
+    if(purchases){
+      purchases = JSON.parse(purchases);
+    }
+    else{
+      try {
+        const purchases = await RNIap.getAvailablePurchases();
+        console.log('Available purchases :: ', purchases);
+  
+        if (purchases && purchases.length > 0) {
+          this.setState({
+            availableItemsMessage: `Got ${purchases.length} items.`,
+            receipt: purchases[0].transactionReceipt,
+          });
+        }
+      } catch (err) {
+        console.log('available purchases error', err.code, err.message);
+        Alert.alert('Available Purchases Error', err.message);
       }
-    } catch (err) {
-      console.log(err.code, err.message);
-      Alert.alert('Available Purchase Error', err.message);
     }
   };
 
