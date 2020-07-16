@@ -106,7 +106,7 @@ export default class IAPScreen extends Component {
     );
 
     this.setState({ spinner: true });
-    this.getAvailablePurchases();
+    //this.getAvailablePurchases();
     this.getItems();
   }
 
@@ -135,10 +135,17 @@ export default class IAPScreen extends Component {
   };
 
   getAvailablePurchases = async () => {
-    let purchases = AsyncStorage.getItem('availablePurchases');
+    let purchases = await AsyncStorage.getItem('availablePurchases');
     console.log('purchases', purchases);
     if(purchases){
       purchases = JSON.parse(purchases);
+
+      if (purchases && purchases.length > 0) {
+        this.setState({
+          availableItemsMessage: `Got ${purchases.length} items.`,
+          receipt: purchases[0].transactionReceipt,
+        });
+      }
     }
     else{
       try {
