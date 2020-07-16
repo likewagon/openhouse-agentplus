@@ -59,11 +59,11 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Open Requires to access your camera</string>
+	<string>Agent Plus Requires to access your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Open Requires to access your geo location to operate. Allowing geo location will increase the accuracy of the properties displayed by Open</string>
+	<string>Agent Plus Requires to access your geo location to operate. Allowing geo location will increase the accuracy of the properties displayed by Open</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Open Requires to access your microphone</string>
+	<string>Agent Plus Requires to access your microphone</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Billabong.ttf</string>

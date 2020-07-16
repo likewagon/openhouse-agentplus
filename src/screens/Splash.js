@@ -45,9 +45,37 @@ import { isUserSubscriptionActive } from '@constants';
 import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
 
-PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
-PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
-PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
+// PushNotification.configure({
+//   onRegister: function (token) {
+//     console.log("TOKEN:", token);
+//   },     
+//   // (required) Called when a remote is received or opened, or local notification is opened
+//   onNotification: function (notification) {
+//     console.log("NOTIFICATION:", notification);     
+//     // process the notification     
+
+//     notification.finish(PushNotificationIOS.FetchResult.NoData);
+//   },
+//   onAction: function (notification) {
+//     console.log("NOTIFICATION:", notification);
+//   },
+//   onRegistrationError: function(err) {
+//     console.error('REGISTRATION ERROR:', err);
+//   },
+//   popInitialNotification: true,     
+//   requestPermissions: true,
+// });
+// PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
+// PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
+// PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
+// PushNotificationIOS.getInitialNotification((remoteMessage)=>{
+//   if(notification!=null){
+//     PushNotificationIOS.presentLocalNotification({
+//       alertTitle: remoteMessage.data.title,
+//       alertBody: remoteMessage.data.body
+//     })
+//   }
+// })
 
 BackgroundFetch.configure({
   minimumFetchInterval: 15,
@@ -107,7 +135,7 @@ export default class SplashScreen extends Component {
 
             // skip
             this.requestNotification();
-            this.submit();
+            //this.submit();
           })
           .catch((err) => {
             console.log('request camera and microphone error', err);
@@ -170,6 +198,13 @@ export default class SplashScreen extends Component {
   }
 
   async requestNotification() {
+    // const authStatus = await messaging().requestPermission({
+    //   alert: true,
+    //   badge: true,      
+    //   sound: true
+    // });
+    // const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
     PushNotification.configure({
       onRegister: function (token) {
         console.log("TOKEN:", token);
@@ -178,26 +213,30 @@ export default class SplashScreen extends Component {
       onNotification: function (notification) {
         console.log("NOTIFICATION:", notification);     
         // process the notification     
-
+    
         notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
       onAction: function (notification) {
         console.log("NOTIFICATION:", notification);
       },
       onRegistrationError: function(err) {
-        console.error(err.message, err);
+        console.error('REGISTRATION ERROR:', err);
       },
       popInitialNotification: true,     
-      requestPermissions: false,
+      requestPermissions: true,
     });
-
-    const authStatus = await messaging().requestPermission({
-      alert: true,
-      badge: true,      
-      sound: true
-    });
-    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
+    PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
+    PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
+    PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
+    PushNotificationIOS.getInitialNotification((remoteMessage)=>{
+      if(notification!=null){
+        PushNotificationIOS.presentLocalNotification({
+          alertTitle: remoteMessage.data.title,
+          alertBody: remoteMessage.data.body
+        })
+      }
+    })
+    let enabled = true;
     if (enabled) {
       var fcmToken = await messaging().getToken();
       LoginInfo.fcmToken = fcmToken;
@@ -237,6 +276,8 @@ export default class SplashScreen extends Component {
       });
 
       this.isLoggedInProc();
+      //skip
+      this.submit();
     }
     else {
       console.log('Authorization status: disabled');
@@ -343,7 +384,7 @@ export default class SplashScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        //console.log('post login info success', res);
+        console.log('post login info success', res);
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
