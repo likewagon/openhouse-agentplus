@@ -170,7 +170,32 @@ export default class SplashScreen extends Component {
   }
 
   async requestNotification() {
-    const authStatus = await messaging().requestPermission();
+    PushNotification.configure({
+      onRegister: function (token) {
+        console.log("TOKEN:", token);
+      },     
+      // (required) Called when a remote is received or opened, or local notification is opened
+      onNotification: function (notification) {
+        console.log("NOTIFICATION:", notification);     
+        // process the notification     
+
+        notification.finish(PushNotificationIOS.FetchResult.NoData);
+      },
+      onAction: function (notification) {
+        console.log("NOTIFICATION:", notification);
+      },
+      onRegistrationError: function(err) {
+        console.error(err.message, err);
+      },
+      popInitialNotification: true,     
+      requestPermissions: false,
+    });
+
+    const authStatus = await messaging().requestPermission({
+      alert: true,
+      badge: true,      
+      sound: true
+    });
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
@@ -274,14 +299,14 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
-    let subscription = await AsyncStorage.getItem('subscription');
-    let activate = await isUserSubscriptionActive(subscription);
-    console.log('activate', activate);
-    if (!activate) {
-      await AsyncStorage.removeItem('subscription');
-       setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-       return;
-    }
+    // let subscription = await AsyncStorage.getItem('subscription');
+    // let activate = await isUserSubscriptionActive(subscription);
+    // console.log('activate', activate);
+    // if (!activate) {
+    //   await AsyncStorage.removeItem('subscription');
+    //    setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+    //    return;
+    // }
 
     // skip
     LoginInfo.uniqueid = 'askdfjasdjflasdjflk';

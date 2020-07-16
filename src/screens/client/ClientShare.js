@@ -50,7 +50,8 @@ export default class ClientShareScreen extends Component {
     //supported: facebook, instagram, twitter, whatsapp
 
     let shareOption = {
-      url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',
+      //url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',
+      url: 'http://www.openhousemarketingsystem.com/virtualplus/download.php',
       title: 'Open Plus™',
       subject: 'Open Plus™',
       social: socialKind,
@@ -74,7 +75,8 @@ export default class ClientShareScreen extends Component {
 
   onUnSupportedShare = (socialKind) => {
     //not supported: messenger, email, linkedin, youtube, snapchat, pinterest, tiktok   
-    const url = 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733';
+    //const url = 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733';
+    const url = 'http://www.openhousemarketingsystem.com/virtualplus/download.php';
     const title = 'Open Plus™';
     const message = 'test message'; //this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,    
     let icon = '';
