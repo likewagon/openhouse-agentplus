@@ -21,7 +21,7 @@ import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
 
-import { request, requestMultiple, check, checkMultiple, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { request, requestMultiple, check, checkMultiple, checkNotifications, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
 var PushNotification = require("react-native-push-notification");
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
@@ -208,82 +208,88 @@ export default class SplashScreen extends Component {
     PushNotification.configure({
       onRegister: function (token) {
         console.log("TOKEN:", token);
-      },     
+      },
       // (required) Called when a remote is received or opened, or local notification is opened
       onNotification: function (notification) {
-        console.log("NOTIFICATION:", notification);     
+        console.log("NOTIFICATION:", notification);
         // process the notification     
-    
+
         notification.finish(PushNotificationIOS.FetchResult.NoData);
       },
       onAction: function (notification) {
         console.log("NOTIFICATION:", notification);
       },
-      onRegistrationError: function(err) {
+      onRegistrationError: function (err) {
         console.error('REGISTRATION ERROR:', err);
       },
-      popInitialNotification: true,     
+      popInitialNotification: true,
       requestPermissions: true,
     });
     PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
     PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
     PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
-    PushNotificationIOS.getInitialNotification((remoteMessage)=>{
-      if(notification!=null){
+    PushNotificationIOS.getInitialNotification((remoteMessage) => {
+      if (notification != null) {
         PushNotificationIOS.presentLocalNotification({
           alertTitle: remoteMessage.data.title,
           alertBody: remoteMessage.data.body
         })
       }
     })
-    let enabled = true;
-    if (enabled) {
-      var fcmToken = await messaging().getToken();
-      LoginInfo.fcmToken = fcmToken;
-      console.log('fcmToken', fcmToken);
+    checkNotifications().then(async ({status, settings}) => {      
+      // Response is one of: 'authorized', 'denied', 'restricted', or 'undetermined'
+      console.log('notification status', status);
+      if (status == 'granted') {
+        var fcmToken = await messaging().getToken();
+        LoginInfo.fcmToken = fcmToken;
+        console.log('fcmToken', fcmToken);
 
-      messaging().onMessage(async remoteMessage => {
-        // console.log('Message arrived', remoteMessage);        
+        messaging().onMessage(async remoteMessage => {
+          // console.log('Message arrived', remoteMessage);        
 
-        if (Platform.OS === 'android') {
-          PushNotification.localNotification({
-            title: remoteMessage.data.title,
-            message: remoteMessage.data.body
-          });
-        }
-        else {
-          PushNotificationIOS.presentLocalNotification({
-            alertTitle: remoteMessage.data.title,
-            alertBody: remoteMessage.data.body
-          })
-        }
+          if (Platform.OS === 'android') {
+            PushNotification.localNotification({
+              title: remoteMessage.data.title,
+              message: remoteMessage.data.body
+            });
+          }
+          else {
+            PushNotificationIOS.presentLocalNotification({
+              alertTitle: remoteMessage.data.title,
+              alertBody: remoteMessage.data.body
+            })
+          }
 
-        if (remoteMessage.data.propertyNo) {
-          setTimeout(() => {
-            Alert.alert(
-              remoteMessage.data.alertTitle,
-              remoteMessage.data.alertBody,
-              [
-                { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
-                { text: 'No', onPress: () => { } },
-              ],
-              {
-                cancelable: true
-              }
-            )
-          }, 1500);
-        }
-      });
+          if (remoteMessage.data.propertyNo) {
+            setTimeout(() => {
+              Alert.alert(
+                remoteMessage.data.alertTitle,
+                remoteMessage.data.alertBody,
+                [
+                  { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
+                  { text: 'No', onPress: () => { } },
+                ],
+                {
+                  cancelable: true
+                }
+              )
+            }, 1500);
+          }
+        });
 
-      this.isLoggedInProc();
-      //skip
-      this.submit();
-    }
-    else {
-      console.log('Authorization status: disabled');
-      this.setState({ pnSettingVisible: true });
-      Linking.openSettings();
-    }
+        this.isLoggedInProc();
+        //skip
+        this.submit();
+      }
+      else{
+        console.log('Authorization status: disabled');
+        this.setState({ pnSettingVisible: true });
+        Linking.openSettings();
+      }
+    })
+    .catch((err)=>{
+      console.log('notification permission check error', err);
+    })
   }
 
   onLiveCallYes = (propertyNo) => {
