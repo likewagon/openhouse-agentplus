@@ -21,11 +21,12 @@ import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
 
-import { 
-  request, requestMultiple, 
-  check, checkMultiple, 
+import {
+  request, requestMultiple,
+  check, checkMultiple,
   checkNotifications, requestNotifications,
-  PERMISSIONS, RESULTS } from 'react-native-permissions';
+  PERMISSIONS, RESULTS
+} from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
 var PushNotification = require("react-native-push-notification");
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
@@ -138,7 +139,7 @@ export default class SplashScreen extends Component {
             //this.requestLocation();
 
             // skip
-            this.requestNotification();            
+            this.requestNotification();
           })
           .catch((err) => {
             console.log('request camera and microphone error', err);
@@ -201,34 +202,39 @@ export default class SplashScreen extends Component {
   }
 
   async requestNotification() {
-    // const authStatus = await messaging().requestPermission({
-    //   alert: true,
-    //   badge: true,
-    //   sound: true
-    // });
-    // const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    PushNotification.configure({
-      onRegister: function (token) {
-        console.log("TOKEN:", token);
-      },
-      // (required) Called when a remote is received or opened, or local notification is opened
-      onNotification: function (notification) {
-        console.log("NOTIFICATION:", notification);
-        // process the notification     
-
-        notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
-      onAction: function (notification) {
-        console.log("NOTIFICATION:", notification);
-      },
-      onRegistrationError: function (err) {
-        console.error('REGISTRATION ERROR:', err);
-      },
-      popInitialNotification: true,
-      requestPermissions: false,
+    const authStatus = await messaging().requestPermission({
+      alert: true,
+      badge: true,
+      sound: true
     });
-    
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    // PushNotification.configure({
+    //   onRegister: function (token) {
+    //     console.log("TOKEN:", token);
+    //   },
+    //   // (required) Called when a remote is received or opened, or local notification is opened
+    //   onNotification: function (notification) {
+    //     console.log("NOTIFICATION:", notification);
+    //     // process the notification     
+
+    //     notification.finish(PushNotificationIOS.FetchResult.NoData);
+    //   },
+    //   onAction: function (notification) {
+    //     console.log("NOTIFICATION:", notification);
+    //   },
+    //   onRegistrationError: function (err) {
+    //     console.error('REGISTRATION ERROR:', err);
+    //   },
+    //   permissions: {
+    //     alert: true,
+    //     badge: true,
+    //     sound: true,
+    //   },
+    //   popInitialNotification: true,      
+    //   requestPermissions: true,
+    // });
+
     PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
     PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
     PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
@@ -242,63 +248,58 @@ export default class SplashScreen extends Component {
       }
     });
 
-    // checkNotifications().then(async ({status, settings}) => {
-    //   if(status == 'granted'){
-
-    //   }
-    //   else{
-
-    //   }
+    // checkNotifications().then(async ({ status, settings }) => {
     // });
-    requestNotifications(['alert', 'sound']).then(async ({status, settings}) => {      
-      if (status == 'granted') {
-        var fcmToken = await messaging().getToken();
-        LoginInfo.fcmToken = fcmToken;
-        console.log('fcmToken', fcmToken);
-  
-        messaging().onMessage(async remoteMessage => {
-          // console.log('Message arrived', remoteMessage);        
-  
-          if (Platform.OS === 'android') {
-            PushNotification.localNotification({
-              title: remoteMessage.data.title,
-              message: remoteMessage.data.body
-            });
-          }
-          else {
-            PushNotificationIOS.presentLocalNotification({
-              alertTitle: remoteMessage.data.title,
-              alertBody: remoteMessage.data.body
-            })
-          }
-  
-          if (remoteMessage.data.propertyNo) {
-            setTimeout(() => {
-              Alert.alert(
-                remoteMessage.data.alertTitle,
-                remoteMessage.data.alertBody,
-                [
-                  { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
-                  { text: 'No', onPress: () => { } },
-                ],
-                {
-                  cancelable: true
-                }
-              )
-            }, 1500);
-          }
-        });
-  
-        this.isLoggedInProc();
-        //skip
-        this.submit();
-      }
-      else {
-        console.log('Authorization status: disabled');
-        this.setState({ pnSettingVisible: true });
-        Linking.openSettings();
-      }
-    });
+    // requestNotifications().then(async ({ status, settings }) => {
+    // })
+
+    if (enabled) {
+      var fcmToken = await messaging().getToken();
+      LoginInfo.fcmToken = fcmToken;
+      console.log('fcmToken', fcmToken);
+
+      messaging().onMessage(async remoteMessage => {
+        // console.log('Message arrived', remoteMessage);        
+
+        if (Platform.OS === 'android') {
+          PushNotification.localNotification({
+            title: remoteMessage.data.title,
+            message: remoteMessage.data.body
+          });
+        }
+        else {
+          PushNotificationIOS.presentLocalNotification({
+            alertTitle: remoteMessage.data.title,
+            alertBody: remoteMessage.data.body
+          })
+        }
+
+        if (remoteMessage.data.propertyNo) {
+          setTimeout(() => {
+            Alert.alert(
+              remoteMessage.data.alertTitle,
+              remoteMessage.data.alertBody,
+              [
+                { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
+                { text: 'No', onPress: () => { } },
+              ],
+              {
+                cancelable: true
+              }
+            )
+          }, 1500);
+        }
+      });
+
+      this.isLoggedInProc();
+      //skip
+      //this.submit();
+    }
+    else {
+      console.log('Authorization status: disabled');
+      this.setState({ pnSettingVisible: true });
+      Linking.openSettings();
+    }
   }
 
   onLiveCallYes = (propertyNo) => {
