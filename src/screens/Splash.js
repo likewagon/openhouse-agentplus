@@ -31,7 +31,6 @@ import messaging from '@react-native-firebase/messaging';
 var PushNotification = require("react-native-push-notification");
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import BackgroundFetch from 'react-native-background-fetch';
-import RNIap from 'react-native-iap';
 
 import {
   BrowseCard,
