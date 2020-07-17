@@ -85,13 +85,12 @@ export default class SplashScreen extends Component {
 
     this.keyboardManager();
   }
-  
-  componentDidMount(){
+
+  componentDidMount() {
     this.focusListener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
   }
 
-  async componentDidFocus() {
-    console.warn('rhere');
+  async componentDidFocus() {    
     let res = await getReviewGeoForApple();
     if (res) {
       if (res[0].under_review_by_apple) {
@@ -115,7 +114,7 @@ export default class SplashScreen extends Component {
     }
   }
 
-  componentWillMount(){
+  componentWillMount() {
     //if (this.focusListener) this.focusListener.remove();
   }
 
@@ -208,7 +207,52 @@ export default class SplashScreen extends Component {
 
     PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
     PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
-    PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
+    PushNotificationIOS.addEventListener('notification', async (remoteMessage) => {
+      console.log('pn remote notification listener', remoteMessage);
+      if(remoteMessage.data.propertyNo){
+        var loginInfo = await AsyncStorage.getItem('LoginInfo');
+        if (loginInfo) {
+          var info = JSON.parse(loginInfo);
+  
+          LoginInfo.uniqueid = info.uniqueid;
+          LoginInfo.fullname = info.fullname;
+          LoginInfo.email = info.email;
+          LoginInfo.telephone = info.telephone;
+          LoginInfo.providerid = info.providerid;
+          LoginInfo.photourl = info.photourl;
+          LoginInfo.email_verified = info.email_verified;
+          LoginInfo.phone_verified = info.phone_verified;
+          LoginInfo.fcmToken = info.fcmToken;
+          LoginInfo.user_account = info.user_account;
+  
+          var param = {
+            user_account: LoginInfo.user_account,
+            user_fullname: LoginInfo.fullname,
+            user_latitude: LoginInfo.latitude,
+            user_longitude: LoginInfo.longitude,
+            property_recordno: remoteMessage.data.propertyNo
+          };
+          console.log('live info param', param);
+  
+          getLiveInfo(param)
+            .then((res) => {
+              console.log('live info', res);
+              RouteParam.liveInfo = res[0];
+              if (RouteParam.liveInfo.error === undefined) {
+                RouteParam.liveCallFromBackgroundNotification = true;
+                Linking.openURL('agentplus://Main/LiveCall');
+              }
+            })
+            .catch((err) => {
+              console.log('get live info error', err);
+            })
+        }
+        else {
+          Alert.alert('Please Signin the App');
+          return;
+        }
+      }
+    });
     PushNotificationIOS.getInitialNotification((remoteMessage) => {
       if (remoteMessage != null) {
         console.log('initial notification', remoteMessage);
@@ -221,12 +265,12 @@ export default class SplashScreen extends Component {
 
 
     checkNotifications().then(async ({ status, settings }) => {
-      if(status == 'granted'){
+      if (status == 'granted') {
         if (enabled) {
           var fcmToken = await messaging().getToken();
           LoginInfo.fcmToken = fcmToken;
           console.log('fcmToken', fcmToken);
-    
+
           messaging().onMessage(async remoteMessage => {
             // console.log('Message arrived', remoteMessage); 
             if (Platform.OS === 'android') {
@@ -241,7 +285,7 @@ export default class SplashScreen extends Component {
                 alertBody: remoteMessage.data.body
               })
             }
-    
+
             if (remoteMessage.data.propertyNo) {
               setTimeout(() => {
                 Alert.alert(
@@ -258,8 +302,8 @@ export default class SplashScreen extends Component {
               }, 1500);
             }
           });
-    
-          this.isLoggedInProc();          
+
+          this.isLoggedInProc();
         }
         else {
           console.log('Authorization status: disabled');
@@ -267,15 +311,15 @@ export default class SplashScreen extends Component {
           Linking.openSettings();
         }
       }
-      else{
+      else {
         console.log('check notifications error');
-          this.setState({ pnSettingVisible: true });
-          Linking.openSettings();
+        this.setState({ pnSettingVisible: true });
+        Linking.openSettings();
       }
     });
     // requestNotifications().then(async ({ status, settings }) => {
     // })
-    
+
   }
 
   onLiveCallYes = (propertyNo) => {
@@ -337,7 +381,7 @@ export default class SplashScreen extends Component {
     let subscription = await AsyncStorage.getItem('subscription');
     let activate = await isUserSubscriptionActive(subscription);
     console.log('activate', activate);
-    if (!activate) {      
+    if (!activate) {
       setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
       return;
     }
