@@ -50,38 +50,6 @@ import { isUserSubscriptionActive } from '@constants';
 import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
 
-// PushNotification.configure({
-//   onRegister: function (token) {
-//     console.log("TOKEN:", token);
-//   },     
-//   // (required) Called when a remote is received or opened, or local notification is opened
-//   onNotification: function (notification) {
-//     console.log("NOTIFICATION:", notification);     
-//     // process the notification     
-
-//     notification.finish(PushNotificationIOS.FetchResult.NoData);
-//   },
-//   onAction: function (notification) {
-//     console.log("NOTIFICATION:", notification);
-//   },
-//   onRegistrationError: function(err) {
-//     console.error('REGISTRATION ERROR:', err);
-//   },
-//   popInitialNotification: true,     
-//   requestPermissions: true,
-// });
-// PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
-// PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
-// PushNotificationIOS.addEventListener('notification', () => { console.log('pn remote notification listener') });
-// PushNotificationIOS.getInitialNotification((remoteMessage)=>{
-//   if(notification!=null){
-//     PushNotificationIOS.presentLocalNotification({
-//       alertTitle: remoteMessage.data.title,
-//       alertBody: remoteMessage.data.body
-//     })
-//   }
-// })
-
 BackgroundFetch.configure({
   minimumFetchInterval: 15,
   stopOnTerminate: false, // Android-only,
@@ -118,13 +86,13 @@ export default class SplashScreen extends Component {
 
     this.keyboardManager();
   }
+  
+  componentDidMount(){
+    this.focusListener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
+  }
 
-  async componentDidMount() {
-    let activate = await AsyncStorage.getItem('activate');
-    if (activate) {
-      RouteParam.activate = activate;
-    }
-
+  async componentDidFocus() {
+    console.warn('rhere');
     let res = await getReviewGeoForApple();
     if (res) {
       if (res[0].under_review_by_apple) {
@@ -146,6 +114,10 @@ export default class SplashScreen extends Component {
           })
       }
     }
+  }
+
+  componentWillMount(){
+    //if (this.focusListener) this.focusListener.remove();
   }
 
   keyboardManager = () => {
@@ -221,7 +193,7 @@ export default class SplashScreen extends Component {
     //     notification.finish(PushNotificationIOS.FetchResult.NoData);
     //   },
     //   onAction: function (notification) {
-    //     console.log("NOTIFICATION:", notification);
+    //     console.log("ACTION:", notification);
     //   },
     //   onRegistrationError: function (err) {
     //     console.error('REGISTRATION ERROR:', err);
@@ -248,58 +220,63 @@ export default class SplashScreen extends Component {
       }
     });
 
-    // checkNotifications().then(async ({ status, settings }) => {
-    // });
-    // requestNotifications().then(async ({ status, settings }) => {
-    // })
 
-    if (enabled) {
-      var fcmToken = await messaging().getToken();
-      LoginInfo.fcmToken = fcmToken;
-      console.log('fcmToken', fcmToken);
-
-      messaging().onMessage(async remoteMessage => {
-        // console.log('Message arrived', remoteMessage);        
-
-        if (Platform.OS === 'android') {
-          PushNotification.localNotification({
-            title: remoteMessage.data.title,
-            message: remoteMessage.data.body
+    checkNotifications().then(async ({ status, settings }) => {
+      if(status == 'granted'){
+        if (enabled) {
+          var fcmToken = await messaging().getToken();
+          LoginInfo.fcmToken = fcmToken;
+          console.log('fcmToken', fcmToken);
+    
+          messaging().onMessage(async remoteMessage => {
+            // console.log('Message arrived', remoteMessage); 
+            if (Platform.OS === 'android') {
+              PushNotification.localNotification({
+                title: remoteMessage.data.title,
+                message: remoteMessage.data.body
+              });
+            }
+            else {
+              PushNotificationIOS.presentLocalNotification({
+                alertTitle: remoteMessage.data.title,
+                alertBody: remoteMessage.data.body
+              })
+            }
+    
+            if (remoteMessage.data.propertyNo) {
+              setTimeout(() => {
+                Alert.alert(
+                  remoteMessage.data.alertTitle,
+                  remoteMessage.data.alertBody,
+                  [
+                    { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
+                    { text: 'No', onPress: () => { } },
+                  ],
+                  {
+                    cancelable: true
+                  }
+                )
+              }, 1500);
+            }
           });
+    
+          this.isLoggedInProc();          
         }
         else {
-          PushNotificationIOS.presentLocalNotification({
-            alertTitle: remoteMessage.data.title,
-            alertBody: remoteMessage.data.body
-          })
+          console.log('Authorization status: disabled');
+          this.setState({ pnSettingVisible: true });
+          Linking.openSettings();
         }
-
-        if (remoteMessage.data.propertyNo) {
-          setTimeout(() => {
-            Alert.alert(
-              remoteMessage.data.alertTitle,
-              remoteMessage.data.alertBody,
-              [
-                { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
-                { text: 'No', onPress: () => { } },
-              ],
-              {
-                cancelable: true
-              }
-            )
-          }, 1500);
-        }
-      });
-
-      this.isLoggedInProc();
-      //skip
-      //this.submit();
-    }
-    else {
-      console.log('Authorization status: disabled');
-      this.setState({ pnSettingVisible: true });
-      Linking.openSettings();
-    }
+      }
+      else{
+        console.log('check notifications error');
+          this.setState({ pnSettingVisible: true });
+          Linking.openSettings();
+      }
+    });
+    // requestNotifications().then(async ({ status, settings }) => {
+    // })
+    
   }
 
   onLiveCallYes = (propertyNo) => {
@@ -347,6 +324,8 @@ export default class SplashScreen extends Component {
         else {
           console.log('no login info');
           //setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
+          //skip
+          this.submit();
         }
       })
       .catch((err) => {
@@ -356,14 +335,13 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
-    // let subscription = await AsyncStorage.getItem('subscription');
-    // let activate = await isUserSubscriptionActive(subscription);
-    // console.log('activate', activate);
-    // if (!activate) {
-    //   await AsyncStorage.removeItem('subscription');
-    //    setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-    //    return;
-    // }
+    let subscription = await AsyncStorage.getItem('subscription');
+    let activate = await isUserSubscriptionActive(subscription);
+    console.log('activate', activate);
+    if (!activate) {      
+      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+      return;
+    }
 
     // skip
     LoginInfo.uniqueid = 'askdfjasdjflasdjflk';

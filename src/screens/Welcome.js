@@ -67,8 +67,7 @@ export default class WelcomeScreen extends Component {
   onEnter = async (index) => {
     // let subscription = await AsyncStorage.getItem('subscription');
     // let activate = await isUserSubscriptionActive(subscription);
-    // if (!activate) {
-    //   await AsyncStorage.removeItem('subscription');
+    // if (!activate) {    
     //   setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
     //   return;
     // }  

@@ -15,16 +15,12 @@ export const isUserSubscriptionActive = (subscriptionId) => {
     try {
       RNIap.getAvailablePurchases()
         .then((res) => {
-          console.log('availablePurchases', res);
+          console.log('availablePurchases', res);          
           if (res !== null && res.length > 0) {
-            const subscription = res.find((element) => {
-              return subscriptionId === element.productId;
-            });
+            const subscription = res.find((element) => subscriptionId === element.productId);
             console.log('subscription', subscription);
-            AsyncStorage.setItem('availablePurchases', JSON.stringify(subscription));
-            if (subscription) {
-              // check for the autoRenewingAndroid flag. If it is false the sub period is over
-              resolve(subscription["autoRenewingIOS"] == true);
+            if (subscription) {              
+              resolve(true);
             }
             else {
               resolve(false);
@@ -34,13 +30,12 @@ export const isUserSubscriptionActive = (subscriptionId) => {
           }
         })
         .catch((err) => {
-          console.log('getAvailablePurchases error', err)
+          console.log('get available purchases error', err)
           resolve(false);
         });
     }
     catch (err) {
-      console.log('get available purchase error', err.code, err.message);
-      Alert.alert('Available Purchase Error', err.message);
+      console.log('get available purchase error', err.code, err.message);      
       resolve(false);
     }
   })

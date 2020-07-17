@@ -65,9 +65,8 @@ export default class IAPScreen extends Component {
       spinner: false,
       currentPlan: itemSkus[0],
       productList: [],
-      receipt: '',
-      availableItemsMessage: '',
-      result: false,
+      receipt: '',      
+      result: true,
     }
   }
 
@@ -82,6 +81,7 @@ export default class IAPScreen extends Component {
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase) => {
         const receipt = purchase.transactionReceipt;
+        console.log('receipt', receipt);
         if (receipt) {
           try {
             if (Platform.OS === 'ios') {
@@ -93,7 +93,8 @@ export default class IAPScreen extends Component {
             console.log('ackErr', ackErr);
           }
 
-          this.setState({ receipt }, () => this.goNext());
+          this.setState({ result: true });
+          AsyncStorage.setItem('subscription', this.state.currentPlan);
         }
       },
     );
@@ -105,11 +106,9 @@ export default class IAPScreen extends Component {
       },
     );
 
-    this.setState({ spinner: true });
-    //this.getAvailablePurchases();
     this.getItems();
   }
-
+  
   componentWillUnmount() {
     if (purchaseUpdateSubscription) {
       purchaseUpdateSubscription.remove();
@@ -121,8 +120,9 @@ export default class IAPScreen extends Component {
     }
     RNIap.endConnection();
   }
-
-  getItems = async () => {    
+  
+  getItems = async () => {
+    this.setState({ spinner: true });    
     try {
       const products = await RNIap.getProducts(itemSkus);
       var sortedProducts = products.sort((a, b) => { return a.price - b.price });
@@ -131,37 +131,6 @@ export default class IAPScreen extends Component {
     } catch (err) {
       this.setState({ spinner: false });
       console.log('get products error', err.code, err.message);
-    }
-  };
-
-  getAvailablePurchases = async () => {
-    let purchases = await AsyncStorage.getItem('availablePurchases');
-    console.log('purchases', purchases);
-    if(purchases){
-      purchases = JSON.parse(purchases);
-
-      if (purchases && purchases.length > 0) {
-        this.setState({
-          availableItemsMessage: `Got ${purchases.length} items.`,
-          receipt: purchases[0].transactionReceipt,
-        });
-      }
-    }
-    else{
-      try {
-        const purchases = await RNIap.getAvailablePurchases();
-        console.log('Available purchases :: ', purchases);
-  
-        if (purchases && purchases.length > 0) {
-          this.setState({
-            availableItemsMessage: `Got ${purchases.length} items.`,
-            receipt: purchases[0].transactionReceipt,
-          });
-        }
-      } catch (err) {
-        console.log('available purchases error', err.code, err.message);
-        Alert.alert('Available Purchases Error', err.message);
-      }
     }
   };
 
@@ -178,12 +147,6 @@ export default class IAPScreen extends Component {
       console.log('request subscription error', err.message);
       Alert.alert('Request Subscription Error', err.message);
     }
-  };
-
-  goNext = () => {
-    console.log('receipt', this.state.receipt);
-    this.setState({ result: true });
-    AsyncStorage.setItem('subscription', this.state.currentPlan);
   };
 
   onPressPlan = (plan) => {
@@ -241,9 +204,10 @@ export default class IAPScreen extends Component {
             </View>
 
             <View style={styles.mainContainerFirstPage}>
+              <View style={styles.btnsPart}>
               {
                 this.state.productList.length == 3 &&
-                <View style={styles.btnsPart}>
+                <>
                   <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[0] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[0])}>
                     <View style={styles.btnLeft}>
                       <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[0].price)}</Text>
@@ -291,8 +255,9 @@ export default class IAPScreen extends Component {
                       </Text>
                     </View>
                   </TouchableOpacity>
-                </View>
+                </>
               }
+              </View>
 
               <View style={styles.bottomTxtPart}>
                 <Text style={styles.bottomTxt}>
@@ -328,21 +293,68 @@ export default class IAPScreen extends Component {
                     <Text style={styles.itemTxt}>Agent Plus™</Text>
                   </View>
                 </View>
-                <View style={styles.itemLine}>
+                {/* <View style={styles.itemLine}>
                   <View style={styles.itemName}>
                     <Text style={styles.itemTxt}>Item SKU/ID:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}>Agentplusyearly</Text>
+                    <Text style={styles.itemTxt}>{this.state.currentPlan}</Text>
                   </View>
-                </View>
+                </View> */}
                 <View style={styles.itemLine}>
                   <View style={styles.itemName}>
                     <Text style={styles.itemTxt}>Subscription Type:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}>1 Year Subscription</Text>
+                    <Text style={styles.itemTxt}></Text>
                   </View>
+                </View>
+                <View style={styles.itemLine}>
+                  <View style={styles.itemName}>
+                    <Text style={styles.itemTxt}>Subscription Starting Date:</Text>
+                  </View>
+                  <View style={styles.itemValue}>
+                    <Text style={styles.itemTxt}></Text>
+                  </View>
+                </View>
+                <View style={styles.itemLine}>
+                  <View style={styles.itemName}>
+                    <Text style={styles.itemTxt}>Subscription Ending Date:</Text>
+                  </View>
+                  <View style={styles.itemValue}>
+                    <Text style={styles.itemTxt}></Text>
+                  </View>
+                </View>
+                <View style={styles.itemLine}>
+                  <View style={styles.itemName}>
+                    <Text style={styles.itemTxt}>Monthly Subscription Cost:</Text>
+                  </View>
+                  <View style={styles.itemValue}>
+                    <Text style={styles.itemTxt}></Text>
+                  </View>
+                </View>
+                <View style={styles.itemLine}>
+                  <View style={styles.itemName}>
+                    <Text style={styles.itemTxt}>Total Amount Billed At This Time:</Text>
+                  </View>
+                  <View style={styles.itemValue}>
+                    <Text style={styles.itemTxt}></Text>
+                  </View>
+                </View>
+                <View style={styles.itemLine}>
+                  <View style={styles.itemName}>
+                    <Text style={styles.itemTxt}>Transaction Number:</Text>
+                  </View>
+                  <View style={styles.itemValue}>
+                    <Text style={styles.itemTxt}></Text>
+                  </View>
+                </View>
+
+                <View style={styles.itemLine}>                  
+                  <Text style={styles.itemTxt}>Purchase will appear in your credit card statement as:</Text>
+                </View>
+                <View style={styles.itemLine}>                  
+                  <Text style={styles.itemTxt}>"{this.state.currentPlan}" from ECapture, Inc.</Text>
                 </View>
               </View>
 
@@ -355,7 +367,6 @@ export default class IAPScreen extends Component {
       </View >
     );
   }
-
 }
 
 const width = Dimensions.get('window').width;
@@ -418,7 +429,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '82%',
     justifyContent: 'space-between',
-    alignItems: 'center',        
+    alignItems: 'center',
+    //borderWidth: 2
   },
   btn: {
     width: '100%',
@@ -509,20 +521,21 @@ const styles = StyleSheet.create({
   },
   itemLine: {
     width: '100%',
-    height: normalize(25),
+    height: normalize(30),
     flexDirection: 'row',
+    //borderWidth: 1
   },
   itemName: {
-    width: '55%',
+    width: '60%',
     height: '100%',
   },
   itemValue: {
-    width: '55%',
+    width: '40%',
     height: '100%'
   },
   itemTxt: {
     fontFamily: 'SFProText-Regular',
-    fontSize: RFPercentage(2),
+    fontSize: RFPercentage(1.7),
     color: Colors.blackColor,
   },
   bottomPart: {
