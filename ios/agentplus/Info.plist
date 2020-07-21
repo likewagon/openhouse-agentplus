@@ -29,17 +29,7 @@
 			<array>
 				<string>com.googleusercontent.apps.1006237194994-jstvaqmf0lf959equcf47q0t5pbgn6l4</string>
 			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>agentplus</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>agentplus</string>
-			</array>
-		</dict>
+		</dict>		
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
@@ -60,7 +50,7 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Agent Plus Requires to access your camera</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Agent Plus Requires to access your geo location to operate. Allowing geo location will increase the accuracy of the properties displayed by Open</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Agent Plus Requires to access your microphone</string>
@@ -88,6 +78,6 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>		
+	<false/>
 </dict>
 </plist>

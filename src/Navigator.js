@@ -235,24 +235,20 @@ function MainStack() {
       />
       <Stack.Screen
         name="LiveCall"
-        component={LiveCallScreen}
-        path="LiveCall"
+        component={LiveCallScreen}        
       />      
     </Stack.Navigator>
   );
 }
 
-function App() {
-  const linking = {
-    prefixes: ['agentplus://'],
-  };
+function App() {  
   return (
-    <NavigationContainer linking={linking}>
+    <NavigationContainer>
       <Stack.Navigator headerMode="none">
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Auth" component={AuthStack} />
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
-        <Stack.Screen name="Main" component={MainStack} path="Main"/>
+        <Stack.Screen name="Main" component={MainStack} />
         <Stack.Screen name="IAP" component={IAPScreen} />
       </Stack.Navigator>
     </NavigationContainer>
