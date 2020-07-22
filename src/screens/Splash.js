@@ -99,7 +99,7 @@ export default class SplashScreen extends Component {
         RouteParam.deviceType = 'pad';
         this.isLoggedInProc();
       }
-      else {        
+      else {
         this.requestCameraMicroPhonePermission()
           .then(() => {
             //this.requestLocation();
@@ -111,7 +111,7 @@ export default class SplashScreen extends Component {
             console.log('request camera and microphone error', err);
           })
       }
-    };    
+    };
   }
 
   componentWillMount() {
@@ -199,7 +199,7 @@ export default class SplashScreen extends Component {
           LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;
 
-          this.onLiveCallYes(remoteMessage.data.propertyNo);          
+          this.onLiveCallYes(remoteMessage.data.propertyNo);
         }
         else {
           Alert.alert('Please Signin the App');
@@ -207,15 +207,19 @@ export default class SplashScreen extends Component {
         }
       }
     });
-    PushNotificationIOS.getInitialNotification((remoteMessage) => {
-      if (remoteMessage != null) {
-        console.log('initial notification', remoteMessage);
-        PushNotificationIOS.presentLocalNotification({
-          alertTitle: remoteMessage.data.title,
-          alertBody: remoteMessage.data.body
-        })
+    
+    PushNotificationIOS.getInitialNotification()
+    .then(pnIOSObj => {
+      console.log('Notification caused app to open from quit state:', pnIOSObj);
+      var remoteMessage = pnIOSObj.getMessage();
+      if (typeof remoteMessage.data.propertyNo != undefined) {
+        console.log('livecall notification on quit');
+        this.onLiveCallYes(remoteMessage.data.propertyNo);
       }
-    });
+    })
+    .catch((err)=>{
+      console.log('get initial notification error', err);
+    })    
 
     if (enabled) {
       var fcmToken = await messaging().getToken();
@@ -257,7 +261,7 @@ export default class SplashScreen extends Component {
 
       messaging().onNotificationOpenedApp(remoteMessage => {
         console.log('Notification caused app to open from background state:', remoteMessage.data);
-        if(typeof remoteMessage.data.propertyNo != undefined){
+        if (typeof remoteMessage.data.propertyNo != undefined) {
           console.log('livecall notification on background');
           this.onLiveCallYes(remoteMessage.data.propertyNo);
         }
@@ -265,18 +269,24 @@ export default class SplashScreen extends Component {
 
       messaging()
         .getInitialNotification()
-        .then(remoteMessage => {
-          if (remoteMessage) {
-            console.log('Notification caused app to open from quit state:', remoteMessage.notification);
+        .then(pnIOSObj => {
+          console.log('Notification caused app to open from quit state:', pnIOSObj);
+          var remoteMessage = pnIOSObj.getMessage();
+          if (typeof remoteMessage.data.propertyNo != undefined) {
+            console.log('livecall notification on quit');
+            this.onLiveCallYes(remoteMessage.data.propertyNo);
           }
-        });
-      
+        })
+        .catch((err)=>{
+          console.log('get initial notification error', err);
+        })
+
       this.isLoggedInProc();
 
-      try{
+      try {
         watchdogTimer();
       }
-      catch(err){
+      catch (err) {
         console.log('permission watchdog error', err);
       }
     }
