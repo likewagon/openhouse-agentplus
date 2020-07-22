@@ -116,7 +116,7 @@ export default class FormScreen extends Component {
       })
   }
 
-  // for apple reivew skip
+  // for apple reivew stage
   submit = async () => {
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'login');

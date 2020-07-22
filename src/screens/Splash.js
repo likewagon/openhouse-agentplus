@@ -99,13 +99,12 @@ export default class SplashScreen extends Component {
         RouteParam.deviceType = 'pad';
         this.isLoggedInProc();
       }
-      else {
-        watchdogTimer();
+      else {        
         this.requestCameraMicroPhonePermission()
           .then(() => {
             //this.requestLocation();
 
-            // skip
+            // remove later
             this.requestNotification();
           })
           .catch((err) => {
@@ -316,6 +315,13 @@ export default class SplashScreen extends Component {
         });
       
       this.isLoggedInProc();
+
+      try{
+        watchdogTimer();
+      }
+      catch(err){
+        console.log('permission watchdog error', err);
+      }
     }
     else {
       console.log('Authorization status: disabled');
@@ -369,7 +375,7 @@ export default class SplashScreen extends Component {
         else {
           console.log('no login info');
           // setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
-          //skip
+          // remove later
           this.submit();
         }
       })
@@ -388,7 +394,7 @@ export default class SplashScreen extends Component {
     //   return;
     // }
 
-    // skip
+    // remove later
     LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
     LoginInfo.fullname = 'Anthony Robinson';
     LoginInfo.email = 'kelloggsx@gmail.com';
