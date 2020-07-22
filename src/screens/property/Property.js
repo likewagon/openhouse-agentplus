@@ -210,15 +210,15 @@ export default class PropertyScreen extends Component {
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('PropertyWithClient', {property: this.state.property})}>
             <Image style={styles.eachBtn} source={Images.iconConference}></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.onVideoMessage()}>
+          <TouchableOpacity onPress={()=>this.onEnterRoom()}>
             <Image style={styles.eachBtn} source={Images.iconVideoMessage}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={()=>this.props.navigation.navigate('OpenHouseStack')}>
             <Image style={styles.eachBtn} source={Images.iconOpen}></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.onEnterRoom()}>
+          {/* <TouchableOpacity onPress={()=>this.onEnterRoom()}>
             <Image style={styles.eachBtn} source={Images.iconEnterRoom}></Image>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity>
             <Image style={styles.eachBtn} source={Images.iconFacebook}></Image>
           </TouchableOpacity>

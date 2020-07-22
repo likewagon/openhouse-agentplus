@@ -140,13 +140,13 @@ export default class LiveCallScreen extends Component {
           <Header title={'LIVE CALL'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View>         */}
         {this.state.status === "connected" && (
-          <View style={styles.remoteGrid}>
+          <View style={styles.remoteSmallVideoContainer}>            
             {Array.from(
               this.state.videoTracks,
               ([trackSid, trackIdentifier]) => {
                 return (
                   <TwilioVideoParticipantView
-                    style={styles.remoteVideo}
+                    style={styles.remoteSmallVideo}
                     key={trackSid}
                     trackIdentifier={trackIdentifier}
                   />
@@ -155,8 +155,8 @@ export default class LiveCallScreen extends Component {
             )}
           </View>
         )}
-        <View style={styles.smallVideoContainer}>
-          <TwilioVideoLocalView enabled={true} style={styles.localVideo} />
+        <View style={styles.localBigVideoContainer}>
+          <TwilioVideoLocalView enabled={true} style={styles.localBigVideo} />
         </View>
         <View style={styles.btnsContainer}>
           <TouchableOpacity onPress={() => {
@@ -204,31 +204,32 @@ const styles = StyleSheet.create({
     // borderColor: Colors.borderColor,
     // borderBottomWidth: normalize(0.5, 'height'),
   },  
-  remoteGrid: {
+  localBigVideoContainer: {
     flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap"
+    // flexDirection: "row",
+    // flexWrap: "wrap"
   },
-  remoteVideo: {
+  localBigVideo: {
     width: '100%',
     height: '100%',
     // borderWidth: 2,
     // borderColor: '#ff0000'
   },
-  smallVideoContainer: {
+  remoteSmallVideoContainer: {
     position: 'absolute',
     top: normalize(40, 'height'),        
-    width: '100%',
+    width: '95%',
     height: normalize(100),
     flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignSelf: 'center'
   },
-  localVideo: {    
+  remoteSmallVideo: {    
     width: normalize(100),
     height: normalize(100),
-    marginLeft: normalize(18),
     borderRadius: normalize(5),
-    borderWidth: normalize(2),
-    borderColor: '#4e4e4e'
+    // borderWidth: normalize(2),
+    // borderColor: '#4e4e4e'
   },  
   btnsContainer: {
     position: 'absolute',

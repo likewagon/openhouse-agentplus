@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'SFProText-Bold',
-    fontSize: RFPercentage(5),
+    fontSize: RFPercentage(4.5),
     color: Colors.blackColor,
     textAlign: 'center',
   },
@@ -147,15 +147,4 @@ const styles = StyleSheet.create({
     color: '#50505A',
     textAlign: 'center'
   },
-  // homeBtnContainer: {
-  //   width: '90%',
-  //   height: '15%',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   marginTop: normalize(-50, 'height')
-  // },
-  // homeImg: {
-  //   width: '100%',
-  //   height: '100%'
-  // }
 });

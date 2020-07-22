@@ -179,37 +179,11 @@ export default class SplashScreen extends Component {
     });
     const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-    // PushNotification.configure({
-    //   onRegister: function (token) {
-    //     console.log("TOKEN:", token);
-    //   },
-    //   // (required) Called when a remote is received or opened, or local notification is opened
-    //   onNotification: function (notification) {
-    //     console.log("NOTIFICATION:", notification);
-    //     // process the notification     
-
-    //     notification.finish(PushNotificationIOS.FetchResult.NoData);
-    //   },
-    //   onAction: function (notification) {
-    //     console.log("ACTION:", notification);
-    //   },
-    //   onRegistrationError: function (err) {
-    //     console.error('REGISTRATION ERROR:', err);
-    //   },
-    //   permissions: {
-    //     alert: true,
-    //     badge: true,
-    //     sound: true,
-    //   },
-    //   popInitialNotification: true,      
-    //   requestPermissions: true,
-    // });
-
     PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
     PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
     PushNotificationIOS.addEventListener('notification', async (remoteMessage) => {
       console.log('pn remote notification listener', remoteMessage);
-      if (remoteMessage.data.propertyNo) {
+      if (typeof remoteMessage.data.propertyNo != undefined) {
         var loginInfo = await AsyncStorage.getItem('LoginInfo');
         if (loginInfo) {
           var info = JSON.parse(loginInfo);
@@ -225,27 +199,7 @@ export default class SplashScreen extends Component {
           LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;
 
-          var param = {
-            user_account: LoginInfo.user_account,
-            user_fullname: LoginInfo.fullname,
-            user_latitude: LoginInfo.latitude,
-            user_longitude: LoginInfo.longitude,
-            property_recordno: remoteMessage.data.propertyNo
-          };
-          console.log('live info param', param);
-
-          getLiveInfo(param)
-            .then((res) => {
-              console.log('live info', res);
-              RouteParam.liveInfo = res[0];
-              if (RouteParam.liveInfo.error === undefined) {
-                RouteParam.liveCallFromBackgroundNotification = true;
-                Linking.openURL('agentplus://Main/LiveCall');
-              }
-            })
-            .catch((err) => {
-              console.log('get live info error', err);
-            })
+          this.onLiveCallYes();          
         }
         else {
           Alert.alert('Please Signin the App');
@@ -262,7 +216,6 @@ export default class SplashScreen extends Component {
         })
       }
     });
-
 
     if (enabled) {
       var fcmToken = await messaging().getToken();
