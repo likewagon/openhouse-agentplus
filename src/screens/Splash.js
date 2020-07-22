@@ -199,7 +199,7 @@ export default class SplashScreen extends Component {
           LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;
 
-          this.onLiveCallYes();          
+          this.onLiveCallYes(remoteMessage.data.propertyNo);          
         }
         else {
           Alert.alert('Please Signin the App');
@@ -238,7 +238,7 @@ export default class SplashScreen extends Component {
         }
 
         if (typeof remoteMessage.data.propertyNo != undefined) {
-          console.log('arrived livecall notification');
+          console.log('livecall notification on foreground');
           setTimeout(() => {
             Alert.alert(
               remoteMessage.data.alertTitle,
@@ -256,7 +256,11 @@ export default class SplashScreen extends Component {
       });
 
       messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log('Notification caused app to open from background state:', remoteMessage.notification);
+        console.log('Notification caused app to open from background state:', remoteMessage.data);
+        if(typeof remoteMessage.data.propertyNo != undefined){
+          console.log('livecall notification on background');
+          this.onLiveCallYes(remoteMessage.data.propertyNo);
+        }
       });
 
       messaging()
