@@ -25,24 +25,24 @@ export const isUserSubscriptionActive = (subscriptionId) => {
     try {
       RNIap.getAvailablePurchases()
         .then((res) => {
-            console.log('availablePurchases', res);          
-            if (res !== null && res.length > 0) {
-              const subscription = res.find((element) => subscriptionId === element.productId);
-              console.log('subscription', subscription);
-              if (subscription) {              
-                resolve(true);
-              }
-              else {
-                resolve(false);
-              }
-            } else {
+          console.log('availablePurchases', res);
+          if (res !== null && res.length > 0) {
+            const subscription = res.find((element) => subscriptionId === element.productId);
+            console.log('subscription', subscription);
+            if (subscription) {
+              resolve(true);
+            }
+            else {
               resolve(false);
             }
-          })
-          .catch((err) => {
-            console.log('get available purchases error', err)
+          } else {
             resolve(false);
-          });
+          }
+        })
+        .catch((err) => {
+          console.log('get available purchases error', err)
+          resolve(false);
+        });
     }
     catch (err) {
       console.log('get available purchase error', err.code, err.message);
@@ -74,15 +74,8 @@ export const watchdogTimer = () => {
       (result) => {
         if (result != RESULTS.GRANTED) {
           console.log('location permission:', result);
-          if(result == RESULTS.DENIED){
-            request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE).then((result)=>{
-              
-            })
-          }
-          else{
-            Linking.openSettings().then(() => { }).catch((err) => { console.log('open setting err', err) })
-          }
-        }        
+          Linking.openSettings().then(() => { }).catch((err) => { console.log('open setting err', err) })
+        }
       },
     );
     checkNotifications().then(({ status, settings }) => {
