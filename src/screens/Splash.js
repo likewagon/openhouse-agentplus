@@ -100,6 +100,7 @@ export default class SplashScreen extends Component {
         this.isLoggedInProc();
       }
       else {
+        watchdogTimer();
         this.requestCameraMicroPhonePermission()
           .then(() => {
             //this.requestLocation();
@@ -313,8 +314,7 @@ export default class SplashScreen extends Component {
             console.log('Notification caused app to open from quit state:', remoteMessage.notification);
           }
         });
-
-      watchdogTimer();
+      
       this.isLoggedInProc();
     }
     else {
