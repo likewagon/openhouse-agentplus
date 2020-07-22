@@ -39,7 +39,8 @@ export default class FormScreen extends Component {
     this.state = {
       fullname: LoginInfo.fullname,
       email: LoginInfo.email,
-      telephone: LoginInfo.telephone,      
+      telephone: LoginInfo.telephone, 
+      phoneNumberReceived: LoginInfo.telephone ? true : false,       
       spinner: false
     }
   }
@@ -72,7 +73,7 @@ export default class FormScreen extends Component {
       Alert.alert('Please enter your phone number');
       return;
     }
-    if (this.state.telephone.length < 19) {
+    if (!this.state.phoneNumberReceived && this.state.telephone.length < 19) {
       Alert.alert('Please enter a valid telephone number');
       return;
     }
