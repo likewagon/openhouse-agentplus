@@ -314,6 +314,7 @@ export default class SplashScreen extends Component {
           }
         });
 
+      watchdogTimer();
       this.isLoggedInProc();
     }
     else {
@@ -321,8 +322,6 @@ export default class SplashScreen extends Component {
       this.setState({ pnSettingVisible: true });
       Linking.openSettings();
     }
-
-    watchdogTimer();
   }
 
   onLiveCallYes = (propertyNo) => {
