@@ -207,14 +207,19 @@ export default class SplashScreen extends Component {
         }
       }
     });
-    
+
     PushNotificationIOS.getInitialNotification()
     .then(pnIOSObj => {
       console.log('Notification caused app to open from quit state:', pnIOSObj);
-      var remoteMessage = pnIOSObj.getMessage();
-      if (typeof remoteMessage.data.propertyNo != undefined) {
-        console.log('livecall notification on quit');
-        this.onLiveCallYes(remoteMessage.data.propertyNo);
+      if(pnIOSObj){
+        var remoteMessage = pnIOSObj.getMessage();
+        if (typeof remoteMessage.data.propertyNo != undefined) {
+          console.log('livecall notification on quit');
+          this.onLiveCallYes(remoteMessage.data.propertyNo);
+        }
+      }
+      else{
+        
       }
     })
     .catch((err)=>{
@@ -269,9 +274,8 @@ export default class SplashScreen extends Component {
 
       messaging()
         .getInitialNotification()
-        .then(pnIOSObj => {
-          console.log('Notification caused app to open from quit state:', pnIOSObj);
-          var remoteMessage = pnIOSObj.getMessage();
+        .then(remoteMessage => {
+          console.log('Notification caused app to open from quit state:', remoteMessage);
           if (typeof remoteMessage.data.propertyNo != undefined) {
             console.log('livecall notification on quit');
             this.onLiveCallYes(remoteMessage.data.propertyNo);
