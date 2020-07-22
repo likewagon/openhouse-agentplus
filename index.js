@@ -10,8 +10,8 @@ var PushNotification = require("react-native-push-notification");
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  //console.log('Message handled in the background!', remoteMessage);  
-
+  console.log('Message handled in the background!', remoteMessage);  
+  
   if (Platform.OS === 'android') {
     PushNotification.localNotification({
       title: remoteMessage.data.title,

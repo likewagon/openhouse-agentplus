@@ -284,7 +284,8 @@ export default class SplashScreen extends Component {
           })
         }
 
-        if (remoteMessage.data.propertyNo) {
+        if (typeof remoteMessage.data.propertyNo != undefined) {
+          console.log('arrived livecall notification');
           setTimeout(() => {
             Alert.alert(
               remoteMessage.data.alertTitle,
@@ -368,7 +369,7 @@ export default class SplashScreen extends Component {
         }
         else {
           console.log('no login info');
-          //setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
+          // setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
           //skip
           this.submit();
         }

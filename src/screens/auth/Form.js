@@ -113,7 +113,6 @@ export default class FormScreen extends Component {
 
         console.log('verify phone number error', err);
       })
-
   }
 
   // for apple reivew skip
