@@ -52,6 +52,8 @@
 	<string>Agent Plus Requires to access your camera</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Agent Plus Requires to access your geo location to operate. Allowing geo location will increase the accuracy of the properties displayed by Open</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Agent Plus Requires to access your geo location to operate. Allowing geo location will increase the accuracy of the properties displayed by Open</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Agent Plus Requires to access your microphone</string>
 	<key>UIAppFonts</key>

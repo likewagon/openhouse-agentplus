@@ -19,7 +19,7 @@ import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import TextInputMask from 'react-native-text-input-mask';
+import { TextInputMask } from 'react-native-masked-text';
 import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNIap from 'react-native-iap';
@@ -39,8 +39,7 @@ export default class FormScreen extends Component {
     this.state = {
       fullname: LoginInfo.fullname,
       email: LoginInfo.email,
-      telephone: LoginInfo.telephone,
-      country_additional_prefix: LoginInfo.telephone ? false : true,
+      telephone: LoginInfo.telephone,      
       spinner: false
     }
   }
@@ -49,13 +48,17 @@ export default class FormScreen extends Component {
 
   }
 
-  validatePhoneNumber = () => {
-    // var regexp = /^[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/
-    // return regexp.test(this.state.telephone)
-
-    return true;
+  makeVerifyPhoneNumber = () => {
+    var {telephone} = this.state;
+    while(telephone.indexOf(' ') >= 0){
+      telephone = telephone.replace(' ', '');
+    }
+    telephone = telephone.replace('(', '');
+    telephone = telephone.replace(')', '');
+    telephone = telephone.replace('-', '');
+    return telephone;
   }
-
+  
   onNext = async () => {
     if (this.state.fullname == null || this.state.fullname == '') {
       Alert.alert('Please enter your full name');
@@ -69,10 +72,17 @@ export default class FormScreen extends Component {
       Alert.alert('Please enter your phone number');
       return;
     }
+    if (this.state.telephone.length < 19) {
+      Alert.alert('Please enter a valid telephone number');
+      return;
+    }
+
+    var vPhoneNumber = this.makeVerifyPhoneNumber(); //verify phoneNumber: +13059007270
+    var pPhoneNumber = vPhoneNumber.slice(2); //post phoneNumber: 3059007270    
 
     LoginInfo.fullname = this.state.fullname;
     LoginInfo.email = this.state.email;
-    LoginInfo.telephone = this.state.telephone;
+    LoginInfo.telephone = pPhoneNumber;
 
     if (RouteParam.deviceType === 'pad') {
       this.submit();
@@ -80,42 +90,30 @@ export default class FormScreen extends Component {
     }
 
     this.setState({ spinner: true });
+    
+    console.log('phonenumber', vPhoneNumber);
+    await verifyPhoneNumber(vPhoneNumber)
+      .then((verifyResult) => {
+        //console.log('verifyResult', verifyResult)
+        RouteParam.verifyResult = verifyResult;
 
-    if (this.validatePhoneNumber()) {
-      var phoneNumber = this.state.country_additional_prefix ? '+1' + this.state.telephone : this.state.telephone;
-      console.log('phonenumber', phoneNumber);
-      await verifyPhoneNumber(phoneNumber)
-        .then((verifyResult) => {
-          //console.log('verifyResult', verifyResult)
-          RouteParam.verifyResult = verifyResult;
+        this.setState({ spinner: false });
+        this.props.navigation.navigate('SMS');
+      })
+      .catch((err) => {
+        // Alert.alert(
+        //   'Verify Phone Number Failed. Try again later',
+        //   '',
+        //   [
+        //     { text: 'OK', onPress: () => {this.setState({ spinner: false }); this.submit(); }}
+        //   ]
+        // );
 
-          this.setState({ spinner: false });
-          this.props.navigation.navigate('SMS');
-        })
-        .catch((err) => {
-          // Alert.alert(
-          //   'Verify Phone Number Failed. Try again later',
-          //   '',
-          //   [
-          //     { text: 'OK', onPress: () => {this.setState({ spinner: false }); this.submit(); }}
-          //   ]
-          // );
+        this.setState({ spinner: false }); this.submit();
 
-          this.setState({ spinner: false }); this.submit();
+        console.log('verify phone number error', err);
+      })
 
-          console.log('verify phone number error', err);
-        })
-    }
-    else {
-      Alert.alert(
-        'Invalid Phone Number',
-        '',
-        [
-          { text: 'OK', onPress: () => this.setState({ spinner: false }) }
-        ]
-      );
-      console.log('invalide phone number');
-    }
   }
 
   // for apple reivew skip
@@ -192,28 +190,20 @@ export default class FormScreen extends Component {
                 onChangeText={(text) => this.setState({ email: text })}
               />
             </View>
-            <View style={styles.inputBoxContainer}>
-              {/* <TextInput
-                style={styles.txtInput}                
-                keyboardType={'numeric'}
-                value={this.state.telephone}
-                placeholder='Cell Phone Number'
-                placeholderTextColor={Colors.weakBlackColor}
-                editable={LoginInfo.telephone ? false : true}
-                onChangeText={(telephone) => this.setState({ telephone })}
-              /> */}
+            <View style={styles.inputBoxContainer}>              
               <TextInputMask
+                type={'custom'}
+                options={{
+                  mask: '+1 (999) 999 - 9999'
+                }}
                 refInput={ref => { this.input = ref }}
                 style={styles.txtInput}
                 placeholder='Cell Phone Number'
                 placeholderTextColor={Colors.weakBlackColor}
                 value={this.state.telephone}
                 keyboardType={'numeric'}
-                editable={LoginInfo.telephone ? false : true}
-                onChangeText={(formatted, extracted) => {
-                  this.setState({ telephone: extracted });
-                }}
-                mask={"+1 ([000]) [000] - [0000]"}
+                editable={LoginInfo.telephone ? false : true}                
+                onChangeText={(text) => this.setState({ telephone: text })}
               />
             </View>
             <View style={styles.nextContainer}>

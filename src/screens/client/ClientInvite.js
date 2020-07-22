@@ -18,7 +18,7 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import TextInputMask from 'react-native-text-input-mask';
+import { TextInputMask } from 'react-native-masked-text';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
@@ -52,19 +52,7 @@ export default class ClientInviteScreen extends Component {
   validateEmail = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     return reg.test(this.state.clientEmail);
-  }
-
-  formatTelephone = () => {
-    var { clientTelephone } = this.state;
-    var formatTelephone = '(';
-    formatTelephone += clientTelephone.substr(0, 3);
-    formatTelephone += ') ';
-    formatTelephone += clientTelephone.substr(3, 3);
-    formatTelephone += ' - ';
-    formatTelephone += clientTelephone.substr(6, 4);
-
-    return formatTelephone; //(305) 900 - 7270
-  }
+  } 
 
   onContinue = async () => {    
     if (this.state.clientFullname == '') {
@@ -87,7 +75,7 @@ export default class ClientInviteScreen extends Component {
       Alert.alert('Please Enter Client Telephone Number');
       return;
     }
-    if (this.state.clientTelephone.length < 10) {
+    if (this.state.clientTelephone.length < 19) {
       Alert.alert('Please Enter A Valid Client Telephone Number');
       return;
     }
@@ -97,7 +85,7 @@ export default class ClientInviteScreen extends Component {
     bodyFormData.append('account_no', LoginInfo.user_account);
     bodyFormData.append('fullname', this.state.clientFullname);
     bodyFormData.append('email', this.state.clientEmail);
-    bodyFormData.append('telephone', this.formatTelephone());
+    bodyFormData.append('telephone', this.state.clientTelephone.slice(3)); //(305) 900 - 7270
 
     this.setState({ spinner: true });
     await postData(bodyFormData)
@@ -114,7 +102,7 @@ export default class ClientInviteScreen extends Component {
         }
         //console.log('post new client invite success', res);
         this.setState({ spinner: false });
-        this.props.navigation.navigate('ClientShare', {clientFullname: this.state.clientFullname, clientEmail: this.state.clientEmail});
+        this.props.navigation.navigate('ClientShare', { clientFullname: this.state.clientFullname, clientEmail: this.state.clientEmail });
       })
       .catch((err) => {
         console.log('post new client invite error', err);
@@ -161,27 +149,19 @@ export default class ClientInviteScreen extends Component {
             placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.clientEmail}
             onChangeText={(text) => this.setState({ clientEmail: text })}
-          />
-          {/* <TextInput
-            style={styles.inputBox}
-            autoCapitalize='none'
-            keyboardType={'numeric'}
-            placeholder={'Client Telephone Number'}
-            placeholderTextColor={Colors.passiveTxtColor}
-            value={this.state.clientTelephone}
-            onChangeText={(text) => this.setState({ clientTelephone: text })}
-          /> */}
+          />          
           <TextInputMask
+            type={'custom'}
+            options={{
+              mask: '+1 (999) 999 - 9999'
+            }}
             refInput={ref => { this.input = ref }}
             style={styles.inputBox}
             keyboardType={'numeric'}
-            placeholder='Client Telephone Number'
+            placeholder='Client Telephone NuFmber'
             placeholderTextColor={Colors.passiveTxtColor}
-            value={this.state.clientTelephone}
-            onChangeText={(formatted, extracted) => {
-              this.setState({ clientTelephone: extracted });
-            }}
-            mask={"+1 ([000]) [000] - [0000]"}
+            value={this.state.clientTelephone}            
+            onChangeText={(text) => this.setState({ clientTelephone: text })}
           />
 
           <View style={styles.btnContainer}>
@@ -217,7 +197,7 @@ const styles = StyleSheet.create({
     height: '14%',
     justifyContent: 'center',
     alignItems: 'center',
-    alignSelf: 'center',    
+    alignSelf: 'center',
   },
   txt: {
     fontFamily: 'SFProText-Regular',

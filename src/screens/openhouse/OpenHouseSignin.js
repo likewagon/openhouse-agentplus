@@ -18,7 +18,7 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import TextInputMask from 'react-native-text-input-mask';
+import { TextInputMask } from 'react-native-masked-text';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
@@ -54,18 +54,6 @@ export default class OpenHouseSigninScreen extends Component {
     return reg.test(this.state.email);
   }
 
-  formatTelephone = () => {
-    var { telephone } = this.state;
-    var formatTelephone = '(';
-    formatTelephone += telephone.substr(0, 3);
-    formatTelephone += ') ';
-    formatTelephone += telephone.substr(3, 3);
-    formatTelephone += ' - ';
-    formatTelephone += telephone.substr(6, 4);
-
-    return formatTelephone; //(305) 900 - 7270
-  }
-
   onContinue = async () => {
     if (this.state.fullname == '') {
       Alert.alert('Please Enter Your First and Last Name');
@@ -87,7 +75,7 @@ export default class OpenHouseSigninScreen extends Component {
       Alert.alert('Please Enter Your Telephone Number');
       return;
     }
-    if (this.state.telephone.length < 10) {
+    if (this.state.telephone.length < 19) {
       Alert.alert('Please Enter A Valid Telephone Number');
       return;
     }
@@ -97,7 +85,7 @@ export default class OpenHouseSigninScreen extends Component {
     // bodyFormData.append('account_no', LoginInfo.user_account);
     // bodyFormData.append('fullname', this.state.fullname);
     // bodyFormData.append('email', this.state.email);
-    // bodyFormData.append('telephone', this.formatTelephone());
+    // bodyFormData.append('telephone', this.state.telephone.slice(3)); //(305) 900 - 7270
 
     // this.setState({ spinner: true });
     // await postData(bodyFormData)
@@ -153,27 +141,19 @@ export default class OpenHouseSigninScreen extends Component {
             placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.email}
             onChangeText={(text) => this.setState({ email: text })}
-          />
-          {/* <TextInput
-            style={styles.inputBox}
-            autoCapitalize='none'
-            keyboardType={'numeric'}
-            placeholder={'Your Telephone Number'}
-            placeholderTextColor={Colors.passiveTxtColor}
-            value={this.state.telephone}
-            onChangeText={(text) => this.setState({ telephone: text })}
-          /> */}
+          />          
           <TextInputMask
+            type={'custom'}
+            options={{
+              mask: '+1 (999) 999 - 9999'
+            }}
             refInput={ref => { this.input = ref }}
             style={styles.inputBox}
             keyboardType={'numeric'}
             placeholder='Your Telephone Number'
             placeholderTextColor={Colors.passiveTxtColor}
-            value={this.state.telephone}
-            onChangeText={(formatted, extracted) => {
-              this.setState({ telephone: extracted });
-            }}
-            mask={"+1 ([000]) [000] - [0000]"}
+            value={this.state.telephone}            
+            onChangeText={(text) => this.setState({ telephone: text })}
           />
 
           <View style={styles.txtContainer}>

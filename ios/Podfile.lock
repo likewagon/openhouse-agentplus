@@ -365,9 +365,6 @@ PODS:
     - React
   - react-native-signature-capture (0.4.10):
     - React
-  - react-native-text-input-mask (2.0.0):
-    - React
-    - RNInputMask
   - react-native-twilio-video-webrtc (1.0.2-1):
     - React
     - TwilioVideo (~> 3.2.3)
@@ -474,7 +471,6 @@ PODS:
     - React
   - RNIap (4.5.0):
     - React
-  - RNInputMask (4.1.0)
   - RNPDF (0.10.2):
     - React
   - RNPermissions (2.1.5):
@@ -536,7 +532,6 @@ DEPENDENCIES:
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-signature-capture (from `../node_modules/react-native-signature-capture`)
-  - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
   - react-native-twilio-video-webrtc (from `../node_modules/react-native-twilio-video-webrtc`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -565,7 +560,6 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNIap (from `../node_modules/react-native-iap`)
-  - RNInputMask (from `../node_modules/react-native-text-input-mask/ios/InputMask`)
   - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -660,8 +654,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-signature-capture:
     :path: "../node_modules/react-native-signature-capture"
-  react-native-text-input-mask:
-    :path: "../node_modules/react-native-text-input-mask"
   react-native-twilio-video-webrtc:
     :path: "../node_modules/react-native-twilio-video-webrtc"
   react-native-video:
@@ -716,8 +708,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/google-signin"
   RNIap:
     :path: "../node_modules/react-native-iap"
-  RNInputMask:
-    :path: "../node_modules/react-native-text-input-mask/ios/InputMask"
   RNPDF:
     :path: "../node_modules/react-native-view-pdf"
   RNPermissions:
@@ -789,7 +779,6 @@ SPEC CHECKSUMS:
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
   react-native-signature-capture: 6dae6c8c9f085536d4ba305e15c01f0a3a49373e
-  react-native-text-input-mask: b3cb63f0cd73b4b3ea76dd0c614bb7d79e934e39
   react-native-twilio-video-webrtc: 5a1dc979bfe98c0f8dba110e9b5655d52278f862
   react-native-video: aa527b0acb37f94c4491e70df0274cb26979405d
   react-native-webview: 0e2881d2e3e72ad52a82445c1a116c43205fd471
@@ -817,7 +806,6 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNIap: 9a5ad5e38905b4946fc4eadf542a575084821fe2
-  RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNPDF: f6adfcb6299b2ad7f7d14600c578764ab472ff54
   RNPermissions: 1888705aebcc81714efa5dbff94351e4388ae012
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
@@ -827,6 +815,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 4534da456d0fe77710b43bc5692d756f0ad08dfb
+PODFILE CHECKSUM: 0c42d62fb4e91bfdc1148eba2425319af02a4698
 
-COCOAPODS: 1.9.2
+COCOAPODS: 1.9.3

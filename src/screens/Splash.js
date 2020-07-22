@@ -111,8 +111,7 @@ export default class SplashScreen extends Component {
             console.log('request camera and microphone error', err);
           })
       }
-    };
-    watchdogTimer();
+    };    
   }
 
   componentWillMount() {
@@ -322,6 +321,7 @@ export default class SplashScreen extends Component {
       Linking.openSettings();
     }
 
+    watchdogTimer();
   }
 
   onLiveCallYes = (propertyNo) => {
@@ -380,13 +380,13 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
-    let subscription = await AsyncStorage.getItem('subscription');
-    let activate = await isUserSubscriptionActive(subscription);
-    console.log('activate', activate);
-    if (!activate) {
-      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-      return;
-    }
+    // let subscription = await AsyncStorage.getItem('subscription');
+    // let activate = await isUserSubscriptionActive(subscription);
+    // console.log('activate', activate);
+    // if (!activate) {
+    //   setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+    //   return;
+    // }
 
     // skip
     LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
