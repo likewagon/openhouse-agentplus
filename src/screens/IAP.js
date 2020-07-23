@@ -66,8 +66,8 @@ export default class IAPScreen extends Component {
       currentPlan: itemSkus[0],
       productList: [],
       requestResult: '',
-      purchaseReceipt: '',      
-      purchaseSuccess: false,
+      purchaseReceipt: '',
+      purchaseSuccess: true,
       purchaseSuccessResult: {}
     }
   }
@@ -84,7 +84,7 @@ export default class IAPScreen extends Component {
       async (purchase) => {
         const receipt = purchase.transactionReceipt;
         console.log('receipt', receipt);
-        this.setState({ 
+        this.setState({
           purchaseReceipt: receipt,
           spinner: false
         });
@@ -94,8 +94,8 @@ export default class IAPScreen extends Component {
               finishTransactionIOS(purchase.transactionId);
             }
             const ackResult = await finishTransaction(purchase);
-            console.log('finish result', ackResult); 
-            this.purchaseValidate();           
+            console.log('finish result', ackResult);
+            this.purchaseValidate();
           } catch (ackErr) {
             console.log('ackErr', ackErr);
           }
@@ -105,14 +105,15 @@ export default class IAPScreen extends Component {
 
     purchaseErrorSubscription = purchaseErrorListener(
       (error) => {
+        this.setState({ spinner: false });
         console.log('purchaseErrorListener', error);
-        Alert.alert('Purchase Error', JSON.stringify(error));
+        // Alert.alert('Purchase Error', JSON.stringify(error));
       },
-    );    
+    );
 
     this.getItems();
   }
-  
+
   componentWillUnmount() {
     if (purchaseUpdateSubscription) {
       purchaseUpdateSubscription.remove();
@@ -124,9 +125,9 @@ export default class IAPScreen extends Component {
     }
     RNIap.endConnection();
   }
-  
+
   getItems = async () => {
-    this.setState({ spinner: true });    
+    this.setState({ spinner: true });
     try {
       const products = await RNIap.getProducts(itemSkus);
       var sortedProducts = products.sort((a, b) => { return a.price - b.price });
@@ -150,17 +151,17 @@ export default class IAPScreen extends Component {
         })
     } catch (err) {
       console.log('request subscription error', err.message);
-      Alert.alert('Request Subscription Error', err.message);
+      // Alert.alert('Request Subscription Error', err.message);
     }
   };
 
   purchaseValidate = () => {
-    if(this.state.requestResult.transactionReceipt == this.state.purchaseReceipt){      
-      this.postPurchase();      
-    }
-    else{
-      console.log('validation error');
-    }
+    // if (this.state.requestResult.transactionReceipt == this.state.purchaseReceipt) {
+       this.postPurchase();
+    // }
+    // else {
+    //   console.log('validation error');
+    // }
   }
 
   postPurchase = async () => {
@@ -171,38 +172,24 @@ export default class IAPScreen extends Component {
     bodyFormData.append('transactionId', this.state.requestResult.transactionId);
     bodyFormData.append('transactionDate', this.state.requestResult.transactionDate);
     bodyFormData.append('os_transaction', Platform.OS === 'ios' ? 'apple' : 'google');
-    
+
     await postData(bodyFormData)
       .then((res) => {
-        //console.log('post attendee success', res);
+        //console.log('post purchase success', res[0]);
 
-        this.setState({ 
-          purchaseSuccess: true, 
-          purchaseSuccessResult: res
+        this.setState({
+          purchaseSuccess: true,
+          purchaseSuccessResult: res[0]
         });
       })
       .catch((err) => {
-        console.log('post attendee error', err)
+        console.log('post purchase error', err)
       })
   }
 
   onPressPlan = (plan) => {
     this.setState({ currentPlan: plan });
-
-    var txt = plan == itemSkus[0] ? 'YEAR SUBSCRIPTION' : plan == itemSkus[1] ? '6 MONTHS SUBSCRIPTION' : 'MONTH-TO-MONTH SUBSCRIPTION';
-    setTimeout(() => {
-      Alert.alert(
-        'Are you sure to ' + txt + '?',
-        '',
-        [
-          { text: 'Yes', onPress: () => {this.setState({spinner: true}); this.requestSubscription(plan)}},
-          { text: 'No', onPress: () => { } },
-        ],
-        {
-          cancelable: true
-        }
-      )
-    }, 300);
+    this.requestSubscription(plan);    
   }
 
   render() {
@@ -242,58 +229,58 @@ export default class IAPScreen extends Component {
 
             <View style={styles.mainContainerFirstPage}>
               <View style={styles.btnsPart}>
-              {
-                this.state.productList.length == 3 &&
-                <>
-                  <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[0] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[0])}>
-                    <View style={styles.btnLeft}>
-                      <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[0].price)}</Text>
-                      <Text style={styles.subPriceTxt}>.{(this.state.productList[0].price - parseInt(this.state.productList[0].price)).toFixed(2).split('.')[1]}</Text>
-                    </View>
-                    <View style={styles.btnRight}>
-                      <Text style={styles.rightTxt}>
-                        PER MONTH
+                {
+                  this.state.productList.length == 3 &&
+                  <>
+                    <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[0] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[0])}>
+                      <View style={styles.btnLeft}>
+                        <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[0].price)}</Text>
+                        <Text style={styles.subPriceTxt}>.{(this.state.productList[0].price - parseInt(this.state.productList[0].price)).toFixed(2).split('.')[1]}</Text>
+                      </View>
+                      <View style={styles.btnRight}>
+                        <Text style={styles.rightTxt}>
+                          PER MONTH
                         {'\n'}
                         SAVE 60%
                         {'\n'}
                         YEAR SUBSCRIPTION
                       </Text>
-                    </View>
-                  </TouchableOpacity>
+                      </View>
+                    </TouchableOpacity>
 
-                  <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[1] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[1])}>
-                    <View style={styles.btnLeft}>
-                      <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[1].price)}</Text>
-                      <Text style={styles.subPriceTxt}>.{(this.state.productList[1].price - parseInt(this.state.productList[1].price)).toFixed(2).split('.')[1]}</Text>
-                    </View>
-                    <View style={styles.btnRight}>
-                      <Text style={styles.rightTxt}>
-                        PER MONTH
+                    <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[1] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[1])}>
+                      <View style={styles.btnLeft}>
+                        <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[1].price)}</Text>
+                        <Text style={styles.subPriceTxt}>.{(this.state.productList[1].price - parseInt(this.state.productList[1].price)).toFixed(2).split('.')[1]}</Text>
+                      </View>
+                      <View style={styles.btnRight}>
+                        <Text style={styles.rightTxt}>
+                          PER MONTH
                         {'\n'}
                         SAVE 20%
                         {'\n'}
                         6 MONTHS SUBSCRIPTION
                       </Text>
-                    </View>
-                  </TouchableOpacity>
+                      </View>
+                    </TouchableOpacity>
 
-                  <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[2] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[2])}>
-                    <View style={styles.btnLeft}>
-                      <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[2].price)}</Text>
-                      <Text style={styles.subPriceTxt}>.{(this.state.productList[2].price - parseInt(this.state.productList[2].price)).toFixed(2).split('.')[1]}</Text>
-                    </View>
-                    <View style={styles.btnRight}>
-                      <Text style={styles.rightTxt}>
-                        PER MONTH
+                    <TouchableOpacity style={[styles.btn, this.state.currentPlan == itemSkus[2] ? { borderWidth: normalize(5), borderColor: Colors.greenColor } : null]} onPress={() => this.onPressPlan(itemSkus[2])}>
+                      <View style={styles.btnLeft}>
+                        <Text style={styles.mainPriceTxt}>${parseInt(this.state.productList[2].price)}</Text>
+                        <Text style={styles.subPriceTxt}>.{(this.state.productList[2].price - parseInt(this.state.productList[2].price)).toFixed(2).split('.')[1]}</Text>
+                      </View>
+                      <View style={styles.btnRight}>
+                        <Text style={styles.rightTxt}>
+                          PER MONTH
                         {'\n'}
                         BILLED MONTHLY
                         {'\n'}
                         MONTH-TO-MONTH
                       </Text>
-                    </View>
-                  </TouchableOpacity>
-                </>
-              }
+                      </View>
+                    </TouchableOpacity>
+                  </>
+                }
               </View>
 
               <View style={styles.bottomTxtPart}>
@@ -387,9 +374,9 @@ export default class IAPScreen extends Component {
                   </View>
                 </View>
 
-                <View style={[styles.itemLine, {width: '100%'}]}>                  
+                <View style={[styles.itemLine, { width: '100%', height: normalize(70) }]}>
                   <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.transaction_text}</Text>
-                </View>                
+                </View>
               </View>
 
               <View style={styles.bottomPart}>
@@ -560,16 +547,17 @@ const styles = StyleSheet.create({
     //borderWidth: 1
   },
   itemName: {
-    width: '60%',
+    width: '55%',
     height: '100%',
+    //borderWidth: 1
   },
   itemValue: {
-    width: '40%',
+    width: '45%',
     height: '100%'
   },
   itemTxt: {
     fontFamily: 'SFProText-Regular',
-    fontSize: RFPercentage(1.7),
+    fontSize: RFPercentage(1.5),
     color: Colors.blackColor,
   },
   bottomPart: {
