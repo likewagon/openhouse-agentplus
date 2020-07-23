@@ -84,7 +84,10 @@ export default class IAPScreen extends Component {
       async (purchase) => {
         const receipt = purchase.transactionReceipt;
         console.log('receipt', receipt);
-        this.setState({ purchaseReceipt: receipt });
+        this.setState({ 
+          purchaseReceipt: receipt,
+          spinner: false
+        });
         if (receipt) {
           try {
             if (Platform.OS === 'ios') {
@@ -160,7 +163,7 @@ export default class IAPScreen extends Component {
     }
   }
 
-  postPurchase = () => {
+  postPurchase = async () => {
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'payment');
     bodyFormData.append('agent_account_no', LoginInfo.user_account);
@@ -192,7 +195,7 @@ export default class IAPScreen extends Component {
         'Are you sure to ' + txt + '?',
         '',
         [
-          { text: 'Yes', onPress: () => this.requestSubscription(plan) },
+          { text: 'Yes', onPress: () => {this.setState({spinner: true}); this.requestSubscription(plan)}},
           { text: 'No', onPress: () => { } },
         ],
         {
