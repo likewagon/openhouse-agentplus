@@ -65,8 +65,10 @@ export default class IAPScreen extends Component {
       spinner: false,
       currentPlan: itemSkus[0],
       productList: [],
-      receipt: '',      
-      result: true,
+      requestResult: '',
+      purchaseReceipt: '',      
+      purchaseSuccess: false,
+      purchaseSuccessResult: {}
     }
   }
 
@@ -82,19 +84,18 @@ export default class IAPScreen extends Component {
       async (purchase) => {
         const receipt = purchase.transactionReceipt;
         console.log('receipt', receipt);
+        this.setState({ purchaseReceipt: receipt });
         if (receipt) {
           try {
             if (Platform.OS === 'ios') {
               finishTransactionIOS(purchase.transactionId);
             }
             const ackResult = await finishTransaction(purchase);
-            console.log('finish result', ackResult);
+            console.log('finish result', ackResult); 
+            this.purchaseValidate();           
           } catch (ackErr) {
             console.log('ackErr', ackErr);
           }
-
-          this.setState({ result: true });
-          AsyncStorage.setItem('subscription', this.state.currentPlan);
         }
       },
     );
@@ -104,7 +105,7 @@ export default class IAPScreen extends Component {
         console.log('purchaseErrorListener', error);
         Alert.alert('Purchase Error', JSON.stringify(error));
       },
-    );
+    );    
 
     this.getItems();
   }
@@ -138,7 +139,8 @@ export default class IAPScreen extends Component {
     try {
       RNIap.requestSubscription(sku)
         .then((res) => {
-          console.log('request subscription result', res);
+          //console.log('request subscription result', res);
+          this.setState({ requestResult: res });
         })
         .catch((err) => {
           console.log('request subscription error', err);
@@ -148,6 +150,38 @@ export default class IAPScreen extends Component {
       Alert.alert('Request Subscription Error', err.message);
     }
   };
+
+  purchaseValidate = () => {
+    if(this.state.requestResult.transactionReceipt == this.state.purchaseReceipt){      
+      this.postPurchase();      
+    }
+    else{
+      console.log('validation error');
+    }
+  }
+
+  postPurchase = () => {
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'payment');
+    bodyFormData.append('agent_account_no', LoginInfo.user_account);
+    bodyFormData.append('productId', this.state.requestResult.productId);
+    bodyFormData.append('transactionId', this.state.requestResult.transactionId);
+    bodyFormData.append('transactionDate', this.state.requestResult.transactionDate);
+    bodyFormData.append('os_transaction', Platform.OS === 'ios' ? 'apple' : 'google');
+    
+    await postData(bodyFormData)
+      .then((res) => {
+        //console.log('post attendee success', res);
+
+        this.setState({ 
+          purchaseSuccess: true, 
+          purchaseSuccessResult: res
+        });
+      })
+      .catch((err) => {
+        console.log('post attendee error', err)
+      })
+  }
 
   onPressPlan = (plan) => {
     this.setState({ currentPlan: plan });
@@ -176,7 +210,7 @@ export default class IAPScreen extends Component {
           <Header title={'AGENT PLUS™ ACTIVATION'} titleColor={Colors.blackColor} noLeftIcon />
         </View>
         {
-          !this.state.result &&
+          !this.state.purchaseSuccess &&
           <>
             <View style={styles.txtContainerFirstPage}>
               <Text style={styles.txtBold}>
@@ -271,7 +305,7 @@ export default class IAPScreen extends Component {
           </>
         }
         {
-          this.state.result &&
+          this.state.purchaseSuccess &&
           <>
             <View style={styles.txtContainerResultPage}>
               <Text style={styles.txtBold}>
@@ -290,23 +324,23 @@ export default class IAPScreen extends Component {
                     <Text style={styles.itemTxt}>Item Purchased:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}>Agent Plus™</Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.item_purchased}</Text>
                   </View>
                 </View>
-                {/* <View style={styles.itemLine}>
+                <View style={styles.itemLine}>
                   <View style={styles.itemName}>
                     <Text style={styles.itemTxt}>Item SKU/ID:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}>{this.state.currentPlan}</Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.item_sku_id}</Text>
                   </View>
-                </View> */}
+                </View>
                 <View style={styles.itemLine}>
                   <View style={styles.itemName}>
                     <Text style={styles.itemTxt}>Subscription Type:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}></Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.item_subscription_type}</Text>
                   </View>
                 </View>
                 <View style={styles.itemLine}>
@@ -314,7 +348,7 @@ export default class IAPScreen extends Component {
                     <Text style={styles.itemTxt}>Subscription Starting Date:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}></Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.item_subscription_starting_date}</Text>
                   </View>
                 </View>
                 <View style={styles.itemLine}>
@@ -322,7 +356,7 @@ export default class IAPScreen extends Component {
                     <Text style={styles.itemTxt}>Subscription Ending Date:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}></Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.item_subscription_ending_date}</Text>
                   </View>
                 </View>
                 <View style={styles.itemLine}>
@@ -330,7 +364,7 @@ export default class IAPScreen extends Component {
                     <Text style={styles.itemTxt}>Monthly Subscription Cost:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}></Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.monthly_subscription_cost}</Text>
                   </View>
                 </View>
                 <View style={styles.itemLine}>
@@ -338,7 +372,7 @@ export default class IAPScreen extends Component {
                     <Text style={styles.itemTxt}>Total Amount Billed At This Time:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}></Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.total_amount_billed_at_this_time}</Text>
                   </View>
                 </View>
                 <View style={styles.itemLine}>
@@ -346,16 +380,13 @@ export default class IAPScreen extends Component {
                     <Text style={styles.itemTxt}>Transaction Number:</Text>
                   </View>
                   <View style={styles.itemValue}>
-                    <Text style={styles.itemTxt}></Text>
+                    <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.transaction_number}</Text>
                   </View>
                 </View>
 
-                <View style={styles.itemLine}>                  
-                  <Text style={styles.itemTxt}>Purchase will appear in your credit card statement as:</Text>
-                </View>
-                <View style={styles.itemLine}>                  
-                  <Text style={styles.itemTxt}>"{this.state.currentPlan}" from ECapture, Inc.</Text>
-                </View>
+                <View style={[styles.itemLine, {width: '100%'}]}>                  
+                  <Text style={styles.itemTxt}>{this.state.purchaseSuccessResult.transaction_text}</Text>
+                </View>                
               </View>
 
               <View style={styles.bottomPart}>

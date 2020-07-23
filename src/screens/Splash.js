@@ -44,7 +44,7 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
-import { isUserSubscriptionActive, watchdogTimer } from '@constants';
+import { watchdogTimer } from '@constants';
 
 import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
@@ -209,22 +209,22 @@ export default class SplashScreen extends Component {
     });
 
     PushNotificationIOS.getInitialNotification()
-    .then(pnIOSObj => {
-      console.log('Notification caused app to open from quit state:', pnIOSObj);
-      if(pnIOSObj){
-        var remoteMessage = pnIOSObj.getMessage();
-        if (typeof remoteMessage.data.propertyNo != undefined) {
-          console.log('livecall notification on quit');
-          this.onLiveCallYes(remoteMessage.data.propertyNo);
+      .then(pnIOSObj => {
+        console.log('Notification caused app to open from quit state:', pnIOSObj);
+        if (pnIOSObj) {
+          var remoteMessage = pnIOSObj.getMessage();
+          if (typeof remoteMessage.data.propertyNo != undefined) {
+            console.log('livecall notification on quit');
+            this.onLiveCallYes(remoteMessage.data.propertyNo);
+          }
         }
-      }
-      else{
-        
-      }
-    })
-    .catch((err)=>{
-      console.log('get initial notification error', err);
-    })    
+        else {
+
+        }
+      })
+      .catch((err) => {
+        console.log('get initial notification error at PNIOS', err);
+      })
 
     if (enabled) {
       var fcmToken = await messaging().getToken();
@@ -281,8 +281,8 @@ export default class SplashScreen extends Component {
             this.onLiveCallYes(remoteMessage.data.propertyNo);
           }
         })
-        .catch((err)=>{
-          console.log('get initial notification error', err);
+        .catch((err) => {
+          console.log('get initial notification error at messaging', err);
         })
 
       this.isLoggedInProc();
@@ -340,6 +340,7 @@ export default class SplashScreen extends Component {
           LoginInfo.phone_verified = info.phone_verified;
           LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;
+          LoginInfo.user_status = info.user_status;
 
           this.submit();
         }
@@ -357,14 +358,6 @@ export default class SplashScreen extends Component {
   }
 
   submit = async () => {
-    // let subscription = await AsyncStorage.getItem('subscription');
-    // let activate = await isUserSubscriptionActive(subscription);
-    // console.log('activate', activate);
-    // if (!activate) {
-    //   setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-    //   return;
-    // }
-
     // remove later
     LoginInfo.uniqueid = 'askdfjasdjflasdjflk';
     LoginInfo.fullname = 'Anthony Robinson';
@@ -404,8 +397,15 @@ export default class SplashScreen extends Component {
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
-
-        setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
+        LoginInfo.user_status = res[0].user_status;       
+        
+        if (!LoginInfo.user_status) {
+          setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+          return;
+        }
+        else{
+          setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
+        }
       })
       .catch((err) => {
         console.log('post login info error', err)

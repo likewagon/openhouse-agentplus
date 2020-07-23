@@ -1,4 +1,5 @@
 import axios from 'axios';
+import RNIap from 'react-native-iap';
 
 const API_V1_POST_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/post.php';
 const API_V1_GET_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/get.php';
@@ -13,10 +14,10 @@ const axios_post_instance = axios.create({
   withCredentials: false,
 });
 
-export const postData = (loginInfo) => {
+export const postData = (param) => {
   return new Promise((resolve, reject) => {
     axios_post_instance
-      .post(API_V1_POST_URL, loginInfo)
+      .post(API_V1_POST_URL, param)
       .then((res) => {        
         resolve(res.data)
       })

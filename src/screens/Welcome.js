@@ -32,7 +32,6 @@ import {
   SignModal,
 } from '@components';
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
-import { isUserSubscriptionActive } from '@constants';
 
 export default class WelcomeScreen extends Component {
   constructor(props) {
@@ -65,14 +64,13 @@ export default class WelcomeScreen extends Component {
   }
 
   onEnter = async (index) => {
-    // let subscription = await AsyncStorage.getItem('subscription');
-    // let activate = await isUserSubscriptionActive(subscription);
-    // if (!activate) {    
-    //   setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-    //   return;
-    // }  
-
-    setTimeout(() => { this.props.navigation.navigate('Main') }, 1000);
+    if (!LoginInfo.user_status) {
+      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+      return;
+    }
+    else {
+      setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
+    }    
   }
 
   render() {
