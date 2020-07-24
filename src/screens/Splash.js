@@ -266,23 +266,23 @@ export default class SplashScreen extends Component {
       messaging().onNotificationOpenedApp(remoteMessage => {
         console.log('Notification caused app to open from background state at messaging:', remoteMessage.data);
         if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
-          console.log('livecall notification on background');
+          console.log('livecall notification on background');          
           this.onLiveCallYes(remoteMessage.data.propertyNo);
         }
       });
 
-      messaging()
-        .getInitialNotification()
-        .then(remoteMessage => {
-          console.log('Notification caused app to open from quit state at messaging:', remoteMessage);
-          if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
-            console.log('livecall notification on quit');
-            this.onLiveCallYes(remoteMessage.data.propertyNo);
-          }
-        })
-        .catch((err) => {
-          console.log('get initial notification error at messaging', err);
-        })
+      // messaging()
+      //   .getInitialNotification()
+      //   .then(remoteMessage => {
+      //     console.log('Notification caused app to open from quit state at messaging:', remoteMessage);
+      //     if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
+      //       console.log('livecall notification on quit');
+      //       this.onLiveCallYes(remoteMessage.data.propertyNo);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log('get initial notification error at messaging', err);
+      //   })
 
       this.isLoggedInProc();
 
