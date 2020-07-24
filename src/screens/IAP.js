@@ -67,7 +67,7 @@ export default class IAPScreen extends Component {
       productList: [],
       requestResult: '',
       purchaseReceipt: '',
-      purchaseSuccess: true,
+      purchaseSuccess: false,
       purchaseSuccessResult: {}
     }
   }
