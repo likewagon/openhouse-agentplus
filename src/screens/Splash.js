@@ -263,13 +263,13 @@ export default class SplashScreen extends Component {
         }
       });
 
-      messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log('Notification caused app to open from background state at messaging:', remoteMessage.data);
-        if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
-          console.log('livecall notification on background');          
-          this.onLiveCallYes(remoteMessage.data.propertyNo);
-        }
-      });
+      // messaging().onNotificationOpenedApp(remoteMessage => {
+      //   console.log('Notification caused app to open from background state at messaging:', remoteMessage.data);
+      //   if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
+      //     console.log('livecall notification on background');          
+      //     this.onLiveCallYes(remoteMessage.data.propertyNo);
+      //   }
+      // });
 
       // messaging()
       //   .getInitialNotification()
