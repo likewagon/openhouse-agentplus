@@ -52,15 +52,13 @@ export default class SocialLoginScreen extends Component {
       .then(async (res) => {
         console.log('apple signin success', res);
 
-        LoginInfo.uniqueid = res.user.uid;
-        LoginInfo.fullname = res.user.displayName;
-        LoginInfo.email = res.user.email;
+        LoginInfo.uniqueid = res.user.providerData[0].uid;
+        LoginInfo.fullname = res.user.providerData[0].displayName;
+        LoginInfo.email = res.user.providerData[0].email;
         LoginInfo.telephone = res.user.phoneNumber;
-        LoginInfo.photourl = res.user.photoURL;
+        LoginInfo.photourl = res.user.providerData[0].photoURL;
         LoginInfo.providerid = 'apple';
         LoginInfo.email_verified = res.user.emailVerified;
-
-        console.log('apple avatar url', LoginInfo.photourl);
 
         this.props.navigation.navigate('Form');
       })
