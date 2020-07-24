@@ -41,78 +41,7 @@ export default class ClientViewScreen extends Component {
       spinner: false,
       tab: 'preference',
       client: this.props.route.params.client,
-      preferenceData: [
-        {
-          "client_question": "I Am Currently Looking To...",
-          "client_answer": "Buy A Property",
-          "displayorder": 1
-        },
-        {
-          "client_question": "Working With An Agent?",
-          "client_answer": "No",
-          "displayorder": 2
-        },
-        {
-          "client_question": "How Soon Are You Looking To?",
-          "client_answer": "As Soon As Possible",
-          "displayorder": 3
-        },
-        {
-          "client_question": "I Need A Place Because?",
-          "client_answer": "Need More Space",
-          "displayorder": 4
-        },
-        {
-          "client_question": "Own Or Rent?",
-          "client_answer": "I Own A Property",
-          "displayorder": 5
-        },
-        {
-          "client_question": "Sell Or End Lease?",
-          "client_answer": "Yes",
-          "displayorder": 6
-        },
-        {
-          "client_question": "Mortgage Qualifications?",
-          "client_answer": "Yes",
-          "displayorder": 7
-        },
-        {
-          "client_question": "I Would Prefer To Find A Place In...",
-          "client_answer": "Near My Current Address",
-          "displayorder": 8
-        },
-        {
-          "client_question": "My Ideal Property Will Be A...",
-          "client_answer": "Single Family Home",
-          "displayorder": 9
-        },
-        {
-          "client_question": "My Budget Is...",
-          "client_answer": "No Budget",
-          "displayorder": 10
-        },
-        {
-          "client_question": "Bedrooms?",
-          "client_answer": "1",
-          "displayorder": 11
-        },
-        {
-          "client_question": "Bathrooms?",
-          "client_answer": "1",
-          "displayorder": 12
-        },
-        {
-          "client_question": "Pets?",
-          "client_answer": "No Pets",
-          "displayorder": 13
-        },
-        {
-          "client_question": "The Most Important Thing...",
-          "client_answer": "Location",
-          "displayorder": 14
-        }
-      ],
+      preferenceData: [],
       searchedData: [],
       viewedData: [],
       pdfData: []
@@ -120,7 +49,7 @@ export default class ClientViewScreen extends Component {
   }
 
   componentDidMount() {
-    //this.getPreference();
+    this.getPreference();
     this.getSearched();
     this.getViewed();
     this.getPDF();
@@ -145,7 +74,7 @@ export default class ClientViewScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get preference error', err);
+        //console.log('get preference error', err);
       })
   }
 
@@ -169,7 +98,7 @@ export default class ClientViewScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get searched error', err);
+        //console.log('get searched error', err);
       })
   }
 
@@ -196,7 +125,7 @@ export default class ClientViewScreen extends Component {
         RouteParam.propertyData = sortedRes;
       })
       .catch((err) => {
-        console.log('get viewed error', err);
+        //console.log('get viewed error', err);
         this.setState({ spinner: false})
       })
   }
@@ -221,7 +150,7 @@ export default class ClientViewScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get pdf error', err);
+        //console.log('get pdf error', err);
       })
   }
 
@@ -408,8 +337,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: normalize(15),
-    borderColor: Colors.borderColor,
-    borderWidth: normalize(1)
+    //borderColor: Colors.borderColor,
+    //borderWidth: normalize(1)
   },
   txtContainer: {
     width: '72%',

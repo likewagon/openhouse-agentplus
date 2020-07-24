@@ -80,7 +80,7 @@ export default class PropertyScreen extends Component {
         RouteParam.propertyAgentFullname = res[0].property_listing_agent_fullname;
       })
       .catch((err) => {
-        console.log('get property error', err);
+        //console.log('get property error', err);
         this.setState({ spinner: false });
       })
   }
@@ -113,11 +113,11 @@ export default class PropertyScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('create live call success', res);
+        //console.log('create live call success', res);
         Alert.alert('You can have live call for this property!');
       })
       .catch((err) => {
-        console.log('create live call error', err)
+        //console.log('create live call error', err)
         Alert.alert('Live call is not applied');
       })
   }
@@ -134,14 +134,14 @@ export default class PropertyScreen extends Component {
 
     getLiveInfo(param)
       .then((res) => {
-        console.log('live info', res);
+        //console.log('live info', res);
         RouteParam.liveInfo = res[0];
         if (RouteParam.liveInfo.error === undefined) {
           this.props.navigation.navigate('Main', { screen: 'LiveCall' });
         }
       })
       .catch((err) => {
-        console.log('get live info error', err);
+        //console.log('get live info error', err);
       })
   }
 
@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     alignSelf: 'center',
-    // marginTop: normalize(10, 'height'),
+    //marginTop: normalize(10, 'height'),
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(1, 'height'),
     borderBottomWidth: normalize(1, 'height')
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Semibold',
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
-    // marginTop: normalize(7, 'height'), 
+    //marginTop: normalize(7, 'height'), 
     marginBottom: normalize(7, 'height')
   },
   descTxt: {

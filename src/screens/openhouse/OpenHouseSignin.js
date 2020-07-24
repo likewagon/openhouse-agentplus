@@ -192,15 +192,15 @@ const styles = StyleSheet.create({
     height: normalize(70, 'height'),
     justifyContent: 'center',
     alignItems: 'center',
-    // borderColor: Colors.borderColor,
-    // borderBottomWidth: normalize(0.5, 'height'),
+    //borderColor: Colors.borderColor,
+    //borderBottomWidth: normalize(0.5, 'height'),
   },  
   mainContainer: {
     width: '100%',
     height: '87%',
     alignItems: 'center',
-    // borderColor: Colors.borderColor,
-    // borderTopWidth: normalize(0.5, 'height'),
+    //borderColor: Colors.borderColor,
+    //borderTopWidth: normalize(0.5, 'height'),
     //borderWidth: 3
   },
   inputBox: {
@@ -219,9 +219,6 @@ const styles = StyleSheet.create({
     height: '18%',
     justifyContent: 'center',
     alignItems: 'center',
-    //marginTop: normalize(25, 'height'),
-    // borderColor: Colors.borderColor,
-    // borderBottomWidth: normalize(0.5, 'height'),
     padding: normalize(18),
     //borderWidth: 1
   },

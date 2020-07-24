@@ -91,7 +91,7 @@ export default class DashboardScreen extends Component {
         this.setState({ recentClientData: sortedRes });
       })
       .catch((err) => {
-        console.log('get recent client error', err);
+        //console.log('get recent client error', err);
       })
   }
 
@@ -112,7 +112,7 @@ export default class DashboardScreen extends Component {
         this.setState({ recentActivityData: sortedRes });
       })
       .catch((err) => {
-        console.log('get recent activity error', err);
+        //console.log('get recent activity error', err);
       })
   }
 
@@ -138,7 +138,7 @@ export default class DashboardScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get most popular property error', err);
+        //console.log('get most popular property error', err);
         this.setState({ spinner: false })
       })
   }
@@ -330,7 +330,6 @@ const styles = StyleSheet.create({
   clientNameContainer: {
     width: '95%',
     height: normalize(30),
-    //justifyContent: 'center',
     alignItems: 'center',
     //borderWidth: 1,
   },

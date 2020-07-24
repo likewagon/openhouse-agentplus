@@ -64,7 +64,7 @@ export default class LiveCallScreen extends Component {
         accessToken: RouteParam.liveInfo.token
       });
     } catch (error) {
-      console.log('live connect error', error);
+      //console.log('live connect error', error);
     }
     this.setState({ status: "connecting" });
   };
@@ -91,17 +91,17 @@ export default class LiveCallScreen extends Component {
   };
 
   _onRoomDidConnect = () => {
-    console.log("LiveCall :: connected")
+    //console.log("LiveCall :: connected")
     this.setState({ status: "connected" });
   };
 
   _onRoomDidDisconnect = ({ roomName, error }) => {
-    console.log("_onRoomDidDisconnect: ", error);
+    //console.log("_onRoomDidDisconnect: ", error);
     this.setState({ status: "disconnected" });
   };
 
   _onRoomDidFailToConnect = error => {
-    console.log("_onRoomDidFailToConnect: ", error);
+    //console.log("_onRoomDidFailToConnect: ", error);
     this.setState({ status: "disconnected" });
   };
 
@@ -120,7 +120,7 @@ export default class LiveCallScreen extends Component {
   };
 
   _onParticipantRemovedVideoTrack = ({ participant, track }) => {
-    console.log("onParticipantRemovedVideoTrack: ", participant, track);
+    //console.log("onParticipantRemovedVideoTrack: ", participant, track);
 
     const videoTracks = this.state.videoTracks;
     videoTracks.delete(track.trackSid);
@@ -138,7 +138,7 @@ export default class LiveCallScreen extends Component {
       <ImageBackground style={styles.container} source={{ uri: RouteParam.propertyMainPhotoUrl }}>
         {/* <View style={styles.headerContainer}>
           <Header title={'LIVE CALL'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
-        </View>         */}
+        </View> */}
         {this.state.status === "connected" && (
           <View style={styles.remoteSmallVideoContainer}>            
             {Array.from(
@@ -201,19 +201,19 @@ const styles = StyleSheet.create({
     height: normalize(70, 'height'),
     justifyContent: 'center',
     alignItems: 'center',
-    // borderColor: Colors.borderColor,
-    // borderBottomWidth: normalize(0.5, 'height'),
+    //borderColor: Colors.borderColor,
+    //borderBottomWidth: normalize(0.5, 'height'),
   },  
   localBigVideoContainer: {
     flex: 1,
-    // flexDirection: "row",
-    // flexWrap: "wrap"
+    //flexDirection: "row",
+    //flexWrap: "wrap"
   },
   localBigVideo: {
     width: '100%',
     height: '100%',
-    // borderWidth: 2,
-    // borderColor: '#ff0000'
+    //borderWidth: 2,
+    //borderColor: '#ff0000'
   },
   remoteSmallVideoContainer: {
     position: 'absolute',
@@ -228,8 +228,8 @@ const styles = StyleSheet.create({
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(5),
-    // borderWidth: normalize(2),
-    // borderColor: '#4e4e4e'
+    //borderWidth: normalize(2),
+    //borderColor: '#4e4e4e'
   },  
   btnsContainer: {
     position: 'absolute',

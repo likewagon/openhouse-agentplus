@@ -48,26 +48,24 @@ export default class ClientShareScreen extends Component {
 
   onSupportedShare = (socialKind) => {
     //supported: facebook, instagram, twitter, whatsapp
-
     let shareOption = {
-      //url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',
-      url: 'http://www.openhousemarketingsystem.com/virtualplus/download.php',
+      url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',      
       title: 'Open Plus™',
       subject: 'Open Plus™',
       social: socialKind,
-      message: 'test message', //this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,
-      email: 'example@gmail.com', //this.props.route.params.clientEmail
+      message: this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,
+      email: this.props.route.params.clientEmail
     };
 
     setTimeout(() => {
       this.setState({ spinner: true });
       Share.shareSingle(shareOption)
         .then((res) => {
-          console.log('share result', res);
+          //console.log('share result', res);
           this.setState({ spinner: false });
         })
         .catch((err) => {
-          console.log('share error', err);
+          //console.log('share error', err);
           this.setState({ spinner: false });
         })
     }, 500);
@@ -75,10 +73,9 @@ export default class ClientShareScreen extends Component {
 
   onUnSupportedShare = (socialKind) => {
     //not supported: messenger, email, linkedin, youtube, snapchat, pinterest, tiktok   
-    //const url = 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733';
-    const url = 'http://www.openhousemarketingsystem.com/virtualplus/download.php';
+    const url = 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733';
     const title = 'Open Plus™';
-    const message = 'test message'; //this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname,    
+    const message = this.props.route.params.clientFullname + ' was invited by ' + LoginInfo.fullname;    
     let icon = '';
 
     if(socialKind == 'messenger') icon = 'data:image/png;base64,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'
@@ -92,7 +89,7 @@ export default class ClientShareScreen extends Component {
     const options = Platform.select({
       ios: {
         activityItemSources: [
-          { // For sharing url with custom title.
+          { 
             placeholderItem: { type: 'url', content: url },
             item: {
               default: { type: 'url', content: url },
@@ -102,7 +99,7 @@ export default class ClientShareScreen extends Component {
             },
             linkMetadata: { originalUrl: url, url, title },
           },
-          { // For sharing text.
+          { 
             placeholderItem: { type: 'text', content: message },
             item: {
               default: { type: 'text', content: message },
@@ -112,7 +109,7 @@ export default class ClientShareScreen extends Component {
               title: message
             },
           },
-          { // For using custom icon instead of default text icon at share preview when sharing with message.
+          { 
             placeholderItem: {
               type: 'url',
               content: icon
@@ -141,11 +138,11 @@ export default class ClientShareScreen extends Component {
       this.setState({ spinner: true });
       Share.open(options)
         .then((res) => {
-          console.log('share result', res);
+          //console.log('share result', res);
           this.setState({ spinner: false });
         })
         .catch((err) => {
-          console.log('share error', err);
+          //console.log('share error', err);
           this.setState({ spinner: false });
         })
     }, 500);
@@ -272,7 +269,7 @@ const styles = StyleSheet.create({
   },
   lineContainer: {
     width: '75%',
-    height: '20%',//normalize(85, 'height'),
+    height: '20%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

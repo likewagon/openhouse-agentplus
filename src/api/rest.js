@@ -46,7 +46,6 @@ export const getLiveInfo = (param) => {
       params: param
     })
     .then((res) => {
-      //console.log(res);
       resolve(res.data);
     })
     .catch((err) => {
@@ -59,7 +58,6 @@ export const getReviewGeoForApple = () => {
   return new Promise((resolve, reject)=>{
     axios.get(API_V1_GET_GEO_REVIEW_FOR_APPLE_URL)
     .then((res) => {
-      //console.log(res);
       resolve(res.data);
     })
     .catch((err) => {

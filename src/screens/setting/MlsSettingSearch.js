@@ -72,7 +72,7 @@ export default class MlsSettingSearchScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get agent search error', err);
+        //console.log('get agent search error', err);
         this.setState({ spinner: false })
       })
   }
@@ -126,7 +126,7 @@ export default class MlsSettingSearchScreen extends Component {
         this.props.navigation.navigate('MlsSettingLink');
       })
       .catch((err) => {
-        console.log('mls link error', err);        
+        //console.log('mls link error', err);        
       })        
   }
 
@@ -240,8 +240,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginBottom: normalize(5, 'height'),
-    // borderColor: Colors.borderColor,
-    // borderWidth: normalize(0.5, 'height'),        
+    //borderColor: Colors.borderColor,
+    //borderWidth: normalize(0.5, 'height'),        
   },
   emptyContainer: {
     width: '100%',

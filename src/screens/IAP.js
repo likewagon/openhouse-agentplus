@@ -75,29 +75,29 @@ export default class IAPScreen extends Component {
   async componentDidMount() {
     try {
       const result = await RNIap.initConnection();
-      // console.log('result', result);
     } catch (err) {
-      console.log('init connection error', err.code, err.message);
+      //console.log('init connection error', err.code, err.message);
     }
 
     purchaseUpdateSubscription = purchaseUpdatedListener(
       async (purchase) => {
         const receipt = purchase.transactionReceipt;
-        console.log('receipt', receipt);
+        //console.log('receipt', receipt);
         this.setState({
           purchaseReceipt: receipt,
           spinner: false
         });
+
         if (receipt) {
           try {
             if (Platform.OS === 'ios') {
               finishTransactionIOS(purchase.transactionId);
             }
             const ackResult = await finishTransaction(purchase);
-            console.log('finish result', ackResult);
+            //console.log('finish result', ackResult);
             this.purchaseValidate();
           } catch (ackErr) {
-            console.log('ackErr', ackErr);
+            //console.log('ackErr', ackErr);
           }
         }
       },
@@ -106,8 +106,8 @@ export default class IAPScreen extends Component {
     purchaseErrorSubscription = purchaseErrorListener(
       (error) => {
         this.setState({ spinner: false });
-        console.log('purchaseErrorListener', error);
-        // Alert.alert('Purchase Error', JSON.stringify(error));
+        //console.log('purchaseErrorListener', error);
+        //Alert.alert('Purchase Error', JSON.stringify(error));
       },
     );
 
@@ -135,7 +135,7 @@ export default class IAPScreen extends Component {
       //console.log('productList', sortedProducts);
     } catch (err) {
       this.setState({ spinner: false });
-      console.log('get products error', err.code, err.message);
+      //console.log('get products error', err.code, err.message);
     }
   };
 
@@ -147,11 +147,10 @@ export default class IAPScreen extends Component {
           this.setState({ requestResult: res });
         })
         .catch((err) => {
-          console.log('request subscription error', err);
+          //console.log('request subscription error', err);
         })
     } catch (err) {
-      console.log('request subscription error', err.message);
-      // Alert.alert('Request Subscription Error', err.message);
+      //console.log('request subscription error', err.message);
     }
   };
 
@@ -183,7 +182,7 @@ export default class IAPScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('post purchase error', err)
+        //console.log('post purchase error', err)
       })
   }
 
@@ -442,8 +441,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5, 'height'),
-    // borderColor: '#ff0000',
-    // borderWidth: 5,
+    //borderColor: '#ff0000',
+    //borderWidth: 5,
     padding: normalize(20),
   },
   btnsPart: {
@@ -488,14 +487,12 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: normalize(2),
     justifyContent: 'center',
-    // alignItems: 'center',
-    // borderWidth: 2
+    //borderWidth: 2
   },
   rightTxt: {
     fontFamily: 'SFProText-Bold',
     fontSize: RFPercentage(1.8),
     color: Colors.whiteColor,
-    // textAlign: 'center',
     lineHeight: 23
   },
 
@@ -532,8 +529,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(0.5, 'height'),
-    // borderColor: '#ff0000',
-    // borderWidth: 5,
+    //borderColor: '#ff0000',
+    //borderWidth: 5,
     padding: normalize(20),
   },
   topPart: {

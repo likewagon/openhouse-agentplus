@@ -76,7 +76,7 @@ export default class MlsSettingLinkScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get agent error', err);
+        //console.log('get agent error', err);
         this.setState({ spinner: false });
       })
   }
@@ -126,14 +126,14 @@ export default class MlsSettingLinkScreen extends Component {
         this.getAgent();
       })
       .catch((err) => {
-        console.log('mls unlink error', err);        
+        //console.log('mls unlink error', err);        
       })        
   }
 
   render() {
     return (
       <View style={styles.container}>
-        {/* <Spinner visible={this.state.spinner} /> */}
+        <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
           <Header title={'MLS SETTINGS'} titleColor={Colors.blackColor} rightIcon={Images.iconAddPerson} onPressBack={() => this.props.navigation.goBack(null)} onPressRightIcon={() => { this.props.navigation.navigate('MlsSettingSearch') }} />
         </View>
@@ -215,8 +215,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginBottom: normalize(5, 'height'),
-    // borderColor: Colors.borderColor,
-    // borderWidth: normalize(0.5, 'height'),        
+    //borderColor: Colors.borderColor,
+    //borderWidth: normalize(0.5, 'height'),        
   },
   emptyContainer: {
     width: '100%',

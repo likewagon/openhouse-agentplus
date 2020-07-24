@@ -75,7 +75,7 @@ export default class PropertyWithClientScreen extends Component {
         });        
       })
       .catch((err) => {
-        console.log('get client by prperty error', err);
+        //console.log('get client by prperty error', err);
         this.setState({ spinner: false })
       })
   }
@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    // borderColor: Colors.borderColor,
-    // borderWidth: normalize(0.5, 'height'),        
+    //borderColor: Colors.borderColor,
+    //borderWidth: normalize(0.5, 'height'),        
   },
   emptyContainer: {
     width: '100%',

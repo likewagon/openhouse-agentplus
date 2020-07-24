@@ -74,7 +74,7 @@ export default class ClientListScreen extends Component {
         });        
       })
       .catch((err) => {
-        console.log('get client error', err);
+        //console.log('get client error', err);
         this.setState({ spinner: false })
       })
   }

@@ -46,30 +46,29 @@ import {
 import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 import { watchdogTimer } from '@constants';
 
-import { firebaseInit } from '../api/Firebase';
 import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
 
 BackgroundFetch.configure({
   minimumFetchInterval: 15,
-  stopOnTerminate: false, // Android-only,
-  startOnBoot: true // Android-only
+  stopOnTerminate: false,
+  startOnBoot: true
 }, () => {
-  console.log("[js] Received background-fetch event");
+  //console.log("[js] Received background-fetch event");
   BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
 }, (error) => {
-  console.log("[js] RNBackgroundFetch failed to start");
+  //console.log("[js] RNBackgroundFetch failed to start");
 });
 
 BackgroundFetch.status((status) => {
   switch (status) {
     case BackgroundFetch.STATUS_RESTRICTED:
-      console.log("BackgroundFetch restricted");
+      //console.log("BackgroundFetch restricted");
       break;
     case BackgroundFetch.STATUS_DENIED:
-      console.log("BackgroundFetch denied");
+      //console.log("BackgroundFetch denied");
       break;
     case BackgroundFetch.STATUS_AVAILABLE:
-      console.log("BackgroundFetch is enabled");
+      //console.log("BackgroundFetch is enabled");
       break;
   }
 });
@@ -108,7 +107,7 @@ export default class SplashScreen extends Component {
             this.requestNotification();
           })
           .catch((err) => {
-            console.log('request camera and microphone error', err);
+            //console.log('request camera and microphone error', err);
           })
       }
     };
@@ -129,7 +128,7 @@ export default class SplashScreen extends Component {
       KeyboardManager.setToolbarManageBehaviour(0);
       KeyboardManager.setToolbarPreviousNextButtonEnable(false);
       KeyboardManager.setShouldToolbarUsesTextFieldTintColor(false);
-      KeyboardManager.setShouldShowTextFieldPlaceholder(true); // deprecated, use setShouldShowToolbarPlaceholder
+      KeyboardManager.setShouldShowTextFieldPlaceholder(true);
       KeyboardManager.setShouldShowToolbarPlaceholder(true);
       KeyboardManager.setOverrideKeyboardAppearance(false);
       KeyboardManager.setShouldResignOnTouchOutside(true);
@@ -144,8 +143,8 @@ export default class SplashScreen extends Component {
     return new Promise((resolve, reject) => {
       requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE]).then(
         (statuses) => {
-          console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
-          console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
+          //console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
+          //console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
           resolve();
         },
       ).catch((err) => {
@@ -182,10 +181,11 @@ export default class SplashScreen extends Component {
     if (enabled) {
       var fcmToken = await messaging().getToken();
       LoginInfo.fcmToken = fcmToken;
-      console.log('fcmToken', fcmToken);
+      //console.log('fcmToken', fcmToken);
 
       messaging().onMessage(async remoteMessage => {
-        // console.log('Notification arrived:', remoteMessage); 
+        // console.log('notification arrived:', remoteMessage);
+        if(remoteMessage.data == null || remoteMessage.data == undefined) return;         
         if (Platform.OS === 'android') {
           PushNotification.localNotification({
             title: remoteMessage.data.title,
@@ -199,8 +199,8 @@ export default class SplashScreen extends Component {
           })
         }
 
-        if (remoteMessage.data && remoteMessage.data.propertyNo) {
-          console.log('livecall notification on foreground');
+        if (remoteMessage.data.propertyNo) {
+          //console.log('livecall notification on foreground');
           setTimeout(() => {
             Alert.alert(
               remoteMessage.data.alertTitle,
@@ -218,9 +218,10 @@ export default class SplashScreen extends Component {
       });
 
       messaging().onNotificationOpenedApp(remoteMessage => {
-        console.log('Notification caused app to open from background state:', remoteMessage.data);
-        if (remoteMessage.data && remoteMessage.data.propertyNo) {
-          console.log('livecall notification on background');          
+        //console.log('notification caused app to open from background state:', remoteMessage.data);
+        if(remoteMessage.data == null || remoteMessage.data == undefined) return;
+        if (remoteMessage.data.propertyNo) {
+          //console.log('livecall notification on background');          
           this.onLiveCallYes(remoteMessage.data.propertyNo);
         }
       });      
@@ -231,11 +232,11 @@ export default class SplashScreen extends Component {
         watchdogTimer();
       }
       catch (err) {
-        console.log('permission watchdog error', err);
+        //console.log('permission watchdog error', err);
       }
     }
     else {
-      console.log('Authorization status: disabled');
+      //console.log('Authorization status: disabled');
       this.setState({ pnSettingVisible: true });
       Linking.openSettings();
     }
@@ -249,18 +250,18 @@ export default class SplashScreen extends Component {
       user_longitude: LoginInfo.longitude,
       property_recordno: propertyNo
     };
-    console.log('live info param', param);
+    //console.log('live info param', param);
 
     getLiveInfo(param)
       .then((res) => {
-        console.log('live info', res);
+        //console.log('live info', res);
         RouteParam.liveInfo = res[0];
         if (RouteParam.liveInfo.error === undefined) {
           this.props.navigation.navigate('Main', { screen: 'LiveCall' });
         }
       })
       .catch((err) => {
-        console.log('get live info error', err);
+        //console.log('get live info error', err);
       })
   }
 
@@ -285,14 +286,14 @@ export default class SplashScreen extends Component {
           this.submit();
         }
         else {
-          console.log('no login info');
+          //console.log('no login info saved');
           // setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
           // remove later
           this.submit();
         }
       })
       .catch((err) => {
-        console.log('get login info error', err);
+        //console.log('get login info error', err);
         setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
       })
   }
@@ -312,7 +313,7 @@ export default class SplashScreen extends Component {
     LoginInfo.latitude = 40.776611;
     LoginInfo.longitude = -73.345718;
     LoginInfo.user_account = 1;
-    // ///////////////
+    /////////////////
 
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'login');
@@ -333,7 +334,7 @@ export default class SplashScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        console.log('post login info success', res);
+        //console.log('post login info success', res);
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.photourl = res[0].user_photourl;
         LoginInfo.fcmToken = res[0].fcmToken;
@@ -348,7 +349,7 @@ export default class SplashScreen extends Component {
         }
       })
       .catch((err) => {
-        console.log('post login info error', err)
+        //console.log('post login info error', err)
       })
   }
 
@@ -359,31 +360,31 @@ export default class SplashScreen extends Component {
           !this.state.geoSettingVisible && !this.state.pnSettingVisible ?
             (
               <View style={styles.modalBack}>
-                <View style={{ width: '100%', height: '9%', /*borderWidth: 1*/ }}></View>
+                <View style={{ width: '100%', height: '9%' }}></View>
                 <View style={styles.logoImgContainer}>
                   <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
                 </View>
-                <View style={{ width: '100%', height: '2%', /*borderWidth: 1*/ }}></View>
+                <View style={{ width: '100%', height: '2%' }}></View>
                 <View style={styles.logoNameContainer}>
                   <Text style={styles.logoName}>Open House</Text>
                   <Text style={styles.logoPlusLabel}>+</Text>
                 </View>
-                <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                <View style={{ width: '100%', height: '5%' }}></View>
                 <View style={styles.logoTxtContainer}>
                   <Text style={styles.logoTxt}>{this.state.logoTxt}</Text>
                 </View>
-                <View style={{ width: '100%', height: '7%', /*borderWidth: 1*/ }}></View>
+                <View style={{ width: '100%', height: '7%' }}></View>
               </View>
             )
             :
             this.state.geoSettingVisible ?
               (
                 <View style={styles.modalBackSetting}>
-                  <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                  <View style={{ width: '100%', height: '5%' }}></View>
                   <View style={styles.logoImgContainerSetting}>
                     <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
                   </View>
-                  <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
+                  <View style={{ width: '100%', height: '1%' }}></View>
                   <View style={styles.logoNameContainerSetting}>
                     <Text style={styles.logoName}>Open House</Text>
                     <Text style={styles.logoPlusLabel}>+</Text>
@@ -407,11 +408,11 @@ export default class SplashScreen extends Component {
               :
               (
                 <View style={styles.modalBackSetting}>
-                  <View style={{ width: '100%', height: '5%', /*borderWidth: 1*/ }}></View>
+                  <View style={{ width: '100%', height: '5%' }}></View>
                   <View style={styles.logoImgContainerSetting}>
                     <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
                   </View>
-                  <View style={{ width: '100%', height: '1%', /*borderWidth: 1*/ }}></View>
+                  <View style={{ width: '100%', height: '1%' }}></View>
                   <View style={styles.logoNameContainerSetting}>
                     <Text style={styles.logoName}>Open House</Text>
                     <Text style={styles.logoPlusLabel}>+</Text>
@@ -509,7 +510,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
 
-  /////////////////////////////////////////////////
   modalBackSetting: {
     backgroundColor: 'rgba(255,255,255,1)',
     width: wp(75),
@@ -578,5 +578,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     //borderWidth: 1
   },
-
 });

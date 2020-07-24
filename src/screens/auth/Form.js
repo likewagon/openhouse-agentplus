@@ -22,7 +22,6 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { TextInputMask } from 'react-native-masked-text';
 import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
-import RNIap from 'react-native-iap';
 
 import {
   Button,
@@ -92,7 +91,7 @@ export default class FormScreen extends Component {
 
     this.setState({ spinner: true });
     
-    console.log('phonenumber', vPhoneNumber);
+    //console.log('phonenumber', vPhoneNumber);
     await verifyPhoneNumber(vPhoneNumber)
       .then((verifyResult) => {
         //console.log('verifyResult', verifyResult)
@@ -111,8 +110,7 @@ export default class FormScreen extends Component {
         // );
 
         this.setState({ spinner: false }); this.submit();
-
-        console.log('verify phone number error', err);
+        //console.log('verify phone number error', err);
       })
   }
 
@@ -137,7 +135,7 @@ export default class FormScreen extends Component {
 
     await postData(bodyFormData)
       .then((res) => {
-        //console.warn('post login info success', res);
+        //console.log('post login info success', res);
 
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.photourl = res[0].user_photourl;
@@ -147,9 +145,10 @@ export default class FormScreen extends Component {
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');
       })
-      .catch((err) => console.log('post login info error', err))
+      .catch((err) => {
+        //console.log('post login info error', err);
+      })
   }
-  ///////////////////////
 
   render() {
     return (

@@ -81,7 +81,7 @@ export default class PreferenceScreen extends Component {
         });
       })
       .catch((err) => {
-        console.log('get preference error', err);
+        //console.log('get preference error', err);
       })
   }
 
@@ -107,7 +107,7 @@ export default class PreferenceScreen extends Component {
         //console.log('update preference success', res);
       })
       .catch((err) => {
-        console.log('update preference error', err);
+        //console.log('update preference error', err);
       })
   }
 

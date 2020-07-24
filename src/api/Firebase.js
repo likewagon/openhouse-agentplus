@@ -7,18 +7,6 @@ import appleAuth, {
   AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication';
 
-export const firebaseInit = () => {  
-  firebase.initializeApp({
-    apiKey: "AIzaSyDtWfisE1asFGtcCWXglIKtREs_bH3-QuI",       // Auth / General Use
-    appId: "1:1006237194994:ios:9592ea440298f5f1450e6b",      // General Use
-    projectId: "open-6eecb",                               // General Use
-    // authDomain: "YOUR_APP.firebaseapp.com",               // Auth with popup/redirect
-    databaseURL: "https://open-6eecb.firebaseio.com",      // Realtime Database
-    storageBucket: "open-6eecb.appspot.com",               // Storage
-    messagingSenderId: "1006237194994"                        // Cloud Messaging
-  });
-}
-
 export const appleSignin = () => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -69,48 +57,19 @@ export const googleSignin = () => {
   })
 }
 
-export const fbSignin = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      // Attempt login with permissions
-      const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-
-      if (result.isCancelled) {
-        throw 'User cancelled the login process';
-      }
-
-      // Once signed in, get the users AccesToken
-      const data = await AccessToken.getCurrentAccessToken();
-
-      if (!data) {
-        throw 'Something went wrong obtaining access token';
-      }
-
-      // Create a Firebase credential with the AccessToken
-      const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-
-      // Sign-in the user with the credential
-      resolve(auth().signInWithCredential(facebookCredential));
-    }
-    catch (err) {
-      reject(err);
-    }
-  })
-}
-
 export const signOut = () => {
   return new Promise(async (resolve, reject) => {
     await auth().currentUser.unlink('phone')
       .then(() => {
-        console.log('unlink');
+        //console.log('unlink');
       })
       .catch((err) => {
-        console.log('unlink error', err.code);
+        //console.log('unlink error', err.code);
       })
 
     await auth().signOut()
       .then(() => {
-        console.log('signOut');
+        //console.log('signOut');
         resolve()
       })
   })
@@ -134,7 +93,7 @@ export const verifyPhoneNumber = (phoneNumber) => {
 export const linkWithCredential = (verificationId, verificationCode) => {
   return new Promise(async (resolve, reject) => {
     let cred = auth.PhoneAuthProvider.credential(verificationId, verificationCode)
-    console.log('phoneAuth cred', cred);
+    //console.log('phoneAuth cred', cred);
     if (cred) {
       await auth().currentUser.linkWithCredential(cred)
         .then((cred) => {

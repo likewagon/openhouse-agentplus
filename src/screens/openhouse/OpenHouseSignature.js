@@ -50,8 +50,8 @@ export default class OpenHouseSignatureScreen extends Component {
   }
 
   onSignOK = () => {   
-    // this.postSignature();
-    // this.postAttendee();   
+    this.postSignature();
+    this.postAttendee();   
     
     this.props.navigation.navigate('OpenHouseSignatureEnd');
   }
@@ -82,7 +82,7 @@ export default class OpenHouseSignatureScreen extends Component {
         //console.log('post sign success', res)
       })
       .catch((err)=>{
-        console.log('post sign error',err);
+        //console.log('post sign error',err);
       })
       .done();   
   }
@@ -100,7 +100,7 @@ export default class OpenHouseSignatureScreen extends Component {
         //console.log('post attendee success', res);
       })
       .catch((err) => {
-        console.log('post attendee error', err)
+        //console.log('post attendee error', err)
       })
   }
 
@@ -143,8 +143,8 @@ const styles = StyleSheet.create({
     height: normalize(70, 'height'),
     justifyContent: 'center',
     alignItems: 'center',
-    // borderColor: Colors.borderColor,
-    // borderBottomWidth: normalize(0.5, 'height'),
+    //borderColor: Colors.borderColor,
+    //borderBottomWidth: normalize(0.5, 'height'),
   },  
   body: {
     width: '100%',

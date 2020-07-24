@@ -78,7 +78,7 @@ export default class AgentListingScreen extends Component {
           resolve();
         })
         .catch((err) => {
-          console.log('get active listing error', err);        
+          //console.log('get active listing error', err);        
           reject();
         })
     })
@@ -105,7 +105,7 @@ export default class AgentListingScreen extends Component {
           resolve();
         })
         .catch((err) => {
-          console.log('get inactive listing error', err);
+          //console.log('get inactive listing error', err);
           reject();
         })
     })
@@ -133,7 +133,7 @@ export default class AgentListingScreen extends Component {
           resolve();
         })
         .catch((err) => {
-          console.log('get withclients listing error', err);
+          //console.log('get withclients listing error', err);
           reject();
         })
     })
@@ -147,7 +147,6 @@ export default class AgentListingScreen extends Component {
             : [],
       tab: kind
     });
-
   }
 
   onPropertyPress = (propertyRecordNo) => {
@@ -187,7 +186,6 @@ export default class AgentListingScreen extends Component {
       </View>
     );
   }
-
 }
 
 const width = Dimensions.get('window').width;

@@ -49,7 +49,7 @@ export default class SignModal extends Component {
   }
 
   _onDragEvent() {
-    //console.warn('drag');    
+    //console.log('drag');    
     isDrag = true;    
   }
 
@@ -61,7 +61,7 @@ export default class SignModal extends Component {
         //console.log('signature saved', res)
       })
       .catch(err => {
-        console.log('signature error', err);
+        //console.log('signature error', err);
       });
   }
 
@@ -69,8 +69,6 @@ export default class SignModal extends Component {
     return (
       <Overlay
         visible={this.props.visible}
-        // onClose={this.onClose}
-        // closeOnTouchOutside
         containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
         childrenWrapperStyle={styles.signModal}
       >

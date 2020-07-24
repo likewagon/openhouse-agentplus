@@ -50,7 +50,7 @@ export default class SocialLoginScreen extends Component {
   onAppleSignin = async () => {
     await appleSignin()
       .then(async (res) => {
-        console.log('apple signin success', res);
+        //console.log('apple signin success', res);
 
         LoginInfo.uniqueid = res.user.providerData[0].uid;
         LoginInfo.fullname = res.user.providerData[0].displayName;
@@ -63,8 +63,7 @@ export default class SocialLoginScreen extends Component {
         this.props.navigation.navigate('Form');
       })
       .catch((err) => {
-        //Alert.alert('Apple SignIn is failed');
-        console.log('apple signin error', err);
+        //console.log('apple signin error', err);
       })
   }
 
@@ -84,8 +83,7 @@ export default class SocialLoginScreen extends Component {
         this.props.navigation.navigate('Form');
       })
       .catch((err) => {
-        //Alert.alert('Google SignIn is failed');
-        console.log('google signin error', err)
+        //console.log('google signin error', err)
       })
   } 
 

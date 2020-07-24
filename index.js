@@ -14,8 +14,8 @@ import { RouteParam, LoginInfo } from './src/constants';
 const API_V1_GET_LIVEINFO_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/connect_to_live_oh.php'
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-  console.log('Message handled in the background!', remoteMessage);
-
+  //console.log('message handled in the background:', remoteMessage);
+  if (remoteMessage.data == null || remoteMessage.data == undefinded) return;
   if (Platform.OS === 'android') {
     PushNotification.localNotification({
       title: remoteMessage.data.title,
@@ -35,10 +35,10 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
 messaging()
   .getInitialNotification()
   .then(async (remoteMessage) => {
-    console.log('Notification caused app to open from quit state at messaging:', remoteMessage);
-    if (remoteMessage.data && remoteMessage.data.propertyNo) {
-      console.log('livecall notification on quit');
-
+    //console.log('notification caused app to open from closed status:', remoteMessage);
+    if(remoteMessage.data == null || remoteMessage.data == undefined) return;
+    if (remoteMessage.data.propertyNo) {
+      //console.log('livecall notification on closed status');
       var loginInfo = await AsyncStorage.getItem('LoginInfo');
       if (loginInfo) {
         var info = JSON.parse(loginInfo);
@@ -63,7 +63,7 @@ messaging()
           user_longitude: LoginInfo.longitude,
           property_recordno: remoteMessage.data.propertyNo
         };
-        console.log('live info param', param);
+        //console.log('live info param', param);
 
         axios.get(API_V1_GET_LIVEINFO_URL, {
           params: param
@@ -76,7 +76,7 @@ messaging()
             }
           })
           .catch((err) => {
-            console.log('get live info error', err);
+            //console.log('get live info error', err);
           });
       }
       else {
@@ -85,17 +85,14 @@ messaging()
     }
   })
   .catch((err) => {
-    console.log('get initial notification error at messaging', err);
+    //console.log('get initial notification error at messaging', err);
   })
-
-// AppRegistry.registerComponent(appName, () => App);
 
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
-    // App has been launched in the background by iOS, ignore
     return null;
   }
-
   return <App />;
 }
+
 AppRegistry.registerComponent(appName, () => HeadlessCheck);
