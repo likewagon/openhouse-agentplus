@@ -17,7 +17,7 @@ export const LoginInfo = {}
 export const RouteParam = {
   deviceType: 'phone',  
   verifyResult: {},    
-  liveCallFromBackgroundNotification: false,
+  liveCallFromClosed: false,
   propertyRecordNo: '', 
   propertyMainPhotoUrl: '', 
   propertyAgentFullname: '',      

@@ -1,5 +1,4 @@
 import axios from 'axios';
-import RNIap from 'react-native-iap';
 
 const API_V1_POST_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/post.php';
 const API_V1_GET_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/get.php';

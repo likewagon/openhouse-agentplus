@@ -177,53 +177,7 @@ export default class SplashScreen extends Component {
       badge: true,
       sound: true
     });
-    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-
-    // PushNotificationIOS.addEventListener('register', () => { console.log('pn registered') });
-    // PushNotificationIOS.addEventListener('registrationError', () => { console.log('pn register error') });
-    // PushNotificationIOS.addEventListener('notification', async (remoteMessage) => {
-    //   console.log('pn remote notification listener', remoteMessage);
-    //   if (typeof remoteMessage.data.propertyNo != undefined) {
-    //     var loginInfo = await AsyncStorage.getItem('LoginInfo');
-    //     if (loginInfo) {
-    //       var info = JSON.parse(loginInfo);
-
-    //       LoginInfo.uniqueid = info.uniqueid;
-    //       LoginInfo.fullname = info.fullname;
-    //       LoginInfo.email = info.email;
-    //       LoginInfo.telephone = info.telephone;
-    //       LoginInfo.providerid = info.providerid;
-    //       LoginInfo.photourl = info.photourl;
-    //       LoginInfo.email_verified = info.email_verified;
-    //       LoginInfo.phone_verified = info.phone_verified;
-    //       LoginInfo.fcmToken = info.fcmToken;
-    //       LoginInfo.user_account = info.user_account;
-
-    //       this.onLiveCallYes(remoteMessage.data.propertyNo);
-    //     }
-    //     else {
-    //       Alert.alert('Please Signin the App');
-    //       return;
-    //     }
-    //   }
-    // });
-    // PushNotificationIOS.getInitialNotification()
-    //   .then(pnIOSObj => {
-    //     console.log('Notification caused app to open from quit state:', pnIOSObj);
-    //     if (pnIOSObj) {
-    //       var remoteMessage = pnIOSObj.getMessage();
-    //       if (typeof remoteMessage.data.propertyNo != undefined) {
-    //         console.log('livecall notification on quit');
-    //         this.onLiveCallYes(remoteMessage.data.propertyNo);
-    //       }
-    //     }
-    //     else {
-
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log('get initial notification error at PNIOS', err);
-    //   })
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;   
 
     if (enabled) {
       var fcmToken = await messaging().getToken();
@@ -231,7 +185,7 @@ export default class SplashScreen extends Component {
       console.log('fcmToken', fcmToken);
 
       messaging().onMessage(async remoteMessage => {
-        // console.log('Message arrived', remoteMessage); 
+        // console.log('Notification arrived:', remoteMessage); 
         if (Platform.OS === 'android') {
           PushNotification.localNotification({
             title: remoteMessage.data.title,
@@ -245,7 +199,7 @@ export default class SplashScreen extends Component {
           })
         }
 
-        if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
+        if (remoteMessage.data && remoteMessage.data.propertyNo) {
           console.log('livecall notification on foreground');
           setTimeout(() => {
             Alert.alert(
@@ -263,26 +217,13 @@ export default class SplashScreen extends Component {
         }
       });
 
-      // messaging().onNotificationOpenedApp(remoteMessage => {
-      //   console.log('Notification caused app to open from background state at messaging:', remoteMessage.data);
-      //   if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
-      //     console.log('livecall notification on background');          
-      //     this.onLiveCallYes(remoteMessage.data.propertyNo);
-      //   }
-      // });
-
-      // messaging()
-      //   .getInitialNotification()
-      //   .then(remoteMessage => {
-      //     console.log('Notification caused app to open from quit state at messaging:', remoteMessage);
-      //     if (remoteMessage.data && typeof remoteMessage.data.propertyNo != undefined) {
-      //       console.log('livecall notification on quit');
-      //       this.onLiveCallYes(remoteMessage.data.propertyNo);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log('get initial notification error at messaging', err);
-      //   })
+      messaging().onNotificationOpenedApp(remoteMessage => {
+        console.log('Notification caused app to open from background state:', remoteMessage.data);
+        if (remoteMessage.data && remoteMessage.data.propertyNo) {
+          console.log('livecall notification on background');          
+          this.onLiveCallYes(remoteMessage.data.propertyNo);
+        }
+      });      
 
       this.isLoggedInProc();
 

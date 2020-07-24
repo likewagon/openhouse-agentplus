@@ -71,8 +71,8 @@ export default class LiveCallScreen extends Component {
 
   _onEndButtonPress = () => {
     this.twilioRef.disconnect();
-    if(RouteParam.liveCallFromBackgroundNotification){
-      RouteParam.liveCallFromBackgroundNotification = false;
+    if(RouteParam.liveCallFromClosed){
+      RouteParam.liveCallFromClosed = false;
       this.props.navigation.navigate('Splash');
     }
     else{
