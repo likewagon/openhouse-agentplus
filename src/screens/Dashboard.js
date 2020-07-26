@@ -143,8 +143,8 @@ export default class DashboardScreen extends Component {
       })
   }
 
-  onGoClientView = (client) => {
-    this.props.navigation.navigate('ClientStack', { screen: 'ClientView', params: { client: client } });
+  onGoClientView = (client, tab) => {
+    this.props.navigation.navigate('ClientStack', { screen: 'ClientView', params: { client: client, tab: tab } });
   }
 
   onPropertyPress = (propertyRecordNo) => {
@@ -195,7 +195,7 @@ export default class DashboardScreen extends Component {
                 showsHorizontalScrollIndicator={false}
                 data={this.state.recentClientData}
                 renderItem={({ item }) =>
-                  <TouchableOpacity style={styles.clientItemContainer} onPress={() => this.onGoClientView(item)}>
+                  <TouchableOpacity style={styles.clientItemContainer} onPress={() => this.onGoClientView(item, 'preference')}>
                     <View style={styles.clientImgContainer}>
                       <Image style={styles.clientImg} source={{ uri: item.client_photo_url }} />
                     </View>
@@ -219,12 +219,12 @@ export default class DashboardScreen extends Component {
                 showsHorizontalScrollIndicator={false}
                 data={this.state.recentActivityData}
                 renderItem={({ item }) =>
-                  <View style={styles.activityContainer}>
+                  <TouchableOpacity style={styles.activityContainer} onPress={()=>this.onGoClientView(item, 'searched')}>
                     <Text style={styles.activityTxt} numberOfLines={4} ellipsizeMode='tail'>{item.query_text}</Text>
-                    <TouchableOpacity onPress={() => this.onGoClientView(item)}>
+                    <TouchableOpacity onPress={() => this.onGoClientView(item, 'preference')}>
                       <Text style={[styles.detailsTag, { marginTop: normalize(10) }]}>{'>'} Details</Text>
                     </TouchableOpacity>
-                  </View>
+                  </TouchableOpacity>
                 }
               />
             </View>

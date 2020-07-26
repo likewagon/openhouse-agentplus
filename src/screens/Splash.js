@@ -184,7 +184,7 @@ export default class SplashScreen extends Component {
       //console.log('fcmToken', fcmToken);
 
       messaging().onMessage(async remoteMessage => {
-        // console.log('notification arrived:', remoteMessage);
+        //console.log('notification arrived:', remoteMessage);
         if(remoteMessage.data == null || remoteMessage.data == undefined) return;         
         if (Platform.OS === 'android') {
           PushNotification.localNotification({

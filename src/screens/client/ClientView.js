@@ -39,7 +39,7 @@ export default class ClientViewScreen extends Component {
     super(props);
     this.state = {
       spinner: false,
-      tab: 'preference',
+      tab: this.props.route.params.tab ? this.props.route.params.tab : 'preference',
       client: this.props.route.params.client,
       preferenceData: [],
       searchedData: [],
@@ -55,10 +55,10 @@ export default class ClientViewScreen extends Component {
     this.getPDF();
   }
 
-  getPreference = () => {
+  getPreference = () => {    
     var preferenceParam = {
       action: 'client_preferrences',
-      account_no: LoginInfo.user_account
+      account_no: this.state.client.client_account
     };
     //console.log('preferenceParam', preferenceParam);
     getContentByAction(preferenceParam)
