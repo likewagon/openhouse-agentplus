@@ -162,7 +162,7 @@ export default class OpenHouseSigninScreen extends Component {
               {'\n'}
               and granting permission to be contacted via text, 
               {'\n'}
-              email or phone calls by {RouteParam.propertyAgentFullname}
+              email or phone calls by {LoginInfo.fullname}
               {'\n'}
               any of his/her affiliates.
             </Text>

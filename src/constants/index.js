@@ -20,7 +20,6 @@ export const RouteParam = {
   liveCallFromClosed: false,
   propertyRecordNo: '',
   propertyMainPhotoUrl: '',
-  propertyAgentFullname: '',
   liveInfo: {},
 }
 

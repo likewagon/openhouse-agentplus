@@ -76,8 +76,7 @@ export default class PropertyScreen extends Component {
           spinner: false
         });
 
-        RouteParam.propertyMainPhotoUrl = res[0].property_main_photo_url;
-        RouteParam.propertyAgentFullname = res[0].property_listing_agent_fullname;
+        RouteParam.propertyMainPhotoUrl = res[0].property_main_photo_url;        
       })
       .catch((err) => {
         //console.log('get property error', err);
