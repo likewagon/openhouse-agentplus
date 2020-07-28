@@ -39,9 +39,9 @@ export default class OpenHouseSigninScreen extends Component {
     super(props);
     this.state = {
       spinner: false,
-      fullname: LoginInfo.fullname,
-      email: LoginInfo.email,
-      telephone: LoginInfo.telephone
+      fullname: '',
+      email: '',
+      telephone: ''
     }
   }
 
