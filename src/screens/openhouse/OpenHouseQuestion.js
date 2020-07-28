@@ -46,48 +46,11 @@ export default class OpenHouseQuestionScreen extends Component {
   }
 
   onNo = () => {
-    this.props.navigation.navigate('OpenHouseSignin');
+    this.props.navigation.navigate('OpenHouseSignin', {question: 0});
   }
 
   onYes = async () => {
-    let bodyFormData = new FormData();
-    bodyFormData.append('action', 'post_attendee');
-    bodyFormData.append('account_no', LoginInfo.user_account);
-    bodyFormData.append('fullname', LoginInfo.fullname);
-    bodyFormData.append('email', LoginInfo.email);
-    bodyFormData.append('telephone', LoginInfo.telephone);
-    bodyFormData.append('property_no', RouteParam.property.property_recordno);
-    bodyFormData.append('workingwithanagent', 1);
-    bodyFormData.append('user_latitude', LoginInfo.latitude);
-    bodyFormData.append('user_longitude', LoginInfo.longitude);
-
-    this.setState({ spinner: true });
-    await postData(bodyFormData)
-      .then((res) => {
-        if (res.length == 0 || res[0].error) {
-          Alert.alert(
-            'Signin is failed. \n Please Try Again',
-            '',
-            [
-              { text: 'OK', onPress: () => this.setState({ spinner: false }) }
-            ],
-          );
-          return;
-        }
-        //console.log('attendee signin success', res);
-        this.setState({ spinner: false });
-        this.props.navigation.navigate('OpenHouseSignature');
-      })
-      .catch((err) => {
-        //console.log('attendee signin error', err);
-        Alert.alert(
-          'Signin is failed. \n Please Try Again',
-          '',
-          [
-            { text: 'OK', onPress: () => this.setState({ spinner: false }) }
-          ],
-        );
-      })
+    this.props.navigation.navigate('OpenHouseSignin', {question: 1});
   }
 
   render() {

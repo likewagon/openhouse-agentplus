@@ -87,7 +87,7 @@ export default class OpenHouseSigninScreen extends Component {
     bodyFormData.append('email', this.state.email);
     bodyFormData.append('telephone', this.state.telephone.slice(3)); //(305) 900 - 7270
     bodyFormData.append('property_no', RouteParam.property.property_recordno);
-    bodyFormData.append('workingwithanagent', 0);
+    bodyFormData.append('workingwithanagent', this.props.route.params.question);
     bodyFormData.append('user_latitude', LoginInfo.latitude);
     bodyFormData.append('user_longitude', LoginInfo.longitude);
 
