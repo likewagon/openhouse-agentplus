@@ -21,6 +21,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 import ImageView from 'react-native-image-view';
 import MapView, { Marker } from 'react-native-maps';
+import Share from 'react-native-share';
 
 import {
   Button,
@@ -76,7 +77,7 @@ export default class PropertyScreen extends Component {
           spinner: false
         });
 
-        RouteParam.propertyMainPhotoUrl = res[0].property_main_photo_url;        
+        RouteParam.property = res[0];
       })
       .catch((err) => {
         //console.log('get property error', err);
@@ -88,7 +89,7 @@ export default class PropertyScreen extends Component {
     style: 'currency',
     currency: 'USD',
   });
-  
+
   handleScroll = (event) => {
     let y = event.nativeEvent.contentOffset.y;
 
@@ -103,12 +104,12 @@ export default class PropertyScreen extends Component {
       })
     }
   }
-  
+
   onVideoMessage = async () => {
     let bodyFormData = new FormData();
     bodyFormData.append('action', 'start_live_stream');
     bodyFormData.append('account_no', LoginInfo.user_account);
-    bodyFormData.append('property_no', RouteParam.propertyRecordNo);    
+    bodyFormData.append('property_no', RouteParam.propertyRecordNo);
 
     await postData(bodyFormData)
       .then((res) => {
@@ -142,6 +143,28 @@ export default class PropertyScreen extends Component {
       .catch((err) => {
         //console.log('get live info error', err);
       })
+  }
+
+  onFacebook = () => {
+    let shareOption = {
+      url: RouteParam.property_share_url,      
+      title: 'Agent Plus™ Post Attendee',
+      subject: 'Agent Plus™ Post Attendee',
+      social: Share.Social.FACEBOOK,      
+    };
+
+    setTimeout(() => {
+      this.setState({ spinner: true });
+      Share.shareSingle(shareOption)
+        .then((res) => {
+          //console.log('share result', res);
+          this.setState({ spinner: false });
+        })
+        .catch((err) => {
+          //console.log('share error', err);
+          this.setState({ spinner: false });
+        })
+    }, 500);
   }
 
   render() {
@@ -206,19 +229,16 @@ export default class PropertyScreen extends Component {
         </View>
 
         <View style={styles.btnsContainer}>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('PropertyWithClient', {property: this.state.property})}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('PropertyWithClient', { property: this.state.property })}>
             <Image style={styles.eachBtn} source={Images.iconConference}></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.onEnterRoom()}>
-            <Image style={styles.eachBtn} source={Images.iconVideoMessage}></Image>
+          <TouchableOpacity onPress={() => this.onEnterRoom()}>
+            <Image style={styles.eachBtn} source={Images.iconEnterRoom}></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>this.props.navigation.navigate('OpenHouseStack')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('OpenHouseStack')}>
             <Image style={styles.eachBtn} source={Images.iconOpen}></Image>
           </TouchableOpacity>
-          {/* <TouchableOpacity onPress={()=>this.onEnterRoom()}>
-            <Image style={styles.eachBtn} source={Images.iconEnterRoom}></Image>
-          </TouchableOpacity> */}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onFacebook()}>
             <Image style={styles.eachBtn} source={Images.iconFacebook}></Image>
           </TouchableOpacity>
         </View>

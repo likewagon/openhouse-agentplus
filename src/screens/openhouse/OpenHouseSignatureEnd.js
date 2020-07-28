@@ -57,7 +57,7 @@ export default class OpenHouseSignatureEndScreen extends Component {
     return (
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
-        <ImageBackground style={styles.propertyImgBack} source={{ uri: RouteParam.propertyMainPhotoUrl }}>
+        <ImageBackground style={styles.propertyImgBack} source={{ uri: RouteParam.property.property_main_photo_url }}>
           <View style={styles.thankyouContainer}>
             <Text style={styles.thankyouTxt}>
               Thank You

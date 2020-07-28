@@ -39,9 +39,9 @@ export default class OpenHouseSigninScreen extends Component {
     super(props);
     this.state = {
       spinner: false,
-      fullname: '',
-      email: '',
-      telephone: ''
+      fullname: LoginInfo.fullname,
+      email: LoginInfo.email,
+      telephone: LoginInfo.telephone
     }
   }
 
@@ -59,7 +59,7 @@ export default class OpenHouseSigninScreen extends Component {
       Alert.alert('Please Enter Your First and Last Name');
       return;
     }
-    if(!this.state.fullname.includes(' ')){
+    if (!this.state.fullname.includes(' ')) {
       Alert.alert('Please Enter Your First and Last Name');
       return;
     }
@@ -80,40 +80,44 @@ export default class OpenHouseSigninScreen extends Component {
       return;
     }
 
-    // let bodyFormData = new FormData();
-    // bodyFormData.append('action', '');
-    // bodyFormData.append('account_no', LoginInfo.user_account);
-    // bodyFormData.append('fullname', this.state.fullname);
-    // bodyFormData.append('email', this.state.email);
-    // bodyFormData.append('telephone', this.state.telephone.slice(3)); //(305) 900 - 7270
+    let bodyFormData = new FormData();
+    bodyFormData.append('action', 'post_attendee');
+    bodyFormData.append('account_no', LoginInfo.user_account);
+    bodyFormData.append('fullname', this.state.fullname);
+    bodyFormData.append('email', this.state.email);
+    bodyFormData.append('telephone', this.state.telephone.slice(3)); //(305) 900 - 7270
+    bodyFormData.append('property_no', RouteParam.property.property_recordno);
+    bodyFormData.append('workingwithanagent', 0);
+    bodyFormData.append('user_latitude', LoginInfo.latitude);
+    bodyFormData.append('user_longitude', LoginInfo.longitude);
 
-    // this.setState({ spinner: true });
-    // await postData(bodyFormData)
-    //   .then((res) => {
-    //     if (res.length == 0 || res[0].error) {
-    //       Alert.alert(
-    //         'Signin is failed. \n Please Try Again',
-    //         '',
-    //         [
-    //           { text: 'OK', onPress: () => this.setState({ spinner: false }) }
-    //         ],
-    //       );
-    //       return;
-    //     }
-    //     console.log('attendee signin success', res);
-    //     this.setState({ spinner: false });
-         this.props.navigation.navigate('OpenHouseSignature');
-    //   })
-    //   .catch((err) => {
-    //     console.log('attendee signin error', err);
-    //     Alert.alert(
-    //       'Signin is failed. \n Please Try Again',
-    //       '',
-    //       [
-    //         { text: 'OK', onPress: () => this.setState({ spinner: false }) }
-    //       ],
-    //     );
-    //   })
+    this.setState({ spinner: true });
+    await postData(bodyFormData)
+      .then((res) => {
+        if (res.length == 0 || res[0].error) {
+          Alert.alert(
+            'Signin is failed. \n Please Try Again',
+            '',
+            [
+              { text: 'OK', onPress: () => this.setState({ spinner: false }) }
+            ],
+          );
+          return;
+        }
+        //console.log('attendee signin success', res);
+        this.setState({ spinner: false });
+        this.props.navigation.navigate('OpenHouseSignature');
+      })
+      .catch((err) => {
+        //console.log('attendee signin error', err);
+        Alert.alert(
+          'Signin is failed. \n Please Try Again',
+          '',
+          [
+            { text: 'OK', onPress: () => this.setState({ spinner: false }) }
+          ],
+        );
+      })
   }
 
   render() {
@@ -141,7 +145,7 @@ export default class OpenHouseSigninScreen extends Component {
             placeholderTextColor={Colors.passiveTxtColor}
             value={this.state.email}
             onChangeText={(text) => this.setState({ email: text })}
-          />          
+          />
           <TextInputMask
             type={'custom'}
             options={{
@@ -152,15 +156,15 @@ export default class OpenHouseSigninScreen extends Component {
             keyboardType={'numeric'}
             placeholder='Your Telephone Number'
             placeholderTextColor={Colors.passiveTxtColor}
-            value={this.state.telephone}            
+            value={this.state.telephone}
             onChangeText={(text) => this.setState({ telephone: text })}
           />
 
           <View style={styles.txtContainer}>
             <Text style={styles.txt}>
-              I understand that by pressing "continue", I am agreeing 
+              I understand that by pressing "continue", I am agreeing
               {'\n'}
-              and granting permission to be contacted via text, 
+              and granting permission to be contacted via text,
               {'\n'}
               email or phone calls by {LoginInfo.fullname}
               {'\n'}
@@ -194,7 +198,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //borderColor: Colors.borderColor,
     //borderBottomWidth: normalize(0.5, 'height'),
-  },  
+  },
   mainContainer: {
     width: '100%',
     height: '87%',

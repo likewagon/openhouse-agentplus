@@ -135,7 +135,7 @@ export default class LiveCallScreen extends Component {
 
   render() {
     return (
-      <ImageBackground style={styles.container} source={{ uri: RouteParam.propertyMainPhotoUrl }}>
+      <ImageBackground style={styles.container} source={{ uri: RouteParam.property.property_main_photo_url }}>
         {/* <View style={styles.headerContainer}>
           <Header title={'LIVE CALL'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View> */}

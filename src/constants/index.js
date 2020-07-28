@@ -19,7 +19,7 @@ export const RouteParam = {
   verifyResult: {},
   liveCallFromClosed: false,
   propertyRecordNo: '',
-  propertyMainPhotoUrl: '',
+  property: '',
   liveInfo: {},
 }
 

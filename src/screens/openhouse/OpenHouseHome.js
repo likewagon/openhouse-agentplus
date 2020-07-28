@@ -67,7 +67,7 @@ export default class OpenHouseHomeScreen extends Component {
     return (
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
-        <ImageBackground style={styles.propertyImgBack} source={{ uri: RouteParam.propertyMainPhotoUrl }}>
+        <ImageBackground style={styles.propertyImgBack} source={{ uri: RouteParam.property.property_main_photo_url }}>
           <TouchableOpacity style={styles.lockContainer} onPress={()=>this.onLock()}>
             <Image style={styles.lock} source={Images.btnLock} resizeMode='cover' />
           </TouchableOpacity>
