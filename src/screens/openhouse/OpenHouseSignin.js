@@ -106,7 +106,7 @@ export default class OpenHouseSigninScreen extends Component {
         }
         //console.log('attendee signin success', res);
         this.setState({ spinner: false });
-        this.props.navigation.navigate('OpenHouseSignature');
+        this.props.navigation.navigate('OpenHouseSignature', {attendeeAccount: res[0].attendee_account});
       })
       .catch((err) => {
         //console.log('attendee signin error', err);

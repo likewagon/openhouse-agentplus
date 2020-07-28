@@ -146,16 +146,62 @@ export default class PropertyScreen extends Component {
   }
 
   onFacebook = () => {
-    let shareOption = {
-      url: RouteParam.property_share_url,      
-      title: 'Agent Plus™ Post Attendee',
-      subject: 'Agent Plus™ Post Attendee',
-      social: Share.Social.FACEBOOK,      
-    };
+    const url = RouteParam.property_share_url;
+    const title = 'Agent Plus™';
+    const message = 'Agent Plus™';
+    let icon = '';  
+
+    const options = Platform.select({
+      ios: {
+        activityItemSources: [
+          {
+            placeholderItem: { type: 'url', content: url },
+            item: {
+              default: { type: 'url', content: url },
+            },
+            subject: {
+              default: title,
+            },
+            linkMetadata: { originalUrl: url, url, title },
+          },
+          {
+            placeholderItem: { type: 'text', content: message },
+            item: {
+              default: { type: 'text', content: message },
+              message: null,
+            },
+            linkMetadata: {
+              title: message
+            },
+          },
+          {
+            placeholderItem: {
+              type: 'url',
+              content: icon
+            },
+            item: {
+              default: {
+                type: 'text',
+                content: `${message} ${url}`
+              },
+            },
+            linkMetadata: {
+              title: message,
+              icon: icon
+            }
+          },
+        ],
+      },
+      default: {
+        title,
+        subject: title,
+        message: `${message} ${url}`,
+      },
+    });
 
     setTimeout(() => {
       this.setState({ spinner: true });
-      Share.shareSingle(shareOption)
+      Share.open(options)
         .then((res) => {
           //console.log('share result', res);
           this.setState({ spinner: false });

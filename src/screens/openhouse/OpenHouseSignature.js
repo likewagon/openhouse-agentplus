@@ -40,6 +40,7 @@ export default class OpenHouseSignatureScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      spinner: false,
       visibleSignForm: false,
       pdfURL: "http://www.openhousemarketingsystem.com/application/data/attendeepdf/2991.pdf"
     }   
@@ -51,8 +52,7 @@ export default class OpenHouseSignatureScreen extends Component {
 
   onSignOK = () => {   
     this.postSignature();
-    this.postAttendee();   
-    
+        
     this.props.navigation.navigate('OpenHouseSignatureEnd');
   }
   
@@ -60,7 +60,7 @@ export default class OpenHouseSignatureScreen extends Component {
     let signaturePath = `${RNFetchBlob.fs.dirs.DocumentDir}/signature.png`;    
     let uri = Platform.OS === 'ios' ? signaturePath : 'file://' + signaturePath;
 
-    let filetoupload = LoginInfo.user_account + '.png';  
+    let filetoupload = this.props.route.params.attendeeAccount + '.png';
     let photo_id = LoginInfo.user_account + '-' + RouteParam.propertyRecordNo;
     
     let data = new FormData();
@@ -87,26 +87,10 @@ export default class OpenHouseSignatureScreen extends Component {
       .done();   
   }
 
-  postAttendee = async () => {
-    let bodyFormData = new FormData();
-    bodyFormData.append('action', 'post_oh_attendee');
-    bodyFormData.append('user_account', LoginInfo.user_account);
-    bodyFormData.append('property_recordno', RouteParam.propertyRecordNo);
-    bodyFormData.append('user_latitude', LoginInfo.latitude);
-    bodyFormData.append('user_longitude', LoginInfo.longitude);
-
-    await postData(bodyFormData)
-      .then((res) => {
-        //console.log('post attendee success', res);
-      })
-      .catch((err) => {
-        //console.log('post attendee error', err)
-      })
-  }
-
   render() {
     return (
       <ImageBackground style={styles.container}>
+        <Spinner visible={this.state.spinner} />
         <SignModal
           visible={this.state.visibleSignForm}
           onClose={() => this.setState({ visibleSignForm: false })}
@@ -117,7 +101,11 @@ export default class OpenHouseSignatureScreen extends Component {
         </View>
         <View style={styles.body}>
           <View style={styles.pdfContainer}>
-            <WebView source={{ uri: this.state.pdfURL }} />
+            <WebView 
+            source={{ uri: this.state.pdfURL }} 
+            onLoadStart={()=>this.setState({spinner: true})}
+            onLoadStart={()=>this.setState({spinner: false})}
+            />
           </View>
           <View style={styles.btnContainer}>
             <Button btnTxt='AGREE AND SIGN' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.setState({ visibleSignForm: true })} />
