@@ -480,9 +480,9 @@ const styles = StyleSheet.create({
     width: '90%',
     //height: normalize(80, 'height'),
     alignSelf: 'center',
-    borderColor: Colors.borderColor,
-    borderTopWidth: normalize(0.5, 'height'),
-    marginTop: normalize(15, 'height'),
+    // borderColor: Colors.borderColor,
+    // borderTopWidth: normalize(0.5, 'height'),
+    marginTop: normalize(5, 'height'),
     //borderWidth: 1
   },
   addressTitle: {
