@@ -289,10 +289,10 @@ export default class PropertyScreen extends Component {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.descContainer}>
+        {/* <View style={styles.descContainer}>
           <Text style={styles.descTitle}>DESCRIPTION</Text>
-          {/* <Text style={styles.descTxt}>{this.state.property.property_desc}</Text> */}
-        </View>
+          <Text style={styles.descTxt}>{this.state.property.property_desc}</Text>
+        </View> */}
 
         <View style={styles.addressContainer}>
           <Text style={styles.addressTitle}>ADDRESS</Text>
@@ -310,7 +310,7 @@ export default class PropertyScreen extends Component {
           />
         </View>
 
-        <View style={styles.photoContainer}>
+        {/* <View style={styles.photoContainer}>
           <Text style={styles.photoTitle}>PHOTOS</Text>
           <FlatList
             keyExtractor={item => item.property_photourl}
@@ -331,7 +331,7 @@ export default class PropertyScreen extends Component {
               )
             }}
           />
-        </View>
+        </View> */}
 
         {
           this.state.isImageViewVisible &&

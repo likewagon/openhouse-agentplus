@@ -17,6 +17,7 @@ import {
 import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { openComposer, openInbox } from 'react-native-email-link';
 
 import PropTypes from 'prop-types';
 
@@ -58,7 +59,11 @@ export default class SideMenu extends Component {
   }
 
   onTechnicalSupport = () => {
-    Linking.openURL('mailto:support@openhousemarketingsystem.com');
+    //Linking.openURL('mailto:support@openhousemarketingsystem.com');
+    openComposer({
+      to: 'support@openhousemarketingsystem.com'
+    });
+    //openInbox();
   }
 
   render() {
