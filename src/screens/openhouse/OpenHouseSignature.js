@@ -21,6 +21,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { WebView } from 'react-native-webview';//ios
 import PDFView from 'react-native-view-pdf';//android
 import RNFetchBlob from 'rn-fetch-blob';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
   BrowseCard,
@@ -40,7 +41,7 @@ export default class OpenHouseSignatureScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      spinner: false,
+      spinner: true,
       visibleSignForm: false,
       pdfURL: "http://www.openhousemarketingsystem.com/application/data/attendeepdf/2991.pdf"
     }   
@@ -103,8 +104,7 @@ export default class OpenHouseSignatureScreen extends Component {
           <View style={styles.pdfContainer}>
             <WebView 
             source={{ uri: this.state.pdfURL }} 
-            onLoadStart={()=>this.setState({spinner: true})}
-            onLoadStart={()=>this.setState({spinner: false})}
+            onLoadEnd={()=>this.setState({spinner: false})}            
             />
           </View>
           <View style={styles.btnContainer}>

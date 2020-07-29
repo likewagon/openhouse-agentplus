@@ -9,8 +9,9 @@ import {
   TextInput,
   Alert,
   TouchableOpacity,
-  ImageBackground,
   TouchableHighlight,
+  Linking,
+  ImageBackground,
   Dimensions
 } from "react-native";
 import normalize from "react-native-normalize";
@@ -56,6 +57,10 @@ export default class SideMenu extends Component {
     this.props.onToggleMenu();
   }
 
+  onTechnicalSupport = () => {
+    Linking.openURL('mailto:support@openhousemargetingsystem.com');
+  }
+
   render() {
     return (
       <ImageBackground style={styles.container} source={Images.sideBlurBack}>
@@ -84,6 +89,9 @@ export default class SideMenu extends Component {
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItemContainer} onPress={() => this.onPreference()}>
             <Text style={styles.menuItemTxt}>PREFERENCE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuItemContainer} onPress={() => this.onTechnicalSupport()}>
+            <Text style={styles.menuItemTxt}>TECHNICAL SUPPORT</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.btnContainer}>
