@@ -58,7 +58,7 @@ export default class SideMenu extends Component {
   }
 
   onTechnicalSupport = () => {
-    Linking.openURL('mailto:support@openhousemargetingsystem.com');
+    Linking.openURL('mailto:support@openhousemarketingsystem.com');
   }
 
   render() {
