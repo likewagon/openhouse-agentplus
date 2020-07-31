@@ -84,7 +84,7 @@ export default class FormScreen extends Component {
     LoginInfo.email = this.state.email;
     LoginInfo.telephone = pPhoneNumber;
 
-    if (RouteParam.deviceType === 'pad') {
+    if (RouteParam.isOnAppleReview) {
       this.submit();
       return;
     }

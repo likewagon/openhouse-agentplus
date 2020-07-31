@@ -92,10 +92,10 @@ export default class SplashScreen extends Component {
   async componentDidFocus() {
     let res = await getReviewGeoForApple();
     if (res) {
-      if (res[0].under_review_by_apple) {
+      RouteParam.isOnAppleReview = res[0].under_review_by_apple;
+      if (RouteParam.isOnAppleReview) {
         LoginInfo.latitude = res[0].user_latitude;
-        LoginInfo.longitude = res[0].user_longitude;
-        RouteParam.deviceType = 'pad';
+        LoginInfo.longitude = res[0].user_longitude;        
         this.isLoggedInProc();
       }
       else {
@@ -340,13 +340,12 @@ export default class SplashScreen extends Component {
         LoginInfo.fcmToken = res[0].fcmToken;
         LoginInfo.user_status = res[0].user_status;       
         
-        if (!LoginInfo.user_status) {
+        if (LoginInfo.user_status || RouteParam.isOnAppleReview) {
+          setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);      
+        }
+        else {
           setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-          return;
-        }
-        else{
-          setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
-        }
+        }    
       })
       .catch((err) => {
         //console.log('post login info error', err)
