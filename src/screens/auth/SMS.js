@@ -148,7 +148,6 @@ export default class SMSScreen extends Component {
         LoginInfo.user_status = res[0].user_status;   
 
         AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
-
         this.props.navigation.navigate('Welcome');
       })
       .catch((err) => {

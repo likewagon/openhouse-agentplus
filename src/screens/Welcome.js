@@ -64,12 +64,11 @@ export default class WelcomeScreen extends Component {
   }
 
   onEnter = async (index) => {
-    if (!LoginInfo.user_status) {
-      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-      return;
+    if (LoginInfo.user_status) {
+      setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);      
     }
     else {
-      setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);
+      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
     }    
   }
 
