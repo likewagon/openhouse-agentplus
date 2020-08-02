@@ -92,8 +92,8 @@ export default class SplashScreen extends Component {
   async componentDidFocus() {
     let res = await getReviewGeoForApple();
     if (res) {
-      RouteParam.isOnAppleReview = res[0].under_review_by_apple;
-      if (RouteParam.isOnAppleReview) {
+      RouteParam.isUnderReviewByApple = res[0].under_review_by_apple;
+      if (RouteParam.isUnderReviewByApple) {
         LoginInfo.latitude = res[0].user_latitude;
         LoginInfo.longitude = res[0].user_longitude;        
         this.isLoggedInProc();
@@ -340,7 +340,7 @@ export default class SplashScreen extends Component {
         LoginInfo.fcmToken = res[0].fcmToken;
         LoginInfo.user_status = res[0].user_status;       
         
-        if (LoginInfo.user_status || RouteParam.isOnAppleReview) {
+        if (LoginInfo.user_status || RouteParam.isUnderReviewByApple) {
           setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);      
         }
         else {

@@ -15,7 +15,7 @@ export const Images = DefinedImages;
 export const LoginInfo = {}
 
 export const RouteParam = {
-  isOnAppleReview: false,
+  isUnderReviewByApple: false,
   verifyResult: {},
   liveCallFromClosed: false,
   propertyRecordNo: '',
