@@ -344,7 +344,8 @@ export default class SplashScreen extends Component {
           setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);      
         }
         else {
-          setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+          // setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+          setTimeout(() => { this.props.navigation.navigate('PaymentLink') }, 2000);
         }    
       })
       .catch((err) => {

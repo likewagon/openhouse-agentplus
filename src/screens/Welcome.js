@@ -15,7 +15,6 @@ import normalize from 'react-native-normalize';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import AsyncStorage from '@react-native-community/async-storage';
-import RNIap from 'react-native-iap';
 
 import SafeAreaView from 'react-native-safe-area-view';
 import { SliderBox } from "react-native-image-slider-box";
@@ -68,7 +67,8 @@ export default class WelcomeScreen extends Component {
       setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);      
     }
     else {
-      setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+      // setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
+      setTimeout(() => { this.props.navigation.navigate('PaymentLink') }, 2000);
     }    
   }
 

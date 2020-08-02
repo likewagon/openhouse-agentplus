@@ -22,7 +22,6 @@
 		8477DC5A2494ED46004EB485 /* Billabong.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8477DC562494ED46004EB485 /* Billabong.ttf */; };
 		8477DC5B2494ED46004EB485 /* SFProText-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8477DC572494ED46004EB485 /* SFProText-Bold.ttf */; };
 		849068FF24AA5DE30006BD9F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 849068FE24AA5DE20006BD9F /* GoogleService-Info.plist */; };
-		8490690224AAC43F0006BD9F /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8490690124AAC43F0006BD9F /* StoreKit.framework */; };
 		B8C1A37A3C0966E0F4271F64 /* libPods-agentplus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 838FD803BAF6CB37BB032889 /* libPods-agentplus.a */; };
 		DCD8586E1DDCD43F9E9EC962 /* libPods-agentplus-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DF8277799906E07E023A255 /* libPods-agentplus-tvOS.a */; };
 		ED01F80F17DDE80CA643ABC9 /* libPods-agentplus-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3530220D45CFDFB1651D0BC3 /* libPods-agentplus-tvOSTests.a */; };
@@ -73,7 +72,6 @@
 		8477DC572494ED46004EB485 /* SFProText-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFProText-Bold.ttf"; path = "../src/assets/fonts/SFProText-Bold.ttf"; sourceTree = "<group>"; };
 		849068FE24AA5DE20006BD9F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8490690024AA9DC10006BD9F /* agentplus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = agentplus.entitlements; path = agentplus/agentplus.entitlements; sourceTree = "<group>"; };
-		8490690124AAC43F0006BD9F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8DF8277799906E07E023A255 /* libPods-agentplus-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-agentplus-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF616BBF8DE652E50A5B3837 /* Pods-agentplus.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-agentplus.debug.xcconfig"; path = "Target Support Files/Pods-agentplus/Pods-agentplus.debug.xcconfig"; sourceTree = "<group>"; };
 		CB733E76E905B798754E15C3 /* libPods-agentplus-agentplusTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-agentplus-agentplusTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,7 +95,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B8C1A37A3C0966E0F4271F64 /* libPods-agentplus.a in Frameworks */,
-				8490690224AAC43F0006BD9F /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				8466ADC624C3E8290049698A /* InputMask.framework */,
-				8490690124AAC43F0006BD9F /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				838FD803BAF6CB37BB032889 /* libPods-agentplus.a */,
