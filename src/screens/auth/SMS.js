@@ -19,7 +19,6 @@ import normalize from "react-native-normalize";
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
-import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
@@ -147,7 +146,6 @@ export default class SMSScreen extends Component {
         LoginInfo.fcmToken = res[0].fcmToken;     
         LoginInfo.user_status = res[0].user_status;   
 
-        AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');
       })
       .catch((err) => {

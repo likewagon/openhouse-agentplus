@@ -20,7 +20,6 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 
 import { TextInputMask } from 'react-native-masked-text';
-import AsyncStorage from '@react-native-community/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
@@ -144,7 +143,6 @@ export default class FormScreen extends Component {
         LoginInfo.fcmToken = res[0].fcmToken;
         LoginInfo.user_status = res[0].user_status;
 
-        AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
         this.props.navigation.navigate('Welcome');
       })
       .catch((err) => {

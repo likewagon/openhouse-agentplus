@@ -50,7 +50,7 @@ export default class PaymentLinkScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'Payment'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
+          <Header title={'Activate Your Account'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.navigate('Auth', { screen: 'SocialLogin' })} />
         </View>
         <WebView
           source={{ uri: 'http://www.openhousemarketingsystem.com/agentplus_packages.php' }}
