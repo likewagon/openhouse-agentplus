@@ -53,7 +53,7 @@ export default class PaymentLinkScreen extends Component {
           <Header title={'Payment'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View>
         <WebView
-          source={{ uri: '' }}
+          source={{ uri: 'http://www.openhousemarketingsystem.com/agentplus_packages.php' }}
           onLoadEnd={() => this.setState({ spinner: false })}          
         />
       </View>
