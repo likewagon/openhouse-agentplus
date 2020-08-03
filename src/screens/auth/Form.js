@@ -192,25 +192,22 @@ export default class FormScreen extends Component {
                 onChangeText={(text) => this.setState({ email: text })}
               />
             </View>
-            {
-              !RouteParam.isUnderReviewByApple &&
-              <View style={styles.inputBoxContainer}>
-                <TextInputMask
-                  type={'custom'}
-                  options={{
-                    mask: '+1 (999) 999 - 9999'
-                  }}
-                  refInput={ref => { this.input = ref }}
-                  style={styles.txtInput}
-                  placeholder='Cell Phone Number'
-                  placeholderTextColor={Colors.weakBlackColor}
-                  value={this.state.telephone}
-                  keyboardType={'numeric'}
-                  editable={LoginInfo.telephone ? false : true}
-                  onChangeText={(text) => this.setState({ telephone: text })}
-                />
-              </View>
-            }
+            <View style={styles.inputBoxContainer}>
+              <TextInputMask
+                type={'custom'}
+                options={{
+                  mask: '+1 (999) 999 - 9999'
+                }}
+                refInput={ref => { this.input = ref }}
+                style={styles.txtInput}
+                placeholder='Cell Phone Number'
+                placeholderTextColor={Colors.weakBlackColor}
+                value={this.state.telephone}
+                keyboardType={'numeric'}
+                editable={LoginInfo.telephone || RouteParam.isUnderReviewByApple ? false : true}
+                onChangeText={(text) => this.setState({ telephone: text })}
+              />
+            </View>
             <View style={styles.nextContainer}>
               <Button btnTxt='Next'
                 btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(1.8) }}
