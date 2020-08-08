@@ -37,7 +37,8 @@ export default class PaymentLinkScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      spinner: true
+      spinner: true,
+      paymentUrl: 'http://www.openhousemarketingsystem.com/agentplus_packages.php' + '?email=' + LoginInfo.email
     }
   }
 
@@ -53,7 +54,7 @@ export default class PaymentLinkScreen extends Component {
           <Header title={'Activate Your Account'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.navigate('Auth', { screen: 'SocialLogin' })} />
         </View>
         <WebView
-          source={{ uri: 'http://www.openhousemarketingsystem.com/agentplus_packages.php' }}
+          source={{ uri: this.state.paymentUrl }}
           onLoadEnd={() => this.setState({ spinner: false })}          
         />
       </View>
