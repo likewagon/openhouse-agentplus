@@ -143,6 +143,7 @@ export default class SMSScreen extends Component {
 
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.photourl = res[0].user_photourl;
+        LoginInfo.company = res[0].user_companyname,
         LoginInfo.fcmToken = res[0].fcmToken;     
         LoginInfo.user_status = res[0].user_status;   
 
