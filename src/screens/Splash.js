@@ -277,6 +277,7 @@ export default class SplashScreen extends Component {
           LoginInfo.telephone = info.telephone;
           LoginInfo.providerid = info.providerid;
           LoginInfo.photourl = info.photourl;
+          LoginInfo.company = info.company,
           LoginInfo.email_verified = info.email_verified;
           LoginInfo.phone_verified = info.phone_verified;
           LoginInfo.fcmToken = info.fcmToken;
