@@ -66,16 +66,7 @@ export default class FormScreen extends Component {
     if (this.state.email == null || this.state.email == '') {
       Alert.alert('Please enter your email address');
       return;
-    }
-
-    LoginInfo.fullname = this.state.fullname;
-    LoginInfo.email = this.state.email;
-
-    if (RouteParam.isUnderReviewByApple) {
-      this.submit();
-      return;
-    }
-
+    }    
     if (this.state.telephone == null || this.state.telephone == '') {
       Alert.alert('Please enter your phone number');
       return;
@@ -84,10 +75,12 @@ export default class FormScreen extends Component {
       Alert.alert('Please enter a valid telephone number');
       return;
     }
-
+    
     var vPhoneNumber = this.makeVerifyPhoneNumber(); //verify phoneNumber: +13059007270
     var pPhoneNumber = vPhoneNumber.slice(2); //post phoneNumber: 3059007270    
-
+    
+    LoginInfo.fullname = this.state.fullname;
+    LoginInfo.email = this.state.email;
     LoginInfo.telephone = pPhoneNumber;
 
     this.setState({ spinner: true });
@@ -102,53 +95,16 @@ export default class FormScreen extends Component {
         this.props.navigation.navigate('SMS');
       })
       .catch((err) => {
-        // Alert.alert(
-        //   'Verify Phone Number Failed. Try again later',
-        //   '',
-        //   [
-        //     { text: 'OK', onPress: () => {this.setState({ spinner: false }); this.submit(); }}
-        //   ]
-        // );
-
-        this.setState({ spinner: false }); this.submit();
+        Alert.alert(
+          'Verify Phone Number Failed.',
+          'Please Try Again Later',
+          [
+            { text: 'OK', onPress: () => {this.setState({ spinner: false }); }}
+          ]
+        );        
         //console.log('verify phone number error', err);
       })
-  }
-
-  // for apple reivew 
-  submit = async () => {
-    let bodyFormData = new FormData();
-    bodyFormData.append('action', 'login');
-    bodyFormData.append('uniqueid', LoginInfo.uniqueid);
-    bodyFormData.append('fullname', LoginInfo.fullname);
-    bodyFormData.append('email', LoginInfo.email);
-    bodyFormData.append('telephone', LoginInfo.telephone);
-    bodyFormData.append('photourl', LoginInfo.photourl);
-    bodyFormData.append('fcmToken', LoginInfo.fcmToken);
-    bodyFormData.append('providerid', LoginInfo.providerid);
-    // bodyFormData.append('email_verified', LoginInfo.email_verified);
-    // bodyFormData.append('phone_verified', 0);
-    bodyFormData.append('user_latitude', LoginInfo.latitude);
-    bodyFormData.append('user_longitude', LoginInfo.longitude);
-    bodyFormData.append('appid', 'com.ecaptureinc.agentplus');
-    bodyFormData.append('title', 'CEO');
-    bodyFormData.append('user_companyname', 'ecapture,inc.');
-
-    await postData(bodyFormData)
-      .then((res) => {
-        //console.log('post login info success', res);
-
-        LoginInfo.user_account = res[0].user_account;
-        LoginInfo.photourl = res[0].user_photourl;
-        LoginInfo.fcmToken = res[0].fcmToken;
-        LoginInfo.user_status = res[0].user_status;
-
-        this.props.navigation.navigate('Welcome');
-      })
-      .catch((err) => {
-        //console.log('post login info error', err);
-      })
-  }
+  } 
 
   render() {
     return (
