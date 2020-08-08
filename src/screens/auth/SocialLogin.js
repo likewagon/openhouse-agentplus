@@ -30,7 +30,7 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo } from '@constants';
+import { Colors, Images, LoginInfo, RouteParam } from '@constants';
 import { appleSignin, googleSignin } from '../../api/Firebase';
 
 import { postData } from '../../api/rest';
