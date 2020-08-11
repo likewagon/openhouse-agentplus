@@ -105,25 +105,14 @@ export default class ClientShareScreen extends Component {
               default: { type: 'text', content: message },
               message: null,
             },
-            linkMetadata: {
-              title: message
-            },
+            linkMetadata: { title: message },
           },
           { 
-            placeholderItem: {
-              type: 'url',
-              content: icon
-            },
+            placeholderItem: { type: 'url', content: icon },
             item: {
-              default: {
-                type: 'text',
-                content: `${message} ${url}`
-              },
+              default: { type: 'text', content: `${message} ${url}` },
             },
-            linkMetadata: {
-              title: message,
-              icon: icon
-            }
+            linkMetadata: { title: message, icon: icon }
           },
         ],
       },
