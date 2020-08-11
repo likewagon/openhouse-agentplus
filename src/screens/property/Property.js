@@ -146,17 +146,43 @@ export default class PropertyScreen extends Component {
   }
 
   onFacebook = () => {
-    let shareOption = {
-      url: 'https://apps.apple.com/us/app/open-houses-and-virtual-tours/id1517663733',      
-      title: 'Open Plus™',
-      subject: 'Open Plus™',
-      social: 'facebook',
-      message: LoginInfo.fullname + ' Shared this link '
-    };
+    const url = this.state.property.property_share_url;
+    const title = 'Agent Plus™';
+    const message = LoginInfo.fullname + ' Share';
+
+    const options = Platform.select({
+      ios: {
+        activityItemSources: [
+          { 
+            placeholderItem: { type: 'url', content: url },
+            item: {
+              default: { type: 'url', content: url },
+            },
+            subject: {
+              default: title,
+            },
+            linkMetadata: { originalUrl: url, url, title },
+          },
+          { 
+            placeholderItem: { type: 'text', content: message },
+            item: {
+              default: { type: 'text', content: message },
+              message: null,
+            },
+            linkMetadata: { title: message },
+          },          
+        ],
+      },
+      default: {
+        title,
+        subject: title,
+        message: `${message} ${url}`,
+      },
+    });    
 
     setTimeout(() => {
       this.setState({ spinner: true });
-      Share.shareSingle(shareOption)
+      Share.open(options)
         .then((res) => {
           //console.log('share result', res);
           this.setState({ spinner: false });
