@@ -35,7 +35,7 @@ const Images = {
   btnLinkedin: require('../assets/images/btnLinkedin.png'),
   btnYoutube: require('../assets/images/btnYoutube.png'),
   btnTwitter: require('../assets/images/btnTwitter.png'),
-  btnSnapchat: require('../assets/images/btnSnapchat.png'),
+  btnSnapChat: require('../assets/images/btnSnapChat.png'),
   btnPinterest: require('../assets/images/btnPinterest.png'),
   btnTiktok: require('../assets/images/btnTiktok.png'),
   btnWhatsapp: require('../assets/images/btnWhatsapp.png'),

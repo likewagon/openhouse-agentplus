@@ -187,7 +187,7 @@ export default class ClientShareScreen extends Component {
               <Image style={styles.shareImg} source={Images.btnTwitter} resizeMode='cover' />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.onUnSupportedShare('snapchat')}>
-              <Image style={styles.shareImg} source={Images.btnSnapchat} resizeMode='cover' />
+              <Image style={styles.shareImg} source={Images.btnSnapChat} resizeMode='cover' />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.onUnSupportedShare('pinterest')}>
               <Image style={styles.shareImg} source={Images.btnPinterest} resizeMode='cover' />
