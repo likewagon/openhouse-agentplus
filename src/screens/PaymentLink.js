@@ -51,7 +51,7 @@ export default class PaymentLinkScreen extends Component {
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
         <View style={styles.headerContainer}>
-          <Header title={'Activate Your Account'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.navigate('Auth', { screen: 'SocialLogin' })} />
+          <Header title={'Activate Your Account'} titleColor={Colors.blackColor} noLeftIcon /*onPressBack={() => this.props.navigation.navigate('Auth', { screen: 'SocialLogin' })}*/ />
         </View>
         <WebView
           source={{ uri: this.state.paymentUrl }}

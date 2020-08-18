@@ -63,8 +63,8 @@ export default class WelcomeScreen extends Component {
   }
 
   onEnter = async (index) => {
+    AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
     if (LoginInfo.user_status || RouteParam.isUnderReviewByApple) {
-      AsyncStorage.setItem('LoginInfo', JSON.stringify(LoginInfo));
       setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);      
     }
     else {
