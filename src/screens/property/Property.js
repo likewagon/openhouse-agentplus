@@ -123,28 +123,30 @@ export default class PropertyScreen extends Component {
   }
 
   onVideoCall = () => {
-    // var param = {
-    //   user_account: LoginInfo.user_account,
-    //   user_fullname: LoginInfo.fullname,
-    //   user_latitude: LoginInfo.latitude,
-    //   user_longitude: LoginInfo.longitude,
-    //   property_recordno: RouteParam.propertyRecordNo
-    // };
-    // //console.log('live info param', param);
+    var param = {
+      user_account: LoginInfo.user_account,
+      user_fullname: LoginInfo.fullname,
+      user_latitude: LoginInfo.latitude,
+      user_longitude: LoginInfo.longitude,
+      property_recordno: RouteParam.propertyRecordNo
+    };
+    //console.log('live info param', param);
 
-    // getLiveInfo(param)
-    //   .then((res) => {
-    //     //console.log('live info', res);
-    //     RouteParam.liveInfo = res[0];
-    //     if (RouteParam.liveInfo.error === undefined) {
-    //       this.props.navigation.navigate('Main', { screen: 'LiveCall' });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     //console.log('get live info error', err);
-    //   })
-    var msg = 'Live Stream of ' + this.state.property.property_address1 + ' Is Now Enable.';
-    Alert.alert(msg);
+    getLiveInfo(param)
+      .then((res) => {
+        //console.log('live info', res);
+        RouteParam.liveInfo = res[0];
+        if (RouteParam.liveInfo.error === undefined) {
+          // this.props.navigation.navigate('Main', { screen: 'LiveCall' });
+          var msg = 'Live Stream of ' + this.state.property.property_address1 + ' Is Now Enable.';
+          Alert.alert(msg);
+        }
+      })
+      .catch((err) => {
+        //console.log('get live info error', err);
+        var msg = 'Live Stream of ' + this.state.property.property_address1 + ' Is Now Disable.';
+        Alert.alert(msg);
+      })
   }
 
   onFacebook = () => {
