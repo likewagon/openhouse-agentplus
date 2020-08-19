@@ -41,7 +41,7 @@ export default class LiveCallScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mute: false,      
+      isAudioEnabled: true,      
       status: "disconnected",
       participants: new Map(),
       videoTracks: new Map(),
@@ -82,8 +82,8 @@ export default class LiveCallScreen extends Component {
 
   _onMuteButtonPress = () => {
     this.twilioRef
-      .setLocalAudioEnabled(!this.state.mute)
-      .then(isEnabled => this.setState({ mute: isEnabled }));
+      .setLocalAudioEnabled(!this.state.isAudioEnabled)
+      .then(isEnabled => this.setState({ isAudioEnabled: isEnabled }));
   };
 
   _onFlipButtonPress = () => {
@@ -160,10 +160,9 @@ export default class LiveCallScreen extends Component {
         </View>
         <View style={styles.btnsContainer}>
           <TouchableOpacity onPress={() => {
-            this._onMuteButtonPress();
-            this.setState({ mute: !this.state.mute });
+            this._onMuteButtonPress();            
           }}>
-            <Image style={styles.btnImg} source={this.state.mute ? Images.btnMute : Images.btnUnmute} resizeMode='cover' />
+            <Image style={styles.btnImg} source={this.state.isAudioEnabled ? Images.btnMute : Images.btnUnmute} resizeMode='cover' />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this._onFlipButtonPress()}>
             <Image style={styles.btnImg} source={Images.btnFlipCam} resizeMode='cover' />
@@ -206,8 +205,8 @@ const styles = StyleSheet.create({
   },  
   localBigVideoContainer: {
     flex: 1,
-    //flexDirection: "row",
-    //flexWrap: "wrap"
+    flexDirection: "row",
+    flexWrap: "wrap"
   },
   localBigVideo: {
     width: '100%',
@@ -222,7 +221,8 @@ const styles = StyleSheet.create({
     height: normalize(100),
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    zIndex: 100
   },
   remoteSmallVideo: {    
     width: normalize(100),

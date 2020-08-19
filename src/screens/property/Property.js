@@ -122,27 +122,29 @@ export default class PropertyScreen extends Component {
       })
   }
 
-  onEnterRoom = () => {
-    var param = {
-      user_account: LoginInfo.user_account,
-      user_fullname: LoginInfo.fullname,
-      user_latitude: LoginInfo.latitude,
-      user_longitude: LoginInfo.longitude,
-      property_recordno: RouteParam.propertyRecordNo
-    };
-    //console.log('live info param', param);
+  onVideoCall = () => {
+    // var param = {
+    //   user_account: LoginInfo.user_account,
+    //   user_fullname: LoginInfo.fullname,
+    //   user_latitude: LoginInfo.latitude,
+    //   user_longitude: LoginInfo.longitude,
+    //   property_recordno: RouteParam.propertyRecordNo
+    // };
+    // //console.log('live info param', param);
 
-    getLiveInfo(param)
-      .then((res) => {
-        //console.log('live info', res);
-        RouteParam.liveInfo = res[0];
-        if (RouteParam.liveInfo.error === undefined) {
-          this.props.navigation.navigate('Main', { screen: 'LiveCall' });
-        }
-      })
-      .catch((err) => {
-        //console.log('get live info error', err);
-      })
+    // getLiveInfo(param)
+    //   .then((res) => {
+    //     //console.log('live info', res);
+    //     RouteParam.liveInfo = res[0];
+    //     if (RouteParam.liveInfo.error === undefined) {
+    //       this.props.navigation.navigate('Main', { screen: 'LiveCall' });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     //console.log('get live info error', err);
+    //   })
+    var msg = 'Live Stream of ' + this.state.property.property_address1 + ' Is Now Enable.';
+    Alert.alert(msg);
   }
 
   onFacebook = () => {
@@ -259,7 +261,7 @@ export default class PropertyScreen extends Component {
           <TouchableOpacity onPress={() => this.props.navigation.navigate('PropertyWithClient', { property: this.state.property })}>
             <Image style={styles.eachBtn} source={Images.iconConference}></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.onEnterRoom()}>
+          <TouchableOpacity onPress={() => this.onVideoCall()}>
             <Image style={styles.eachBtn} source={Images.iconEnterRoom}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('OpenHouseStack')}>
