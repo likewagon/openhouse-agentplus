@@ -27,4 +27,4 @@ Subscription
 [iOS app](https://apps.apple.com/us/app/agent-plus-for-real-estate/id1518825097)
 
 ## Screenshot
-<img src="./agentplus.png" height="736px" width="502px">
+<img src="./agentplus.png" height="736px" width="1000px">
