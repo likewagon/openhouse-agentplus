@@ -1,19 +1,20 @@
 import React from 'react';
-import { AppRegistry, Platform, Alert } from 'react-native';
+import {AppRegistry, Platform, Alert} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 
 import App from './App';
-import { name as appName } from './app.json';
+import {name as appName} from './app.json';
 
 import messaging from '@react-native-firebase/messaging';
-var PushNotification = require("react-native-push-notification");
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
-import { RouteParam, LoginInfo } from './src/constants';
+var PushNotification = require('react-native-push-notification');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
+import {RouteParam, LoginInfo} from './src/constants';
 
-const API_V1_GET_LIVEINFO_URL = 'http://www.openhousemarketingsystem.com/application/agentplus/v1/connect_to_live_oh.php'
+const API_V1_GET_LIVEINFO_URL =
+  'http://www.openhousemarketingsystem.com/application/agentplus/v1/connect_to_live_oh.php';
 
-messaging().setBackgroundMessageHandler(async remoteMessage => {
+messaging().setBackgroundMessageHandler(async (remoteMessage) => {
   //console.log('message handled in the background:', remoteMessage);
   if (remoteMessage.data == null || remoteMessage.data == undefinded) return;
   if (Platform.OS === 'android') {
@@ -23,11 +24,10 @@ messaging().setBackgroundMessageHandler(async remoteMessage => {
       actions: '["Yes", "No"]',
       invokeApp: true,
     });
-  }
-  else {
+  } else {
     PushNotificationIOS.presentLocalNotification({
       alertTitle: remoteMessage.data.title,
-      alertBody: remoteMessage.data.body
+      alertBody: remoteMessage.data.body,
     });
   }
 });
@@ -36,7 +36,7 @@ messaging()
   .getInitialNotification()
   .then(async (remoteMessage) => {
     //console.log('notification caused app to open from closed status:', remoteMessage);
-    if(remoteMessage.data == null || remoteMessage.data == undefined) return;
+    if (remoteMessage.data == null || remoteMessage.data == undefined) return;
     if (remoteMessage.data.propertyNo) {
       //console.log('livecall notification on closed status');
       var loginInfo = await AsyncStorage.getItem('LoginInfo');
@@ -61,34 +61,34 @@ messaging()
           user_fullname: LoginInfo.fullname,
           user_latitude: LoginInfo.latitude,
           user_longitude: LoginInfo.longitude,
-          property_recordno: remoteMessage.data.propertyNo
+          property_recordno: remoteMessage.data.propertyNo,
         };
         //console.log('live info param', param);
 
-        axios.get(API_V1_GET_LIVEINFO_URL, {
-          params: param
-        })
+        axios
+          .get(API_V1_GET_LIVEINFO_URL, {
+            params: param,
+          })
           .then((res) => {
             RouteParam.liveInfo = res.data[0];
             if (RouteParam.liveInfo.error === undefined) {
               RouteParam.liveCallFromClosed = true;
-              this.props.navigation.navigate('Main', { screen: 'LiveCall' });
+              this.props.navigation.navigate('Main', {screen: 'LiveCall'});
             }
           })
           .catch((err) => {
             //console.log('get live info error', err);
           });
-      }
-      else {
+      } else {
         Alert.alert('Please Signin First');
       }
     }
   })
   .catch((err) => {
     //console.log('get initial notification error at messaging', err);
-  })
+  });
 
-function HeadlessCheck({ isHeadless }) {
+function HeadlessCheck({isHeadless}) {
   if (isHeadless) {
     return null;
   }

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,15 +12,18 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Dimensions,
-  ImageBackground
-} from "react-native";
+  ImageBackground,
+} from 'react-native';
 import normalize from 'react-native-normalize';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import ImageView from 'react-native-image-view';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import Share from 'react-native-share';
 
 import {
@@ -35,8 +38,8 @@ import {
   SignModal,
 } from '@components';
 
-import { Colors, Images, RouteParam, LoginInfo } from '@constants';
-import { getContentByAction, postData, getLiveInfo } from '../../api/rest';
+import {Colors, Images, RouteParam, LoginInfo} from '@constants';
+import {getContentByAction, postData, getLiveInfo} from '../../api/rest';
 
 export default class PropertyScreen extends Component {
   constructor(props) {
@@ -49,8 +52,8 @@ export default class PropertyScreen extends Component {
       sticky: false,
       spinner: false,
       isImageViewVisible: false,
-      imageIndex: 0
-    }
+      imageIndex: 0,
+    };
   }
 
   componentDidMount() {
@@ -61,29 +64,29 @@ export default class PropertyScreen extends Component {
     var propertyParam = {
       action: 'property_detail',
       account_no: LoginInfo.user_account,
-      property_recordno: RouteParam.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,
     };
 
-    this.setState({ spinner: true });
+    this.setState({spinner: true});
     getContentByAction(propertyParam)
       .then((res) => {
         //console.log(res);
         if (res.length == 0 || res[0].error) {
-          this.setState({ spinner: false });
+          this.setState({spinner: false});
           return;
         }
         this.setState({
           property: res[0],
-          spinner: false
+          spinner: false,
         });
 
         RouteParam.property = res[0];
       })
       .catch((err) => {
         //console.log('get property error', err);
-        this.setState({ spinner: false });
-      })
-  }
+        this.setState({spinner: false});
+      });
+  };
 
   formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -96,14 +99,13 @@ export default class PropertyScreen extends Component {
     if (!this.state.sticky && y > 60) {
       this.setState({
         sticky: true,
-      })
-    }
-    else if (this.state.sticky && y < 60) {
+      });
+    } else if (this.state.sticky && y < 60) {
       this.setState({
         sticky: false,
-      })
+      });
     }
-  }
+  };
 
   onVideoMessage = async () => {
     let bodyFormData = new FormData();
@@ -119,8 +121,8 @@ export default class PropertyScreen extends Component {
       .catch((err) => {
         //console.log('create live call error', err)
         Alert.alert('Live call is not applied');
-      })
-  }
+      });
+  };
 
   onVideoCall = () => {
     var param = {
@@ -128,7 +130,7 @@ export default class PropertyScreen extends Component {
       user_fullname: LoginInfo.fullname,
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
-      property_recordno: RouteParam.propertyRecordNo
+      property_recordno: RouteParam.propertyRecordNo,
     };
     //console.log('live info param', param);
 
@@ -138,16 +140,22 @@ export default class PropertyScreen extends Component {
         RouteParam.liveInfo = res[0];
         if (RouteParam.liveInfo.error === undefined) {
           // this.props.navigation.navigate('Main', { screen: 'LiveCall' });
-          var msg = 'Live Stream of ' + this.state.property.property_address1 + ' Is Now Enable.';
+          var msg =
+            'Live Stream of ' +
+            this.state.property.property_address1 +
+            ' Is Now Enable.';
           Alert.alert(msg);
         }
       })
       .catch((err) => {
         //console.log('get live info error', err);
-        var msg = 'Live Stream of ' + this.state.property.property_address1 + ' Is Now Disable.';
+        var msg =
+          'Live Stream of ' +
+          this.state.property.property_address1 +
+          ' Is Now Disable.';
         Alert.alert(msg);
-      })
-  }
+      });
+  };
 
   onFacebook = () => {
     const url = this.state.property.property_share_url;
@@ -157,24 +165,24 @@ export default class PropertyScreen extends Component {
     const options = Platform.select({
       ios: {
         activityItemSources: [
-          { 
-            placeholderItem: { type: 'url', content: url },
+          {
+            placeholderItem: {type: 'url', content: url},
             item: {
-              default: { type: 'url', content: url },
+              default: {type: 'url', content: url},
             },
             subject: {
               default: title,
             },
-            linkMetadata: { originalUrl: url, url, title },
+            linkMetadata: {originalUrl: url, url, title},
           },
-          { 
-            placeholderItem: { type: 'text', content: message },
+          {
+            placeholderItem: {type: 'text', content: message},
             item: {
-              default: { type: 'text', content: message },
+              default: {type: 'text', content: message},
               message: null,
             },
-            linkMetadata: { title: message },
-          },          
+            linkMetadata: {title: message},
+          },
         ],
       },
       default: {
@@ -182,91 +190,150 @@ export default class PropertyScreen extends Component {
         subject: title,
         message: `${message} ${url}`,
       },
-    });    
+    });
 
     setTimeout(() => {
-      this.setState({ spinner: true });
+      this.setState({spinner: true});
       Share.open(options)
         .then((res) => {
           //console.log('share result', res);
-          this.setState({ spinner: false });
+          this.setState({spinner: false});
         })
         .catch((err) => {
           //console.log('share error', err);
-          this.setState({ spinner: false });
-        })
+          this.setState({spinner: false});
+        });
     }, 500);
-  }
+  };
 
   render() {
     return (
       <ScrollView
-        ref={ref => this.scrollRef = ref}
+        ref={(ref) => (this.scrollRef = ref)}
         style={styles.container}
         bounces={false}
         showsVerticalScrollIndicator={false}
         stickyHeaderIndices={[0]}
         onScroll={this.handleScroll}
-        scrollEventThrottle={16}
-      >
-        {
-          this.state.sticky ? (
-            <View style={{ width: '100%' }}>
-              <Header title={this.state.property.property_mlsnumber} titleColor={Colors.blackColor} isSticky={true} onPressBack={() => this.props.navigation.goBack(null)} />
-            </View>
-          )
-            : <View></View>
-        }
+        scrollEventThrottle={16}>
+        {this.state.sticky ? (
+          <View style={{width: '100%'}}>
+            <Header
+              title={this.state.property.property_mlsnumber}
+              titleColor={Colors.blackColor}
+              isSticky={true}
+              onPressBack={() => this.props.navigation.goBack(null)}
+            />
+          </View>
+        ) : (
+          <View></View>
+        )}
         <Spinner visible={this.state.spinner} />
-        <ImageBackground style={styles.propertyImgBack} source={{ uri: this.state.property.property_main_photo_url }}>
-          {
-            this.state.sticky ? <View></View> :
-              (
-                <View style={{ width: '100%' }}>
-                  <Header title={this.state.property.property_mlsnumber} titleColor={Colors.whiteColor} onPressBack={() => this.props.navigation.goBack(null)} />
-                </View>
-              )
-          }
-
-          {
-            !this.state.spinner &&
-            <View style={[styles.labelTagLine, this.state.sticky ? { marginTop: normalize(465, 'height') } : { marginTop: normalize(415, 'height') }]}>
-              <LabelTag tagTxt={this.state.property.property_listing_type === 'R' ? 'For Rent' : 'For Sale'} tagStyle={{ width: normalize(85), height: normalize(25, 'height') }} />
+        <ImageBackground
+          style={styles.propertyImgBack}
+          source={{uri: this.state.property.property_main_photo_url}}>
+          {this.state.sticky ? (
+            <View></View>
+          ) : (
+            <View style={{width: '100%'}}>
+              <Header
+                title={this.state.property.property_mlsnumber}
+                titleColor={Colors.whiteColor}
+                onPressBack={() => this.props.navigation.goBack(null)}
+              />
             </View>
-          }
+          )}
+
+          {!this.state.spinner && (
+            <View
+              style={[
+                styles.labelTagLine,
+                this.state.sticky
+                  ? {marginTop: normalize(465, 'height')}
+                  : {marginTop: normalize(415, 'height')},
+              ]}>
+              <LabelTag
+                tagTxt={
+                  this.state.property.property_listing_type === 'R'
+                    ? 'For Rent'
+                    : 'For Sale'
+                }
+                tagStyle={{
+                  width: normalize(85),
+                  height: normalize(25, 'height'),
+                }}
+              />
+            </View>
+          )}
         </ImageBackground>
 
         <View style={styles.featurePart}>
-          <Text style={styles.name} numberOfLines={2} ellipsizeMode={'tail'}>{this.state.property.property_address1}</Text>
-          {
-            this.state.property.property_amount &&
-            <Text style={styles.price}>{this.formatter.format(this.state.property.property_amount).split(".")[0]}</Text>
-          }
+          <Text style={styles.name} numberOfLines={2} ellipsizeMode={'tail'}>
+            {this.state.property.property_address1}
+          </Text>
+          {this.state.property.property_amount && (
+            <Text style={styles.price}>
+              {
+                this.formatter
+                  .format(this.state.property.property_amount)
+                  .split('.')[0]
+              }
+            </Text>
+          )}
           <View style={styles.tagLine}>
             <View style={styles.eachTagContainer}>
-              <Image style={styles.tagImg} resizeMode='contain' source={Images.iconBlackBed} />
-              <Text style={styles.tagTxt}>{this.state.property.property_bedrooms}</Text>
+              <Image
+                style={styles.tagImg}
+                resizeMode="contain"
+                source={Images.iconBlackBed}
+              />
+              <Text style={styles.tagTxt}>
+                {this.state.property.property_bedrooms}
+              </Text>
               <Text style={styles.tagTxt}>Beds</Text>
             </View>
-            <View style={{ width: normalize(40), height: '100%', alignItems: 'center' }}>
-              <Image style={{ width: '15%', height: '100%' }} source={Images.markDot} resizeMode='contain' />
+            <View
+              style={{
+                width: normalize(40),
+                height: '100%',
+                alignItems: 'center',
+              }}>
+              <Image
+                style={{width: '15%', height: '100%'}}
+                source={Images.markDot}
+                resizeMode="contain"
+              />
             </View>
             <View style={styles.eachTagContainer}>
-              <Image style={styles.tagImg} resizeMode='contain' source={Images.iconBlackBath} />
-              <Text style={styles.tagTxt}>{this.state.property.property_bathrooms}</Text>
+              <Image
+                style={styles.tagImg}
+                resizeMode="contain"
+                source={Images.iconBlackBath}
+              />
+              <Text style={styles.tagTxt}>
+                {this.state.property.property_bathrooms}
+              </Text>
               <Text style={styles.tagTxt}>Baths</Text>
             </View>
           </View>
         </View>
 
         <View style={styles.btnsContainer}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('PropertyWithClient', { property: this.state.property })}>
-            <Image style={styles.eachBtn} source={Images.iconConference}></Image>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.navigate('PropertyWithClient', {
+                property: this.state.property,
+              })
+            }>
+            <Image
+              style={styles.eachBtn}
+              source={Images.iconConference}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.onVideoCall()}>
             <Image style={styles.eachBtn} source={Images.iconEnterRoom}></Image>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('OpenHouseStack')}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('OpenHouseStack')}>
             <Image style={styles.eachBtn} source={Images.iconOpen}></Image>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.onFacebook()}>
@@ -281,17 +348,25 @@ export default class PropertyScreen extends Component {
 
         <View style={styles.addressContainer}>
           <Text style={styles.addressTitle}>ADDRESS</Text>
-          <Text style={styles.addressTxt}>{this.state.property.property_address1}</Text>
-          <Text style={styles.addressTxt}>{this.state.property.property_city}, {this.state.property.property_state} {this.state.property.property_recordno}</Text>
+          <Text style={styles.addressTxt}>
+            {this.state.property.property_address1}
+          </Text>
+          <Text style={styles.addressTxt}>
+            {this.state.property.property_city},{' '}
+            {this.state.property.property_state}{' '}
+            {this.state.property.property_recordno}
+          </Text>
         </View>
 
         <View style={styles.agentCardContainer}>
           <AgentCard
-            title='Listed By:'
+            title="Listed By:"
             agentName={this.state.property.property_listing_agent_fullname}
             //agentTitle={this.state.property.property_listing_agent_title}
-            agentCompany={this.state.property.property_listing_agent_companyname}
-            agentImg={{ uri: this.state.property.property_listing_agent_photo }}
+            agentCompany={
+              this.state.property.property_listing_agent_companyname
+            }
+            agentImg={{uri: this.state.property.property_listing_agent_photo}}
           />
         </View>
 
@@ -318,15 +393,14 @@ export default class PropertyScreen extends Component {
           />
         </View> */}
 
-        {
-          this.state.isImageViewVisible &&
+        {this.state.isImageViewVisible && (
           <ImageView
             images={this.state.propertyPhotoDetailData}
             imageIndex={this.state.imageIndex}
             isVisible={this.state.isImageViewVisible}
-            onClose={() => this.setState({ isImageViewVisible: false })}
+            onClose={() => this.setState({isImageViewVisible: false})}
           />
-        }
+        )}
 
         <View style={styles.mapContainer}>
           <MapView
@@ -336,26 +410,27 @@ export default class PropertyScreen extends Component {
               latitudeDelta: 0.0922 / 5,
               longitudeDelta: 0.0421 / 5,
             }}
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             showsUserLocation={true}
             showsCompass={true}
             showsPointsOfInterest={false}
-            zoomControlEnabled={true}
-          >
+            zoomControlEnabled={true}>
             <Marker
               coordinate={{
                 latitude: this.state.property.property_latitude,
-                longitude: this.state.property.property_longitude
+                longitude: this.state.property.property_longitude,
               }}
-              title={this.state.property.property_address1}
-            >
-              <View style={{ width: normalize(30), height: normalize(30, 'height') }}>
-                <Image style={{ width: '100%', height: '100%' }} source={Images.marker} />
+              title={this.state.property.property_address1}>
+              <View
+                style={{width: normalize(30), height: normalize(30, 'height')}}>
+                <Image
+                  style={{width: '100%', height: '100%'}}
+                  source={Images.marker}
+                />
               </View>
             </Marker>
           </MapView>
         </View>
-
       </ScrollView>
     );
   }
@@ -366,7 +441,7 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     flex: 1,
     width: width,
     height: height,
@@ -395,12 +470,12 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'SFProText-Bold',
     fontSize: RFPercentage(4),
-    color: Colors.blackColor
+    color: Colors.blackColor,
   },
   price: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(3.5),
-    color: Colors.passiveTxtColor
+    color: Colors.passiveTxtColor,
   },
   tagLine: {
     width: '100%',
@@ -417,13 +492,13 @@ const styles = StyleSheet.create({
   },
   tagImg: {
     width: normalize(30),
-    height: normalize(30)
+    height: normalize(30),
   },
   tagTxt: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2.5),
     color: Colors.blackColor,
-    marginLeft: normalize(7)
+    marginLeft: normalize(7),
   },
   btnsContainer: {
     width: '90%',
@@ -435,11 +510,11 @@ const styles = StyleSheet.create({
     //marginTop: normalize(10, 'height'),
     borderColor: Colors.borderColor,
     borderTopWidth: normalize(1, 'height'),
-    borderBottomWidth: normalize(1, 'height')
+    borderBottomWidth: normalize(1, 'height'),
   },
   eachBtn: {
     width: normalize(40),
-    height: normalize(40)
+    height: normalize(40),
   },
   descContainer: {
     width: '90%',
@@ -452,14 +527,14 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Semibold',
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
-    //marginTop: normalize(7, 'height'), 
-    marginBottom: normalize(7, 'height')
+    //marginTop: normalize(7, 'height'),
+    marginBottom: normalize(7, 'height'),
   },
   descTxt: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(1.7),
     color: Colors.passiveTxtColor,
-    lineHeight: normalize(20, 'height')
+    lineHeight: normalize(20, 'height'),
   },
   addressContainer: {
     width: '90%',
@@ -474,13 +549,13 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Semibold',
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
-    marginTop: normalize(15, 'height')
+    marginTop: normalize(15, 'height'),
   },
   addressTxt: {
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(1.7),
     color: Colors.passiveTxtColor,
-    marginTop: normalize(7, 'height')
+    marginTop: normalize(7, 'height'),
   },
   agentCardContainer: {
     width: width * 0.9,
@@ -509,4 +584,3 @@ const styles = StyleSheet.create({
     borderTopWidth: normalize(0.5, 'height'),
   },
 });
-

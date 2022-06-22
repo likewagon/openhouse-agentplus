@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,23 +13,30 @@ import {
   Dimensions,
   Platform,
   ImageBackground,
-} from "react-native";
-import normalize from "react-native-normalize";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+} from 'react-native';
+import normalize from 'react-native-normalize';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import GetLocation from 'react-native-get-location';
 import AsyncStorage from '@react-native-community/async-storage';
 import KeyboardManager from 'react-native-keyboard-manager';
 
 import {
-  request, requestMultiple,
-  check, checkMultiple,
-  checkNotifications, requestNotifications,
-  PERMISSIONS, RESULTS
+  request,
+  requestMultiple,
+  check,
+  checkMultiple,
+  checkNotifications,
+  requestNotifications,
+  PERMISSIONS,
+  RESULTS,
 } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
-var PushNotification = require("react-native-push-notification");
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
+var PushNotification = require('react-native-push-notification');
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import BackgroundFetch from 'react-native-background-fetch';
 
 import {
@@ -43,21 +50,25 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo, RouteParam } from '@constants';
-import { watchdogTimer } from '@constants';
+import {Colors, Images, LoginInfo, RouteParam} from '@constants';
+import {watchdogTimer} from '@constants';
 
-import { postData, getReviewGeoForApple, getLiveInfo } from '../api/rest';
+import {postData, getReviewGeoForApple, getLiveInfo} from '../api/rest';
 
-BackgroundFetch.configure({
-  minimumFetchInterval: 15,
-  stopOnTerminate: false,
-  startOnBoot: true
-}, () => {
-  //console.log("[js] Received background-fetch event");
-  BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
-}, (error) => {
-  //console.log("[js] RNBackgroundFetch failed to start");
-});
+BackgroundFetch.configure(
+  {
+    minimumFetchInterval: 15,
+    stopOnTerminate: false,
+    startOnBoot: true,
+  },
+  () => {
+    //console.log("[js] Received background-fetch event");
+    BackgroundFetch.finish(BackgroundFetch.FETCH_RESULT_NEW_DATA);
+  },
+  (error) => {
+    //console.log("[js] RNBackgroundFetch failed to start");
+  },
+);
 
 BackgroundFetch.status((status) => {
   switch (status) {
@@ -79,14 +90,17 @@ export default class SplashScreen extends Component {
     this.state = {
       logoTxt: 'In-Person & Virtual \n Digital Sign-in Platform',
       geoSettingVisible: false,
-      pnSettingVisible: false
-    }
+      pnSettingVisible: false,
+    };
 
     this.keyboardManager();
   }
 
   componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
+    this.focusListener = this.props.navigation.addListener(
+      'focus',
+      this.componentDidFocus.bind(this),
+    );
   }
 
   async componentDidFocus() {
@@ -95,10 +109,9 @@ export default class SplashScreen extends Component {
       RouteParam.isUnderReviewByApple = res[0].under_review_by_apple;
       if (RouteParam.isUnderReviewByApple) {
         LoginInfo.latitude = res[0].user_latitude;
-        LoginInfo.longitude = res[0].user_longitude;        
+        LoginInfo.longitude = res[0].user_longitude;
         this.isLoggedInProc();
-      }
-      else {
+      } else {
         this.requestCameraMicroPhonePermission()
           .then(() => {
             //this.requestLocation();
@@ -108,9 +121,9 @@ export default class SplashScreen extends Component {
           })
           .catch((err) => {
             //console.log('request camera and microphone error', err);
-          })
+          });
       }
-    };
+    }
   }
 
   componentWillMount() {
@@ -124,7 +137,7 @@ export default class SplashScreen extends Component {
       KeyboardManager.setKeyboardDistanceFromTextField(10);
       KeyboardManager.setPreventShowingBottomBlankSpace(true);
       KeyboardManager.setEnableAutoToolbar(true);
-      KeyboardManager.setToolbarDoneBarButtonItemText("Done");
+      KeyboardManager.setToolbarDoneBarButtonItemText('Done');
       KeyboardManager.setToolbarManageBehaviour(0);
       KeyboardManager.setToolbarPreviousNextButtonEnable(false);
       KeyboardManager.setShouldToolbarUsesTextFieldTintColor(false);
@@ -133,70 +146,70 @@ export default class SplashScreen extends Component {
       KeyboardManager.setOverrideKeyboardAppearance(false);
       KeyboardManager.setShouldResignOnTouchOutside(true);
       KeyboardManager.resignFirstResponder();
-      KeyboardManager.isKeyboardShowing()
-        .then((isShowing) => {
-        });
+      KeyboardManager.isKeyboardShowing().then((isShowing) => {});
     }
-  }
+  };
 
   requestCameraMicroPhonePermission = () => {
     return new Promise((resolve, reject) => {
-      requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE]).then(
-        (statuses) => {
+      requestMultiple([PERMISSIONS.IOS.CAMERA, PERMISSIONS.IOS.MICROPHONE])
+        .then((statuses) => {
           //console.log('Camera', statuses[PERMISSIONS.IOS.CAMERA]);
           //console.log('Microphone', statuses[PERMISSIONS.IOS.MICROPHONE]);
           resolve();
-        },
-      ).catch((err) => {
-        reject(err);
-      })
-    })
-  }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  };
 
   requestLocation = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
       timeout: 150000,
     })
-      .then(location => {
+      .then((location) => {
         LoginInfo.latitude = location.latitude;
         LoginInfo.longitude = location.longitude;
 
         this.requestNotification();
       })
-      .catch(ex => {
-        this.setState({ geoSettingVisible: true });
+      .catch((ex) => {
+        this.setState({geoSettingVisible: true});
         GetLocation.openAppSettings();
       });
-  }
+  };
 
   async requestNotification() {
     const authStatus = await messaging().requestPermission({
       alert: true,
       badge: true,
-      sound: true
+      sound: true,
     });
-    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED || authStatus === messaging.AuthorizationStatus.PROVISIONAL;   
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
       var fcmToken = await messaging().getToken();
       LoginInfo.fcmToken = fcmToken;
       //console.log('fcmToken', fcmToken);
 
-      messaging().onMessage(async remoteMessage => {
+      messaging().onMessage(async (remoteMessage) => {
         //console.log('notification arrived:', remoteMessage);
-        if(remoteMessage.data == null || remoteMessage.data == undefined) return;         
+        if (remoteMessage.data == null || remoteMessage.data == undefined)
+          return;
         if (Platform.OS === 'android') {
           PushNotification.localNotification({
             title: remoteMessage.data.title,
-            message: remoteMessage.data.body
+            message: remoteMessage.data.body,
           });
-        }
-        else {
+        } else {
           PushNotificationIOS.presentLocalNotification({
             alertTitle: remoteMessage.data.title,
-            alertBody: remoteMessage.data.body
-          })
+            alertBody: remoteMessage.data.body,
+          });
         }
 
         if (remoteMessage.data.propertyNo) {
@@ -206,38 +219,41 @@ export default class SplashScreen extends Component {
               remoteMessage.data.alertTitle,
               remoteMessage.data.alertBody,
               [
-                { text: 'Yes', onPress: () => this.onLiveCallYes(remoteMessage.data.propertyNo) },
-                { text: 'No', onPress: () => { } },
+                {
+                  text: 'Yes',
+                  onPress: () =>
+                    this.onLiveCallYes(remoteMessage.data.propertyNo),
+                },
+                {text: 'No', onPress: () => {}},
               ],
               {
-                cancelable: true
-              }
-            )
+                cancelable: true,
+              },
+            );
           }, 1500);
         }
       });
 
-      messaging().onNotificationOpenedApp(remoteMessage => {
+      messaging().onNotificationOpenedApp((remoteMessage) => {
         //console.log('notification caused app to open from background state:', remoteMessage.data);
-        if(remoteMessage.data == null || remoteMessage.data == undefined) return;
+        if (remoteMessage.data == null || remoteMessage.data == undefined)
+          return;
         if (remoteMessage.data.propertyNo) {
-          //console.log('livecall notification on background');          
+          //console.log('livecall notification on background');
           this.onLiveCallYes(remoteMessage.data.propertyNo);
         }
-      });      
+      });
 
       this.isLoggedInProc();
 
       try {
         watchdogTimer();
-      }
-      catch (err) {
+      } catch (err) {
         //console.log('permission watchdog error', err);
       }
-    }
-    else {
+    } else {
       //console.log('Authorization status: disabled');
-      this.setState({ pnSettingVisible: true });
+      this.setState({pnSettingVisible: true});
       Linking.openSettings();
     }
   }
@@ -248,7 +264,7 @@ export default class SplashScreen extends Component {
       user_fullname: LoginInfo.fullname,
       user_latitude: LoginInfo.latitude,
       user_longitude: LoginInfo.longitude,
-      property_recordno: propertyNo
+      property_recordno: propertyNo,
     };
     //console.log('live info param', param);
 
@@ -257,13 +273,13 @@ export default class SplashScreen extends Component {
         //console.log('live info', res);
         RouteParam.liveInfo = res[0];
         if (RouteParam.liveInfo.error === undefined) {
-          this.props.navigation.navigate('Main', { screen: 'LiveCall' });
+          this.props.navigation.navigate('Main', {screen: 'LiveCall'});
         }
       })
       .catch((err) => {
         //console.log('get live info error', err);
-      })
-  }
+      });
+  };
 
   isLoggedInProc = () => {
     AsyncStorage.getItem('LoginInfo')
@@ -277,16 +293,15 @@ export default class SplashScreen extends Component {
           LoginInfo.telephone = info.telephone;
           LoginInfo.providerid = info.providerid;
           LoginInfo.photourl = info.photourl;
-          LoginInfo.company = info.company,
-          LoginInfo.email_verified = info.email_verified;
+          (LoginInfo.company = info.company),
+            (LoginInfo.email_verified = info.email_verified);
           LoginInfo.phone_verified = info.phone_verified;
           LoginInfo.fcmToken = info.fcmToken;
           LoginInfo.user_account = info.user_account;
           LoginInfo.user_status = info.user_status;
 
           this.submit();
-        }
-        else {
+        } else {
           //console.log('no login info saved');
           // setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
           // remove later
@@ -295,9 +310,11 @@ export default class SplashScreen extends Component {
       })
       .catch((err) => {
         //console.log('get login info error', err);
-        setTimeout(() => { this.props.navigation.navigate('Auth') }, 2000);
-      })
-  }
+        setTimeout(() => {
+          this.props.navigation.navigate('Auth');
+        }, 2000);
+      });
+  };
 
   submit = async () => {
     // remove later
@@ -338,104 +355,141 @@ export default class SplashScreen extends Component {
         //console.log('post login info success', res);
         LoginInfo.user_account = res[0].user_account;
         LoginInfo.photourl = res[0].user_photourl;
-        LoginInfo.company = res[0].user_companyname,
-        LoginInfo.fcmToken = res[0].fcmToken;
-        LoginInfo.user_status = res[0].user_status;       
-        
+        (LoginInfo.company = res[0].user_companyname),
+          (LoginInfo.fcmToken = res[0].fcmToken);
+        LoginInfo.user_status = res[0].user_status;
+
         if (LoginInfo.user_status || RouteParam.isUnderReviewByApple) {
-          setTimeout(() => { this.props.navigation.navigate('Main') }, 2000);      
-        }
-        else {
+          setTimeout(() => {
+            this.props.navigation.navigate('Main');
+          }, 2000);
+        } else {
           // setTimeout(() => { this.props.navigation.navigate('IAP') }, 2000);
-          setTimeout(() => { this.props.navigation.navigate('PaymentLink') }, 2000);
-        }    
+          setTimeout(() => {
+            this.props.navigation.navigate('PaymentLink');
+          }, 2000);
+        }
       })
       .catch((err) => {
         //console.log('post login info error', err)
-      })
-  }
+      });
+  };
 
   render() {
     return (
-      <ImageBackground style={styles.container} source={Images.splashBackground}>
-        {
-          !this.state.geoSettingVisible && !this.state.pnSettingVisible ?
-            (
-              <View style={styles.modalBack}>
-                <View style={{ width: '100%', height: '9%' }}></View>
-                <View style={styles.logoImgContainer}>
-                  <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
-                </View>
-                <View style={{ width: '100%', height: '2%' }}></View>
-                <View style={styles.logoNameContainer}>
-                  <Text style={styles.logoName}>Open House</Text>
-                  <Text style={styles.logoPlusLabel}>+</Text>
-                </View>
-                <View style={{ width: '100%', height: '5%' }}></View>
-                <View style={styles.logoTxtContainer}>
-                  <Text style={styles.logoTxt}>{this.state.logoTxt}</Text>
-                </View>
-                <View style={{ width: '100%', height: '7%' }}></View>
+      <ImageBackground
+        style={styles.container}
+        source={Images.splashBackground}>
+        {!this.state.geoSettingVisible && !this.state.pnSettingVisible ? (
+          <View style={styles.modalBack}>
+            <View style={{width: '100%', height: '9%'}}></View>
+            <View style={styles.logoImgContainer}>
+              <Image
+                style={{width: '90%', height: '90%'}}
+                source={Images.logo}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={{width: '100%', height: '2%'}}></View>
+            <View style={styles.logoNameContainer}>
+              <Text style={styles.logoName}>Open House</Text>
+              <Text style={styles.logoPlusLabel}>+</Text>
+            </View>
+            <View style={{width: '100%', height: '5%'}}></View>
+            <View style={styles.logoTxtContainer}>
+              <Text style={styles.logoTxt}>{this.state.logoTxt}</Text>
+            </View>
+            <View style={{width: '100%', height: '7%'}}></View>
+          </View>
+        ) : this.state.geoSettingVisible ? (
+          <View style={styles.modalBackSetting}>
+            <View style={{width: '100%', height: '5%'}}></View>
+            <View style={styles.logoImgContainerSetting}>
+              <Image
+                style={{width: '90%', height: '90%'}}
+                source={Images.logo}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={{width: '100%', height: '1%'}}></View>
+            <View style={styles.logoNameContainerSetting}>
+              <Text style={styles.logoName}>Open House</Text>
+              <Text style={styles.logoPlusLabel}>+</Text>
+            </View>
+
+            <View style={styles.settingContainer}>
+              <View style={styles.settingTxtContainer}>
+                <Text
+                  style={{
+                    fontFamily: 'SFProText-Regular',
+                    fontSize: RFPercentage(1.7),
+                    color: Colors.passiveTxtColor,
+                    textAlign: 'center',
+                  }}>
+                  Open™ requires access to your geo location to operate. This
+                  will enhance our ability to display properties in your area.
+                </Text>
               </View>
-            )
-            :
-            this.state.geoSettingVisible ?
-              (
-                <View style={styles.modalBackSetting}>
-                  <View style={{ width: '100%', height: '5%' }}></View>
-                  <View style={styles.logoImgContainerSetting}>
-                    <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
-                  </View>
-                  <View style={{ width: '100%', height: '1%' }}></View>
-                  <View style={styles.logoNameContainerSetting}>
-                    <Text style={styles.logoName}>Open House</Text>
-                    <Text style={styles.logoPlusLabel}>+</Text>
-                  </View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity onPress={() => this.requestLocation()}>
+                  <Text
+                    style={{
+                      fontFamily: 'SFProText-Bold',
+                      fontSize: RFPercentage(1.7),
+                      color: Colors.blueColor,
+                      textAlign: 'center',
+                    }}>
+                    Allow Geo Location / Go To Settings
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.modalBackSetting}>
+            <View style={{width: '100%', height: '5%'}}></View>
+            <View style={styles.logoImgContainerSetting}>
+              <Image
+                style={{width: '90%', height: '90%'}}
+                source={Images.logo}
+                resizeMode="contain"
+              />
+            </View>
+            <View style={{width: '100%', height: '1%'}}></View>
+            <View style={styles.logoNameContainerSetting}>
+              <Text style={styles.logoName}>Open House</Text>
+              <Text style={styles.logoPlusLabel}>+</Text>
+            </View>
 
-                  <View style={styles.settingContainer}>
-                    <View style={styles.settingTxtContainer}>
-                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
-                        Open™
-                        requires access to your geo location to operate.
-                      This will enhance our ability to display properties in your area.</Text>
-                    </View>
-                    <View style={styles.btnContainer}>
-                      <TouchableOpacity onPress={() => this.requestLocation()}>
-                        <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Geo Location / Go To Settings</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              )
-              :
-              (
-                <View style={styles.modalBackSetting}>
-                  <View style={{ width: '100%', height: '5%' }}></View>
-                  <View style={styles.logoImgContainerSetting}>
-                    <Image style={{ width: '90%', height: '90%' }} source={Images.logo} resizeMode='contain' />
-                  </View>
-                  <View style={{ width: '100%', height: '1%' }}></View>
-                  <View style={styles.logoNameContainerSetting}>
-                    <Text style={styles.logoName}>Open House</Text>
-                    <Text style={styles.logoPlusLabel}>+</Text>
-                  </View>
-
-                  <View style={styles.settingContainer}>
-                    <View style={styles.settingTxtContainer}>
-                      <Text style={{ fontFamily: 'SFProText-Regular', fontSize: RFPercentage(1.7), color: Colors.passiveTxtColor, textAlign: 'center' }}>
-                        Agent Plus™
-                        requires notification setting.
-                        This will help you contact with client.</Text>
-                    </View>
-                    <View style={styles.btnContainer}>
-                      <TouchableOpacity onPress={() => this.requestNotification()}>
-                        <Text style={{ fontFamily: 'SFProText-Bold', fontSize: RFPercentage(1.7), color: Colors.blueColor, textAlign: 'center' }}>Allow Notification / Go To Settings</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              )
-        }
+            <View style={styles.settingContainer}>
+              <View style={styles.settingTxtContainer}>
+                <Text
+                  style={{
+                    fontFamily: 'SFProText-Regular',
+                    fontSize: RFPercentage(1.7),
+                    color: Colors.passiveTxtColor,
+                    textAlign: 'center',
+                  }}>
+                  Agent Plus™ requires notification setting. This will help you
+                  contact with client.
+                </Text>
+              </View>
+              <View style={styles.btnContainer}>
+                <TouchableOpacity onPress={() => this.requestNotification()}>
+                  <Text
+                    style={{
+                      fontFamily: 'SFProText-Bold',
+                      fontSize: RFPercentage(1.7),
+                      color: Colors.blueColor,
+                      textAlign: 'center',
+                    }}>
+                    Allow Notification / Go To Settings
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        )}
       </ImageBackground>
     );
   }
@@ -450,7 +504,7 @@ const styles = StyleSheet.create({
     height: height,
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   modalBack: {
     backgroundColor: 'rgba(255,255,255,1)',
@@ -459,13 +513,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     borderRadius: 8,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 12,
     },
     shadowOpacity: 0.58,
-    shadowRadius: 16.00,
+    shadowRadius: 16.0,
     elevation: 24,
   },
   logoImgContainer: {
@@ -509,7 +563,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Semibold',
     fontSize: RFPercentage(2),
     color: Colors.passiveTxtColor,
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   modalBackSetting: {
@@ -519,13 +573,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     borderRadius: 8,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 12,
     },
     shadowOpacity: 0.58,
-    shadowRadius: 16.00,
+    shadowRadius: 16.0,
     elevation: 24,
   },
   logoImgContainerSetting: {

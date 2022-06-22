@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,17 +13,23 @@ import {
   Dimensions,
   Platform,
   ImageBackground,
-} from "react-native";
-import normalize from "react-native-normalize";
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+} from 'react-native';
+import normalize from 'react-native-normalize';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
-import { activateKeepAwake, deactivateKeepAwake} from "@sayem314/react-native-keep-awake";
+import {
+  activateKeepAwake,
+  deactivateKeepAwake,
+} from '@sayem314/react-native-keep-awake';
 import {
   TwilioVideoLocalView,
   TwilioVideoParticipantView,
-  TwilioVideo
-} from "react-native-twilio-video-webrtc";
+  TwilioVideo,
+} from 'react-native-twilio-video-webrtc';
 
 import {
   Button,
@@ -35,17 +41,17 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo, RouteParam } from '@constants';
+import {Colors, Images, LoginInfo, RouteParam} from '@constants';
 
 export default class LiveCallScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAudioEnabled: true,      
-      status: "disconnected",
+      isAudioEnabled: true,
+      status: 'disconnected',
       participants: new Map(),
       videoTracks: new Map(),
-    }
+    };
   }
 
   componentDidMount() {
@@ -53,7 +59,7 @@ export default class LiveCallScreen extends Component {
     this._onConnectButtonPress();
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     deactivateKeepAwake();
   }
 
@@ -61,21 +67,20 @@ export default class LiveCallScreen extends Component {
     try {
       this.twilioRef.connect({
         roomName: RouteParam.liveInfo.roomname,
-        accessToken: RouteParam.liveInfo.token
+        accessToken: RouteParam.liveInfo.token,
       });
     } catch (error) {
       //console.log('live connect error', error);
     }
-    this.setState({ status: "connecting" });
+    this.setState({status: 'connecting'});
   };
 
   _onEndButtonPress = () => {
     this.twilioRef.disconnect();
-    if(RouteParam.liveCallFromClosed){
+    if (RouteParam.liveCallFromClosed) {
       RouteParam.liveCallFromClosed = false;
       this.props.navigation.navigate('Splash');
-    }
-    else{
+    } else {
       this.props.navigation.goBack(null);
     }
   };
@@ -83,7 +88,7 @@ export default class LiveCallScreen extends Component {
   _onMuteButtonPress = () => {
     this.twilioRef
       .setLocalAudioEnabled(!this.state.isAudioEnabled)
-      .then(isEnabled => this.setState({ isAudioEnabled: isEnabled }));
+      .then((isEnabled) => this.setState({isAudioEnabled: isEnabled}));
   };
 
   _onFlipButtonPress = () => {
@@ -92,20 +97,20 @@ export default class LiveCallScreen extends Component {
 
   _onRoomDidConnect = () => {
     //console.log("LiveCall :: connected")
-    this.setState({ status: "connected" });
+    this.setState({status: 'connected'});
   };
 
-  _onRoomDidDisconnect = ({ roomName, error }) => {
+  _onRoomDidDisconnect = ({roomName, error}) => {
     //console.log("_onRoomDidDisconnect: ", error);
-    this.setState({ status: "disconnected" });
+    this.setState({status: 'disconnected'});
   };
 
-  _onRoomDidFailToConnect = error => {
+  _onRoomDidFailToConnect = (error) => {
     //console.log("_onRoomDidFailToConnect: ", error);
-    this.setState({ status: "disconnected" });
+    this.setState({status: 'disconnected'});
   };
 
-  _onParticipantAddedVideoTrack = ({ participant, track }) => {
+  _onParticipantAddedVideoTrack = ({participant, track}) => {
     //console.log("onParticipantAddedVideoTrack: ", participant, track);
 
     this.setState({
@@ -113,34 +118,35 @@ export default class LiveCallScreen extends Component {
         ...this.state.videoTracks,
         [
           track.trackSid,
-          { participantSid: participant.sid, videoTrackSid: track.trackSid }
-        ]
-      ])
+          {participantSid: participant.sid, videoTrackSid: track.trackSid},
+        ],
+      ]),
     });
   };
 
-  _onParticipantRemovedVideoTrack = ({ participant, track }) => {
+  _onParticipantRemovedVideoTrack = ({participant, track}) => {
     //console.log("onParticipantRemovedVideoTrack: ", participant, track);
 
     const videoTracks = this.state.videoTracks;
     videoTracks.delete(track.trackSid);
 
-    this.setState({ videoTracks: new Map([...videoTracks]) });
+    this.setState({videoTracks: new Map([...videoTracks])});
   };
 
-  setTwilioRef = ref => {
+  setTwilioRef = (ref) => {
     this.twilioRef = ref;
   };
 
-
   render() {
     return (
-      <ImageBackground style={styles.container} source={{ uri: RouteParam.property.property_main_photo_url }}>
+      <ImageBackground
+        style={styles.container}
+        source={{uri: RouteParam.property.property_main_photo_url}}>
         {/* <View style={styles.headerContainer}>
           <Header title={'LIVE CALL'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
         </View> */}
-        {this.state.status === "connected" && (
-          <View style={styles.remoteSmallVideoContainer}>            
+        {this.state.status === 'connected' && (
+          <View style={styles.remoteSmallVideoContainer}>
             {Array.from(
               this.state.videoTracks,
               ([trackSid, trackIdentifier]) => {
@@ -151,7 +157,7 @@ export default class LiveCallScreen extends Component {
                     trackIdentifier={trackIdentifier}
                   />
                 );
-              }
+              },
             )}
           </View>
         )}
@@ -159,16 +165,31 @@ export default class LiveCallScreen extends Component {
           <TwilioVideoLocalView enabled={true} style={styles.localBigVideo} />
         </View>
         <View style={styles.btnsContainer}>
-          <TouchableOpacity onPress={() => {
-            this._onMuteButtonPress();            
-          }}>
-            <Image style={styles.btnImg} source={this.state.isAudioEnabled ? Images.btnMute : Images.btnUnmute} resizeMode='cover' />
+          <TouchableOpacity
+            onPress={() => {
+              this._onMuteButtonPress();
+            }}>
+            <Image
+              style={styles.btnImg}
+              source={
+                this.state.isAudioEnabled ? Images.btnMute : Images.btnUnmute
+              }
+              resizeMode="cover"
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this._onFlipButtonPress()}>
-            <Image style={styles.btnImg} source={Images.btnFlipCam} resizeMode='cover' />
+            <Image
+              style={styles.btnImg}
+              source={Images.btnFlipCam}
+              resizeMode="cover"
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this._onEndButtonPress()}>
-            <Image style={styles.btnImg} source={Images.btnCallOff} resizeMode='cover' />
+            <Image
+              style={styles.btnImg}
+              source={Images.btnCallOff}
+              resizeMode="cover"
+            />
           </TouchableOpacity>
         </View>
 
@@ -190,7 +211,7 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     flex: 1,
     width: width,
     height: height,
@@ -202,11 +223,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //borderColor: Colors.borderColor,
     //borderBottomWidth: normalize(0.5, 'height'),
-  },  
+  },
   localBigVideoContainer: {
     flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap"
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   localBigVideo: {
     width: '100%',
@@ -216,21 +237,21 @@ const styles = StyleSheet.create({
   },
   remoteSmallVideoContainer: {
     position: 'absolute',
-    top: normalize(40, 'height'),        
+    top: normalize(40, 'height'),
     width: '95%',
     height: normalize(100),
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignSelf: 'center',
-    zIndex: 100
+    zIndex: 100,
   },
-  remoteSmallVideo: {    
+  remoteSmallVideo: {
     width: normalize(100),
     height: normalize(100),
     borderRadius: normalize(5),
     //borderWidth: normalize(2),
     //borderColor: '#4e4e4e'
-  },  
+  },
   btnsContainer: {
     position: 'absolute',
     bottom: normalize(15, 'height'),

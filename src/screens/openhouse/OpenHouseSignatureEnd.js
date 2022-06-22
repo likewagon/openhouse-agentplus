@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,15 +12,18 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Dimensions,
-  ImageBackground
-} from "react-native";
+  ImageBackground,
+} from 'react-native';
 import normalize from 'react-native-normalize';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import ImageView from 'react-native-image-view';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 
 import {
   Button,
@@ -34,15 +37,15 @@ import {
   SignModal,
 } from '@components';
 
-import { Colors, Images, RouteParam, LoginInfo } from '@constants';
-import { getContentByAction, postData } from '../../api/rest';
+import {Colors, Images, RouteParam, LoginInfo} from '@constants';
+import {getContentByAction, postData} from '../../api/rest';
 
 export default class OpenHouseSignatureEndScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       spinner: false,
-    }
+    };
   }
 
   componentDidMount() {
@@ -51,13 +54,15 @@ export default class OpenHouseSignatureEndScreen extends Component {
 
   goHome = () => {
     this.props.navigation.navigate('OpenHouseHome');
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
-        <ImageBackground style={styles.propertyImgBack} source={{ uri: RouteParam.property.property_main_photo_url }}>
+        <ImageBackground
+          style={styles.propertyImgBack}
+          source={{uri: RouteParam.property.property_main_photo_url}}>
           <View style={styles.thankyouContainer}>
             <Text style={styles.thankyouTxt}>
               Thank You
@@ -76,7 +81,7 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     flex: 1,
     width: width,
     height: height,
@@ -94,14 +99,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     borderColor: Colors.blueColor,
-    borderWidth: normalize(1),    
+    borderWidth: normalize(1),
   },
-  thankyouTxt: {        
+  thankyouTxt: {
     fontFamily: 'Billabong',
     fontSize: RFPercentage(5.5),
     color: Colors.blackColor,
-    textAlign: 'center',    
+    textAlign: 'center',
     //borderWidth: 1,
-  }
+  },
 });
-

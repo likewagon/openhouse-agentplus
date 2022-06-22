@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,14 +12,17 @@ import {
   Linking,
   TouchableOpacity,
   Dimensions,
-  Platform
-} from "react-native";
+  Platform,
+} from 'react-native';
 import normalize from 'react-native-normalize';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
-import { WebView } from 'react-native-webview';//ios
-import PDFView from 'react-native-view-pdf';//android
+import {WebView} from 'react-native-webview'; //ios
+import PDFView from 'react-native-view-pdf'; //android
 import RNFetchBlob from 'rn-fetch-blob';
 import Spinner from 'react-native-loading-spinner-overlay';
 
@@ -34,8 +37,8 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo, RouteParam } from '@constants';
-import { getContentByAction, postData } from '../../api/rest';
+import {Colors, Images, LoginInfo, RouteParam} from '@constants';
+import {getContentByAction, postData} from '../../api/rest';
 
 export default class OpenHouseSignatureScreen extends Component {
   constructor(props) {
@@ -43,50 +46,52 @@ export default class OpenHouseSignatureScreen extends Component {
     this.state = {
       spinner: true,
       visibleSignForm: false,
-      pdfURL: "http://www.openhousemarketingsystem.com/application/data/attendeepdf/2991.pdf"
-    }   
+      pdfURL:
+        'http://www.openhousemarketingsystem.com/application/data/attendeepdf/2991.pdf',
+    };
   }
 
-  componentDidMount() {
-    
-  }
+  componentDidMount() {}
 
-  onSignOK = () => {   
+  onSignOK = () => {
     this.postSignature();
-        
+
     this.props.navigation.navigate('OpenHouseSignatureEnd');
-  }
-  
-  postSignature = async () => {    
-    let signaturePath = `${RNFetchBlob.fs.dirs.DocumentDir}/signature.png`;    
+  };
+
+  postSignature = async () => {
+    let signaturePath = `${RNFetchBlob.fs.dirs.DocumentDir}/signature.png`;
     let uri = Platform.OS === 'ios' ? signaturePath : 'file://' + signaturePath;
 
     let filetoupload = this.props.route.params.attendeeAccount + '.png';
     let photo_id = LoginInfo.user_account + '-' + RouteParam.propertyRecordNo;
-    
+
     let data = new FormData();
     data.append('photo_id', photo_id);
-    data.append('photo_type', 's');    
+    data.append('photo_type', 's');
     data.append('filetoupload', {
       uri: uri,
       name: filetoupload,
       type: 'image/png',
-    });      
+    });
 
-    fetch("http://www.openhousemarketingsystem.com/application/virtualplus/v1/uploadimage.php", {
-      method: 'POST',
-      headers: { 'Content-Type': 'multipart/form-data' },
-      body: data,
-    })
-      .then(res => res.json())      
-      .then(res => {        
+    fetch(
+      'http://www.openhousemarketingsystem.com/application/virtualplus/v1/uploadimage.php',
+      {
+        method: 'POST',
+        headers: {'Content-Type': 'multipart/form-data'},
+        body: data,
+      },
+    )
+      .then((res) => res.json())
+      .then((res) => {
         //console.log('post sign success', res)
       })
-      .catch((err)=>{
+      .catch((err) => {
         //console.log('post sign error',err);
       })
-      .done();   
-  }
+      .done();
+  };
 
   render() {
     return (
@@ -94,22 +99,35 @@ export default class OpenHouseSignatureScreen extends Component {
         <Spinner visible={this.state.spinner} />
         <SignModal
           visible={this.state.visibleSignForm}
-          onClose={() => this.setState({ visibleSignForm: false })}
+          onClose={() => this.setState({visibleSignForm: false})}
           onSignOK={() => this.onSignOK()}
         />
         <View style={styles.headerContainer}>
-          <Header title={'AGENCY DISCLOSURE FORM'} titleColor={Colors.blackColor} onPressBack={() => this.props.navigation.goBack(null)} />
+          <Header
+            title={'AGENCY DISCLOSURE FORM'}
+            titleColor={Colors.blackColor}
+            onPressBack={() => this.props.navigation.goBack(null)}
+          />
         </View>
         <View style={styles.body}>
           <View style={styles.pdfContainer}>
-            <WebView 
-            source={{ uri: this.state.pdfURL }} 
-            onLoadEnd={()=>this.setState({spinner: false})}            
+            <WebView
+              source={{uri: this.state.pdfURL}}
+              onLoadEnd={() => this.setState({spinner: false})}
             />
           </View>
           <View style={styles.btnContainer}>
-            <Button btnTxt='AGREE AND SIGN' btnStyle={{ width: '100%', height: normalize(50, 'height'), color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.setState({ visibleSignForm: true })} />
-          </View>          
+            <Button
+              btnTxt="AGREE AND SIGN"
+              btnStyle={{
+                width: '100%',
+                height: normalize(50, 'height'),
+                color: 'blue',
+                fontSize: RFPercentage(2.7),
+              }}
+              onPress={() => this.setState({visibleSignForm: true})}
+            />
+          </View>
         </View>
       </ImageBackground>
     );
@@ -121,7 +139,7 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     flex: 1,
     width: width,
     height: height,
@@ -133,12 +151,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     //borderColor: Colors.borderColor,
     //borderBottomWidth: normalize(0.5, 'height'),
-  },  
+  },
   body: {
     width: '100%',
     height: height,
     marginTop: normalize(10, 'height'),
-    alignItems: 'center'
+    alignItems: 'center',
     //borderWidth: 2
   },
   pdfContainer: {
@@ -161,6 +179,6 @@ const styles = StyleSheet.create({
     height: normalize(50, 'height'),
     alignSelf: 'center',
     justifyContent: 'flex-start',
-    marginTop: normalize(20, 'height')
-  },  
+    marginTop: normalize(20, 'height'),
+  },
 });

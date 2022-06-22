@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -12,15 +12,18 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Dimensions,
-  ImageBackground
-} from "react-native";
+  ImageBackground,
+} from 'react-native';
 import normalize from 'react-native-normalize';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import ImageView from 'react-native-image-view';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 
 import {
   Button,
@@ -34,45 +37,62 @@ import {
   SignModal,
 } from '@components';
 
-import { Colors, Images, RouteParam, LoginInfo } from '@constants';
-import { getContentByAction, postData } from '../../api/rest';
+import {Colors, Images, RouteParam, LoginInfo} from '@constants';
+import {getContentByAction, postData} from '../../api/rest';
 
 export default class OpenHouseHomeScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {      
+    this.state = {
       spinner: false,
-    }
+    };
   }
 
-  componentDidMount() {
-
-  } 
+  componentDidMount() {}
 
   onLock = () => {
     Alert.alert(
       'Please Confirm',
       'Are you sure you want the end this In-Person Open House?',
       [
-        { text: 'Yes', onPress: () => this.props.navigation.goBack(null) },
-        { text: 'No', onPress: () => { } },
+        {text: 'Yes', onPress: () => this.props.navigation.goBack(null)},
+        {text: 'No', onPress: () => {}},
       ],
       {
-        cancelable: true
-      }
+        cancelable: true,
+      },
     );
-  }
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <Spinner visible={this.state.spinner} />
-        <ImageBackground style={styles.propertyImgBack} source={{ uri: RouteParam.property.property_main_photo_url }}>
-          <TouchableOpacity style={styles.lockContainer} onPress={()=>this.onLock()}>
-            <Image style={styles.lock} source={Images.btnLock} resizeMode='cover' />
+        <ImageBackground
+          style={styles.propertyImgBack}
+          source={{uri: RouteParam.property.property_main_photo_url}}>
+          <TouchableOpacity
+            style={styles.lockContainer}
+            onPress={() => this.onLock()}>
+            <Image
+              style={styles.lock}
+              source={Images.btnLock}
+              resizeMode="cover"
+            />
           </TouchableOpacity>
           <View style={styles.btnContainer}>
-            <Button btnTxt='PLEASE SIGN IN' btnStyle={{ width: '100%', height: '100%', color: 'blue', fontSize: RFPercentage(2.7) }} onPress={() => this.props.navigation.navigate('OpenHouseQuestion')} />
+            <Button
+              btnTxt="PLEASE SIGN IN"
+              btnStyle={{
+                width: '100%',
+                height: '100%',
+                color: 'blue',
+                fontSize: RFPercentage(2.7),
+              }}
+              onPress={() =>
+                this.props.navigation.navigate('OpenHouseQuestion')
+              }
+            />
           </View>
         </ImageBackground>
       </View>
@@ -85,7 +105,7 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     flex: 1,
     width: width,
     height: height,
@@ -115,6 +135,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: normalize(40, 'height'),
     //borderWidth: 1
-  }
+  },
 });
-

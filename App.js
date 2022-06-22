@@ -2,12 +2,9 @@ import React from 'react';
 import Navigator from './src/Navigator';
 
 export default class App extends React.Component {
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
-    return (
-      <Navigator />
-    );
+    return <Navigator />;
   }
 }

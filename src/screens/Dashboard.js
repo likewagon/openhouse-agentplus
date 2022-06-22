@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
@@ -13,11 +13,14 @@ import {
   ActivityIndicator,
   FlatList,
   Dimensions,
-  Platform
-} from "react-native";
+  Platform,
+} from 'react-native';
 import normalize from 'react-native-normalize';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,9 +37,9 @@ import {
   SideMenu,
   SignModal,
 } from '@components';
-import { Colors, Images, LoginInfo, RouteParam } from '@constants';
-import { signOut } from '../api/Firebase';
-import { getContentByAction, postData } from '../api/rest';
+import {Colors, Images, LoginInfo, RouteParam} from '@constants';
+import {signOut} from '../api/Firebase';
+import {getContentByAction, postData} from '../api/rest';
 
 export default class DashboardScreen extends Component {
   constructor(props) {
@@ -48,14 +51,19 @@ export default class DashboardScreen extends Component {
       mostPopularPropertyData: [],
       toggleMenuVisible: false,
       spinner: false,
-    }
+    };
 
-    this.focusListener = this.props.navigation.addListener('focus', this.componentDidFocus.bind(this));
-    this.blurListener = this.props.navigation.addListener('blur', this.componentWillBlur.bind(this));
+    this.focusListener = this.props.navigation.addListener(
+      'focus',
+      this.componentDidFocus.bind(this),
+    );
+    this.blurListener = this.props.navigation.addListener(
+      'blur',
+      this.componentWillBlur.bind(this),
+    );
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   componentDidFocus() {
     this.getRecentClient();
@@ -64,9 +72,12 @@ export default class DashboardScreen extends Component {
   }
 
   componentWillBlur() {
-    if(this.state.recentClientData.length > 0) this.clientFlatListRef.scrollToIndex({ index: 0 });
-    if(this.state.recentActivityData.length > 0) this.activityFlatListRef.scrollToIndex({ index: 0 });
-    if(this.state.mostPopularPropertyData.length > 0) this.propertyFlatListRef.scrollToIndex({ index: 0 });
+    if (this.state.recentClientData.length > 0)
+      this.clientFlatListRef.scrollToIndex({index: 0});
+    if (this.state.recentActivityData.length > 0)
+      this.activityFlatListRef.scrollToIndex({index: 0});
+    if (this.state.mostPopularPropertyData.length > 0)
+      this.propertyFlatListRef.scrollToIndex({index: 0});
   }
 
   componentWillUnmount() {
@@ -77,110 +88,128 @@ export default class DashboardScreen extends Component {
   getRecentClient = () => {
     var recentClientParam = {
       action: 'dashboard_recent_clients',
-      account_no: LoginInfo.user_account
+      account_no: LoginInfo.user_account,
     };
     //console.log('recentClient Param', recentClientParam);
     getContentByAction(recentClientParam)
       .then((res) => {
         //console.log('recent client data', res);
         if (res.length == 0 || res[0].error) {
-          this.setState({ spinner: false });
+          this.setState({spinner: false});
           return;
         }
-        var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
-        this.setState({ recentClientData: sortedRes });
+        var sortedRes = res.sort((a, b) => {
+          return a.displayorder - b.displayorder;
+        });
+        this.setState({recentClientData: sortedRes});
       })
       .catch((err) => {
         //console.log('get recent client error', err);
-      })
-  }
+      });
+  };
 
   getRecentActivity = () => {
     var recentActivityParam = {
       action: 'dashboard_recent_activies',
-      account_no: LoginInfo.user_account
+      account_no: LoginInfo.user_account,
     };
     //console.log('recentActivity Param', recentActivityParam);
     getContentByAction(recentActivityParam)
       .then((res) => {
         //console.log('recent activity data', res);
         if (res.length == 0 || res[0].error) {
-          this.setState({ spinner: false });
+          this.setState({spinner: false});
           return;
         }
-        var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
-        this.setState({ recentActivityData: sortedRes });
+        var sortedRes = res.sort((a, b) => {
+          return a.displayorder - b.displayorder;
+        });
+        this.setState({recentActivityData: sortedRes});
       })
       .catch((err) => {
         //console.log('get recent activity error', err);
-      })
-  }
+      });
+  };
 
   getMostPupularProperty = () => {
     var mostPopularPropertyParam = {
       action: 'dashboard_most_popular_properties',
-      account_no: LoginInfo.user_account
+      account_no: LoginInfo.user_account,
     };
     //console.log('mostPopularPropertyParam', mostPopularPropertyParam);
-    this.setState({ spinner: true });
+    this.setState({spinner: true});
 
     getContentByAction(mostPopularPropertyParam)
       .then((res) => {
         //console.log('most popular property data', res);
         if (res.length == 0 || res[0].error) {
-          this.setState({ spinner: false });
+          this.setState({spinner: false});
           return;
         }
-        var sortedRes = res.sort((a, b) => { return a.displayorder - b.displayorder });
+        var sortedRes = res.sort((a, b) => {
+          return a.displayorder - b.displayorder;
+        });
         this.setState({
           mostPopularPropertyData: sortedRes,
-          spinner: false
+          spinner: false,
         });
       })
       .catch((err) => {
         //console.log('get most popular property error', err);
-        this.setState({ spinner: false })
-      })
-  }
+        this.setState({spinner: false});
+      });
+  };
 
   onGoClientView = (client, tab) => {
-    this.props.navigation.navigate('ClientStack', { screen: 'ClientView', params: { client: client, tab: tab } });
-  }
+    this.props.navigation.navigate('ClientStack', {
+      screen: 'ClientView',
+      params: {client: client, tab: tab},
+    });
+  };
 
   onPropertyPress = (propertyRecordNo) => {
     RouteParam.propertyRecordNo = propertyRecordNo;
     this.props.navigation.navigate('PropertyStack');
-  }
+  };
 
   onToggleMenu = () => {
-    this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible });
-  }
+    this.setState({toggleMenuVisible: !this.state.toggleMenuVisible});
+  };
 
   onLogout = () => {
     signOut();
 
-    this.setState({ toggleMenuVisible: !this.state.toggleMenuVisible });
+    this.setState({toggleMenuVisible: !this.state.toggleMenuVisible});
 
     AsyncStorage.removeItem('LoginInfo');
-    this.props.navigation.navigate('Auth', { screen: 'SocialLogin' });
-  }
+    this.props.navigation.navigate('Auth', {screen: 'SocialLogin'});
+  };
 
   onTouchEvent = (e) => {
     var locationX = e.nativeEvent.locationX;
     if (this.state.toggleMenuVisible && locationX > width * 0.8) {
-      this.setState({ toggleMenuVisible: false });
+      this.setState({toggleMenuVisible: false});
     }
-  }
+  };
 
   render() {
     return (
       <View style={styles.container} onTouchStart={(e) => this.onTouchEvent(e)}>
-        {this.state.toggleMenuVisible ?
-          <SideMenu navigation={this.props.navigation} onToggleMenu={this.onToggleMenu} onLogout={this.onLogout} />
-          : null
-        }
+        {this.state.toggleMenuVisible ? (
+          <SideMenu
+            navigation={this.props.navigation}
+            onToggleMenu={this.onToggleMenu}
+            onLogout={this.onLogout}
+          />
+        ) : null}
         <View style={styles.headerContainer}>
-          <Header title={'AGENT PLUS™'} titleColor={Colors.blackColor} leftIcon={Images.iconMenu} onPressBack={() => this.props.navigation.goBack(null)} onPressLeftIcon={() => this.onToggleMenu()} />
+          <Header
+            title={'AGENT PLUS™'}
+            titleColor={Colors.blackColor}
+            leftIcon={Images.iconMenu}
+            onPressBack={() => this.props.navigation.goBack(null)}
+            onPressLeftIcon={() => this.onToggleMenu()}
+          />
         </View>
         <View style={styles.body}>
           <View style={styles.recentClientContainer}>
@@ -189,21 +218,30 @@ export default class DashboardScreen extends Component {
             </View>
             <View style={styles.imgsContainer}>
               <FlatList
-                ref={(ref) => { this.clientFlatListRef = ref; }}
-                keyExtractor={item => item.displayorder.toString()}
+                ref={(ref) => {
+                  this.clientFlatListRef = ref;
+                }}
+                keyExtractor={(item) => item.displayorder.toString()}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={this.state.recentClientData}
-                renderItem={({ item }) =>
-                  <TouchableOpacity style={styles.clientItemContainer} onPress={() => this.onGoClientView(item, 'preference')}>
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    style={styles.clientItemContainer}
+                    onPress={() => this.onGoClientView(item, 'preference')}>
                     <View style={styles.clientImgContainer}>
-                      <Image style={styles.clientImg} source={{ uri: item.client_photo_url }} />
+                      <Image
+                        style={styles.clientImg}
+                        source={{uri: item.client_photo_url}}
+                      />
                     </View>
                     <View style={styles.clientNameContainer}>
-                      <Text style={styles.clientName}>{item.client_fullname}</Text>
+                      <Text style={styles.clientName}>
+                        {item.client_fullname}
+                      </Text>
                     </View>
                   </TouchableOpacity>
-                }
+                )}
               />
             </View>
           </View>
@@ -213,19 +251,32 @@ export default class DashboardScreen extends Component {
             </View>
             <View style={styles.cardsContainer}>
               <FlatList
-                ref={(ref) => { this.activityFlatListRef = ref; }}
-                keyExtractor={item => item.displayorder.toString()}
+                ref={(ref) => {
+                  this.activityFlatListRef = ref;
+                }}
+                keyExtractor={(item) => item.displayorder.toString()}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 data={this.state.recentActivityData}
-                renderItem={({ item }) =>
-                  <TouchableOpacity style={styles.activityContainer} onPress={()=>this.onGoClientView(item, 'searched')}>
-                    <Text style={styles.activityTxt} numberOfLines={4} ellipsizeMode='tail'>{item.query_text}</Text>
-                    <TouchableOpacity onPress={() => this.onGoClientView(item, 'preference')}>
-                      <Text style={[styles.detailsTag, { marginTop: normalize(10) }]}>{'>'} Details</Text>
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    style={styles.activityContainer}
+                    onPress={() => this.onGoClientView(item, 'searched')}>
+                    <Text
+                      style={styles.activityTxt}
+                      numberOfLines={4}
+                      ellipsizeMode="tail">
+                      {item.query_text}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => this.onGoClientView(item, 'preference')}>
+                      <Text
+                        style={[styles.detailsTag, {marginTop: normalize(10)}]}>
+                        {'>'} Details
+                      </Text>
                     </TouchableOpacity>
                   </TouchableOpacity>
-                }
+                )}
               />
             </View>
           </View>
@@ -234,22 +285,39 @@ export default class DashboardScreen extends Component {
               <Text style={styles.label}>MOST POPULAR PROPERTIES</Text>
             </View>
             <View style={styles.propertiesContainer}>
-              <ActivityIndicator style={{ position: 'absolute' }} animating={this.state.spinner} />
-              {
-                this.state.mostPopularPropertyData.length == 0 && this.state.spinner == false ?
-                  <View style={styles.emptyContainer}>
-                    <Text style={styles.emptyTxt}>No Result Data</Text>
-                  </View>
-                  :
-                  <FlatList
-                    ref={(ref) => { this.propertyFlatListRef = ref; }}
-                    keyExtractor={item => item.property_recordno}
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    data={this.state.mostPopularPropertyData}
-                    renderItem={({ item }) => <PropertyCard cardStyle={{ width: normalize(325), height: normalize(245, 'height'), marginRight: normalize(10) }} item={item} onPress={() => this.onPropertyPress(item.property_recordno)} />}
-                  />
-              }
+              <ActivityIndicator
+                style={{position: 'absolute'}}
+                animating={this.state.spinner}
+              />
+              {this.state.mostPopularPropertyData.length == 0 &&
+              this.state.spinner == false ? (
+                <View style={styles.emptyContainer}>
+                  <Text style={styles.emptyTxt}>No Result Data</Text>
+                </View>
+              ) : (
+                <FlatList
+                  ref={(ref) => {
+                    this.propertyFlatListRef = ref;
+                  }}
+                  keyExtractor={(item) => item.property_recordno}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  data={this.state.mostPopularPropertyData}
+                  renderItem={({item}) => (
+                    <PropertyCard
+                      cardStyle={{
+                        width: normalize(325),
+                        height: normalize(245, 'height'),
+                        marginRight: normalize(10),
+                      }}
+                      item={item}
+                      onPress={() =>
+                        this.onPropertyPress(item.property_recordno)
+                      }
+                    />
+                  )}
+                />
+              )}
             </View>
           </View>
         </View>
@@ -263,10 +331,10 @@ const height = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: 'rgba(255,255,255,1)',
     flex: 1,
     width: width,
-    height: height
+    height: height,
   },
   headerContainer: {
     width: '100%',
@@ -298,7 +366,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(2),
     color: Colors.blackColor,
-    marginLeft: normalize(10)
+    marginLeft: normalize(10),
   },
   imgsContainer: {
     width: '95%',
@@ -325,7 +393,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: normalize(35),
     borderColor: Colors.borderColor,
-    borderWidth: normalize(0.5)
+    borderWidth: normalize(0.5),
   },
   clientNameContainer: {
     width: '95%',
@@ -337,7 +405,7 @@ const styles = StyleSheet.create({
     fontFamily: 'SFProText-Regular',
     fontSize: RFPercentage(1.5),
     color: Colors.passiveTxtColor,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   recentActivityContainer: {
     width: '100%',
@@ -359,7 +427,7 @@ const styles = StyleSheet.create({
     marginRight: normalize(10),
     borderColor: Colors.borderColor,
     borderWidth: normalize(0.5),
-    padding: normalize(10)
+    padding: normalize(10),
   },
   activityTxt: {
     fontFamily: 'SFProText-Regular',
@@ -396,6 +464,6 @@ const styles = StyleSheet.create({
   emptyTxt: {
     fontFamily: 'SFProText-Semibold',
     fontSize: RFPercentage(2),
-    color: Colors.blackColor
+    color: Colors.blackColor,
   },
 });
